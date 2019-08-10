@@ -50,19 +50,23 @@ namespace SenkoSanBot.Services
 
             var context = new SocketCommandContext(m_client, message);
 
-            var result = await m_command.ExecuteAsync(
-                context: context,
-                argPos: argPos,
-                services: m_services);
+            using (context.Channel.EnterTypingState())
+            {
 
-            if (!result.IsSuccess)
-            {
-                await context.Channel.SendMessageAsync(result.ErrorReason);
-                m_logger.LogCritical(result.ErrorReason);
-            }
-            else
-            {
-                m_logger.LogInfo("Successfully handled command");
+                var result = await m_command.ExecuteAsync(
+                    context: context,
+                    argPos: argPos,
+                    services: m_services);
+
+                if (!result.IsSuccess)
+                {
+                    await context.Channel.SendMessageAsync(result.ErrorReason);
+                    m_logger.LogCritical(result.ErrorReason);
+                }
+                else
+                {
+                    m_logger.LogInfo("Successfully handled command");
+                }
             }
         }
     }
