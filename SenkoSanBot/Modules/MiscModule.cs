@@ -70,6 +70,7 @@ namespace SenkoSanBot.Modules
                 .WithTitle("Made by: Team Shinaosu")
                 .WithColor(new Color(0xcfbadb))
                 .AddField("Developers", "Nobbele & JayDuck", true)
+                .WithFooter("09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/571686869163704320/Shinaosu.png")
                 .Build();
 
