@@ -3,6 +3,7 @@ using Discord.Audio;
 using Discord.Commands;
 using Discord.Rest;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using SenkoSanBot.Modules;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,16 @@ namespace SenkoSanBot.Services
         private readonly BotConfigurationService m_config;
         private readonly LoggingService m_logger;
         private readonly SenkoSan m_senko;
+        private readonly JsonDatabaseService m_database;
 
-        public CommandLineHandlingService(DiscordSocketClient client, CommandService command, BotConfigurationService config, LoggingService logger, SenkoSan senko)
+        public CommandLineHandlingService(IServiceProvider services)
         {
-            m_command = command;
-            m_client = client;
-            m_config = config;
-            m_logger = logger;
-            m_senko = senko;
+            m_client = services.GetRequiredService<DiscordSocketClient>();
+            m_command = services.GetRequiredService<CommandService>();
+            m_config = services.GetRequiredService<BotConfigurationService>();
+            m_logger = services.GetRequiredService<LoggingService>();
+            m_senko = services.GetRequiredService<SenkoSan>();
+            m_database = services.GetRequiredService<JsonDatabaseService>();
         }
 
         public static readonly int KeyBufferSize = 64;
@@ -98,6 +101,15 @@ namespace SenkoSanBot.Services
                 case "stop":
                 case "kill":
                     BotCommandLineCommands.Stop(m_senko);
+                break;
+
+                case "db":
+                    switch(arguments.Split(' ')[0])
+                    {
+                        case "write":
+                            m_database.WriteData();
+                        break;
+                    }
                 break;
 
                 default:

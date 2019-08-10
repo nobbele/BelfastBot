@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +8,7 @@ namespace SenkoSanBot.Services
 {
     public class LoggingService : IDisposable
     {
-        public static readonly string LogFilePath = $"{DateTime.Now:MM-dd-yyyy_HH-mm-ss}.log";
+        public static readonly string LogFilePath = $"logs/{DateTime.Now:MM-dd-yyyy_HH-mm-ss}.log";
 
         private static readonly int logFileWriteInterval = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
         private static readonly int fileBufferSize = 4096;
@@ -37,9 +35,15 @@ namespace SenkoSanBot.Services
                     {
                         LogCritical(e);
                     }
+
+                    if (tokenSource.Token.IsCancellationRequested)
+                        break;
                     await Task.Delay(logFileWriteInterval, tokenSource.Token);
                 }
             }, tokenSource.Token);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(LogFilePath));
+
             await Task.CompletedTask;
         }
 
@@ -107,8 +111,7 @@ namespace SenkoSanBot.Services
             lock (writeLock)
             {
                 string data = m_fileBuffer.ToString().TrimEnd();
-                using (FileStream fs = new FileStream(LogFilePath, FileMode.Append, FileAccess.Write, FileShare.None))
-                using (StreamWriter writer = new StreamWriter(fs))
+                using (StreamWriter writer = File.AppendText(LogFilePath))
                     writer.WriteLine(data);
                 m_fileBuffer.Clear();
             }

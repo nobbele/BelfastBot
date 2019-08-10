@@ -6,7 +6,6 @@ using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 using SenkoSanBot.Services;
-using System.Threading;
 
 namespace SenkoSanBot
 {
@@ -50,13 +49,13 @@ namespace SenkoSanBot
             {
                 var client = services.GetRequiredService<DiscordSocketClient>();
 
-
                 client.Log += LogMessageAsync;
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
 
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
 
+                await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
             }
@@ -91,6 +90,7 @@ namespace SenkoSanBot
                 .AddSingleton<CommandLineHandlingService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<SenkoSan>()
+                .AddSingleton<JsonDatabaseService>()
                 .BuildServiceProvider();
     }
 }
