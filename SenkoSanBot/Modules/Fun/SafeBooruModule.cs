@@ -19,7 +19,7 @@ namespace SenkoSanBot.Modules.Fun
                 .WithImageUrl(url)
                 .Build();
 
-            await ReplyAsync("", embed: embed);
+            await ReplyAsync(embed: embed);
         }
 
     }

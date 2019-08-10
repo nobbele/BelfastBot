@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Moderation
 {
+    [Summary("Contains commands used to punish users who behave badly")]
     public class PunishmentModule : ModuleBase<SocketCommandContext>
     {
         public JsonDatabaseService Db { get; set; }

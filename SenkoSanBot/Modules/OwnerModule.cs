@@ -11,6 +11,7 @@ namespace SenkoSanBot.Modules
         public SenkoSan Senko { get; set; }
 
         [Command("stop")]
+        [RequireOwner]
         public async Task StopAsync()
         {
             await ReplyAsync("Stopping...");
