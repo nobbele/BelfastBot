@@ -16,7 +16,8 @@ namespace SenkoSanBot.Modules.Moderation
         [Summary("Warns people don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.BanMembers)]
-        public async Task Warn(SocketGuildUser target, [Remainder] string reason = "No reason specified")
+        public async Task Warn([Summary("User that will be warned")] SocketGuildUser target, 
+                               [Summary("Reason for warning the user")] [Remainder] string reason = "No reason specified")
         {
             await Context.Message.DeleteAsync();
 
