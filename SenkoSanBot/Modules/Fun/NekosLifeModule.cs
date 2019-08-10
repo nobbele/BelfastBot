@@ -1,11 +1,6 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
@@ -15,25 +10,33 @@ namespace SenkoSanBot.Modules.Fun
         public DiscordSocketClient Client { get; set; }
 
         [Command("nli")]
-        public async Task GetImage(string category)
+        [Summary("Gets images from nekoslife with the given tag")]
+        public async Task GetImage([Summary("Category to search")]string category)
         {
             string url = await NekosLifeApi.Client.GetSfwImageAsync(category);
-            using (HttpClient client = new HttpClient())
-            {
-                Stream fileStream = await client.GetStreamAsync(url);
-                await Context.Channel.SendFileAsync(fileStream, Path.GetFileName(new Uri(url).LocalPath));
-            }
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(new Color(0xb39df2))
+                .WithTitle("Image From Nekos.Life")
+                .WithImageUrl(url)
+                .Build();
+
+            await ReplyAsync("", embed: embed);
         }
 
         [Command("nlg")]
-        public async Task GetGif(string category)
+        [Summary("Gets gifs from nekoslife with the given tag")]
+        public async Task GetGif([Summary("Category to search")]string category)
         {
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
-            using (HttpClient client = new HttpClient())
-            {
-                Stream fileStream = await client.GetStreamAsync(url);
-                await Context.Channel.SendFileAsync(fileStream, Path.GetFileName(new Uri(url).LocalPath));
-            }
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(new Color(0xb39df2))
+                .WithTitle("Gif From Nekos.Life")
+                .WithImageUrl(url)
+                .Build();
+
+            await ReplyAsync("", embed: embed);
         }
     }
 }

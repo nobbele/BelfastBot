@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NekosLifeApi;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace NekosLifeApiTests
