@@ -1,8 +1,7 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.IO;
-using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
@@ -12,25 +11,50 @@ namespace SenkoSanBot.Modules.Fun
         public DiscordSocketClient Client { get; set; }
 
         [Command("nli")]
-        public async Task GetImage(string category)
+        [Summary("Gets images from nekoslife with the given tag")]
+        public async Task GetImage([Summary("Category to search")]string category)
         {
             string url = await NekosLifeApi.Client.GetSfwImageAsync(category);
-            using (HttpClient client = new HttpClient())
-            {
-                Stream fileStream = await client.GetStreamAsync(url);
-                await Context.Channel.SendFileAsync(fileStream, Path.GetFileName(new Uri(url).LocalPath));
-            }
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(new Color(0xb39df2))
+                .WithTitle("Image From Nekos.Life")
+                .WithImageUrl(url)
+                .Build();
+
+            await ReplyAsync("", embed: embed);
         }
 
         [Command("nlg")]
-        public async Task GetGif(string category)
+        [Summary("Gets gifs from nekoslife with the given tag")]
+        public async Task GetGif([Summary("Category to search")]string category, [Remainder]string arg = "")
         {
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
-            using (HttpClient client = new HttpClient())
-            {
-                Stream fileStream = await client.GetStreamAsync(url);
-                await Context.Channel.SendFileAsync(fileStream, Path.GetFileName(new Uri(url).LocalPath));
-            }
+
+            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+
+            SocketUser target = mentionedUser ?? Context.User;
+
+            if (target.IsBot)
+                return;
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(new Color(0xb39df2))
+                .WithTitle("Gif From Nekos.Life")
+                .WithDescription(Context.User + " interacted with " + target.Mention)
+                .WithImageUrl(url)
+                .Build();
+
+            await ReplyAsync("", embed: embed);
         }
+
+        [Command("hug")]
+        public async Task GetHug() => await GetGif("hug");
+        [Command("kiss")]
+        public async Task GetKiss() => await GetGif("kiss");
+        [Command("poke")]
+        public async Task GetPoke() => await GetGif("poke");
+        [Command("slap")]
+        public async Task GetSlap() => await GetGif("slap");
     }
 }

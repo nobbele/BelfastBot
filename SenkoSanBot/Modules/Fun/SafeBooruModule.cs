@@ -1,11 +1,5 @@
-﻿using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
+﻿using Discord;
+using Discord.Commands;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
@@ -13,14 +7,19 @@ namespace SenkoSanBot.Modules.Fun
     public class SafeBooruModule : ModuleBase<SocketCommandContext>
     {
         [Command("sbi")]
-        public async Task GetImage(string tag)
+        [Summary("Gets images from safebooru with the given tag")]
+        public async Task GetImage([Summary("Tag for search")][Remainder] string tag)
         {
+            tag = tag.Replace(' ', '_');
             string url = await SafeBooruApi.Client.GetRandomPostAsync(tag);
-            using (HttpClient client = new HttpClient())
-            {
-                Stream fileStream = await client.GetStreamAsync(url);
-                await Context.Channel.SendFileAsync(fileStream, Path.GetFileName(new Uri(url).LocalPath));
-            }
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(new Color(0xb39df2))
+                .WithTitle("Image From Safebooru.org")
+                .WithImageUrl(url)
+                .Build();
+
+            await ReplyAsync("", embed: embed);
         }
 
     }

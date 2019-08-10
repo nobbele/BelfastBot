@@ -8,25 +8,19 @@ namespace SenkoSanBot
     [DataContract(Name = "Configuration", Namespace = "")]
     public struct BotConfiguration : IExtensibleDataObject
     {
-        [DataMember()]
+        [DataMember]
         public string Token { get; private set; }
-        [DataMember()]
+        [DataMember]
         public string Prefix { get; private set; }
-
         public ExtensionDataObject ExtensionData { get; set; }
-
-        public BotConfiguration(string token, string prefix)
-        {
-            Token = token;
-            Prefix = prefix;
-
-            ExtensionData = null;
-        }
+        [DataMember]
+        public string WelcomeMessage { get; private set; }
 
         public static BotConfiguration GetDefault() => new BotConfiguration()
         {
             Token = "YOUR TOKEN",
             Prefix = ".",
+            WelcomeMessage = "おかえりなのじや! Welcome {0}",
         };
     }
 }

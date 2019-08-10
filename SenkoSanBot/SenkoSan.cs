@@ -50,6 +50,11 @@ namespace SenkoSanBot
                 var client = services.GetRequiredService<DiscordSocketClient>();
 
                 client.Log += LogMessageAsync;
+                client.UserJoined += async (SocketGuildUser user) => 
+                {
+                    await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention));
+                };
+
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
 
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);

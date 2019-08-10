@@ -7,7 +7,7 @@ namespace SenkoSanBot.Modules
     {
         [Command("echo")]
         public async Task EchoAsync([Remainder] string message)
-        {
+        {   
             await ReplyAsync(message);
         }
     }
