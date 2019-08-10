@@ -54,6 +54,12 @@ namespace SenkoSanBot.Services
 
                         await HandleCommandAsync(command);
                     }
+                    else if (c == '\b')
+                    {
+                        Console.Write(" \b");
+                        if(keyBufferPosition > 0)
+                            keyBufferPosition--;
+                    }
                     else
                     {
                         if (keyBufferPosition >= KeyBufferSize)
