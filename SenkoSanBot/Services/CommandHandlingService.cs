@@ -36,7 +36,7 @@ namespace SenkoSanBot.Services
         public async Task HandleCommandAsync(SocketMessage messageParam)
         {
             if (!(messageParam is SocketUserMessage))
-                m_logger.Log("Received a message that wasn't a SocketUserMessage");
+                m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
             var message = messageParam as SocketUserMessage;
 
             int argPos = 0;
@@ -46,6 +46,8 @@ namespace SenkoSanBot.Services
                 message.Author.IsBot)
                 return;
 
+            m_logger.LogInfo("Handling command " + message.Content);
+
             var context = new SocketCommandContext(m_client, message);
 
             var result = await m_command.ExecuteAsync(
@@ -54,7 +56,14 @@ namespace SenkoSanBot.Services
                 services: m_services);
 
             if (!result.IsSuccess)
+            {
                 await context.Channel.SendMessageAsync(result.ErrorReason);
+                m_logger.LogCritical(result.ErrorReason);
+            }
+            else
+            {
+                m_logger.LogInfo("Successfully handled command");
+            }
         }
     }
 }

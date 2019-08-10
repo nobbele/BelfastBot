@@ -37,7 +37,7 @@ namespace SenkoSanBot.Services
 
         public async Task InitializeAsync()
         {
-            m_logger.Log("Initialized Command Line");
+            m_logger.LogInfo("Initialized Command Line");
             while (true)
             {
                 if (m_senko.Stopped)
@@ -92,6 +92,10 @@ namespace SenkoSanBot.Services
                 case "stop":
                 case "kill":
                     BotCommandLineCommands.Stop(m_senko);
+                break;
+
+                default:
+                    m_logger.Log(false, LogLevel.Critical, "No such command as '{0}'", command);
                 break;
             }
 

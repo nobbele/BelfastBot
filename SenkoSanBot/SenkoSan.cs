@@ -20,7 +20,6 @@ namespace SenkoSanBot
             using (var services = ConfigureServices())
             {
                 Instance = services.GetRequiredService<SenkoSan>();
-                Instance.Logger = services.GetRequiredService<LoggingService>();
                 try
                 {
                     var mainTask = Instance.MainAsync(services);
@@ -28,7 +27,7 @@ namespace SenkoSanBot
                 }
                 catch (Exception e)
                 {
-                    Instance.Logger.Log(e.ToString());
+                    Instance.Logger.LogCritical(e.ToString());
                     Console.ReadKey();
                 }
             }
@@ -37,20 +36,20 @@ namespace SenkoSanBot
         public bool Stopped { get; private set; } = false;
         public void Stop()
         {
-            Logger.Log("Stopping");
+            Logger.LogInfo("Stopping");
             Stopped = true;
         }
 
         public async Task MainAsync(IServiceProvider services)
         {
+            Logger = services.GetRequiredService<LoggingService>();
+            await Logger.InitializeAsync();
             var config = services.GetRequiredService<BotConfigurationService>();
 
             if (config.Initialize())
             {
                 var client = services.GetRequiredService<DiscordSocketClient>();
 
-                //Logging method for DiscordSocketClient.Log and CommandService.Log
-                async Task LogMessageAsync(LogMessage msg) => await Logger.LogAsync(msg.ToString());
 
                 client.Log += LogMessageAsync;
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
@@ -62,6 +61,26 @@ namespace SenkoSanBot
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
             }
         }
+
+        private async Task LogMessageAsync(LogMessage msg) => await Task.Run(() => {
+            LogLevel level = LogLevel.Info;
+            switch (msg.Severity)
+            {
+                case LogSeverity.Info:
+                case LogSeverity.Verbose:
+                case LogSeverity.Debug:
+                    level = LogLevel.Info;
+                    break;
+                case LogSeverity.Warning:
+                    level = LogLevel.Warning;
+                    break;
+                case LogSeverity.Critical:
+                case LogSeverity.Error:
+                    level = LogLevel.Critical;
+                    break;
+            }
+            Logger.Log(level, msg.Message);
+        });
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<LoggingService>()

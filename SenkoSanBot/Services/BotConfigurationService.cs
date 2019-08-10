@@ -16,7 +16,7 @@ namespace SenkoSanBot.Services
     public class BotConfigurationService : IDisposable
     {
         public static string ConfigurationFilePath => "config.xml";
-        public static int FileBufferSize => 4096;
+        public static readonly int FileBufferSize = 4096;
 
         public BotConfiguration Configuration { get; private set; }
 
@@ -31,24 +31,24 @@ namespace SenkoSanBot.Services
         {
             if (!File.Exists(ConfigurationFilePath))
             {
-                m_logger.Log("Configuration not found");
+                m_logger.LogCritical("Configuration not found");
                 Configuration = BotConfiguration.GetDefault();
                 return false;
             }
             else
             {
-                m_logger.Log("Reading configuration");
+                m_logger.LogInfo("Reading configuration");
                 var serializer = new DataContractSerializer(typeof(BotConfiguration));
                 using (var fs = new FileStream(ConfigurationFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: FileBufferSize, useAsync: true))
                     Configuration = (BotConfiguration)serializer.ReadObject(fs);
-                m_logger.Log("Done reading configuration");
+                m_logger.LogInfo("Done reading configuration");
                 return true;
             }
         }
 
         public void Dispose()
         {
-            m_logger.Log("Writing configuration");
+            m_logger.LogInfo("Writing configuration");
             var settings = new XmlWriterSettings()
             {
                 Indent = true,
@@ -57,7 +57,7 @@ namespace SenkoSanBot.Services
             using (var fs = new FileStream(ConfigurationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: FileBufferSize, useAsync: true))
             using (var writer = XmlWriter.Create(fs, settings))
                 serializer.WriteObject(writer, Configuration);
-            m_logger.Log("Done writing configuration");
+            m_logger.LogInfo("Done writing configuration");
         }
     } 
 }
