@@ -62,5 +62,18 @@ namespace SenkoSanBot.Modules
                 await ReplyAsync(embed: builder.Build());
             }
         }
+
+        [Command("about")]
+        public async Task About()
+        {
+            Embed embed = new EmbedBuilder()
+                .WithTitle("Made by: Team Shinaosu")
+                .WithColor(new Color(0xcfbadb))
+                .AddField("Developers", "Nobbele & JayDuck", true)
+                .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/571686869163704320/Shinaosu.png")
+                .Build();
+
+            await ReplyAsync(embed: embed);
+        }
     }
 }
