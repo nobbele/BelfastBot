@@ -63,20 +63,23 @@ namespace SenkoSanBot.Services
 
             string prettyMessage = $"{DateTime.Now:MM/dd/yyyy HH:mm:ss} [{level}] {message}";
 
-            Console.Write($"{DateTime.Now:MM/dd/yyyy HH:mm:ss} [");
-            ConsoleColor oldColor = Console.BackgroundColor;
-            Console.BackgroundColor = color;
-            Console.Write(level);
-            Console.BackgroundColor = oldColor;
-            Console.WriteLine($"] {message}");
-
             lock (writeLock)
+            {
+
+                Console.Write($"{DateTime.Now:MM/dd/yyyy HH:mm:ss} [");
+                ConsoleColor oldColor = Console.BackgroundColor;
+                Console.BackgroundColor = color;
+                Console.Write(level);
+                Console.BackgroundColor = oldColor;
+                Console.WriteLine($"] {message}");
+
                 if (writeToFile)
                     m_fileBuffer.AppendLine(prettyMessage);
 
-            //Things might go very bad after a critical thing happened so we just write instantly
-            if (logLevel == LogLevel.Critical)
-                WriteBuffer();
+                //Things might go very bad after a critical thing happened so we just write instantly
+                if (logLevel == LogLevel.Critical)
+                    WriteBuffer();
+            }
         }
 
         private string LogLevelToString(LogLevel logLevel, out ConsoleColor color)

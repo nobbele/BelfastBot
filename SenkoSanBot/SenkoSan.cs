@@ -79,7 +79,7 @@ namespace SenkoSanBot
                     level = LogLevel.Critical;
                     break;
             }
-            Logger.Log(level, msg.Message);
+            Logger.Log(level, msg.Message ?? msg.Exception.ToString());
         });
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
