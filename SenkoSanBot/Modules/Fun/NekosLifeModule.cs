@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
@@ -26,17 +27,34 @@ namespace SenkoSanBot.Modules.Fun
 
         [Command("nlg")]
         [Summary("Gets gifs from nekoslife with the given tag")]
-        public async Task GetGif([Summary("Category to search")]string category)
+        public async Task GetGif([Summary("Category to search")]string category, [Remainder]string arg = "")
         {
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
+
+            var mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+
+            SocketUser target = mentionedUser ?? Context.User;
+
+            if (target.IsBot)
+                return;
 
             Embed embed = new EmbedBuilder()
                 .WithColor(new Color(0xb39df2))
                 .WithTitle("Gif From Nekos.Life")
+                .WithDescription(Context.User + " interacted with " + target.Mention)
                 .WithImageUrl(url)
                 .Build();
 
             await ReplyAsync("", embed: embed);
         }
+
+        [Command("hug")]
+        public async Task GetHug() => await GetGif("hug");
+        [Command("kiss")]
+        public async Task GetKiss() => await GetGif("kiss");
+        [Command("poke")]
+        public async Task GetPoke() => await GetGif("poke");
+        [Command("slap")]
+        public async Task GetSlap() => await GetGif("slap");
     }
 }
