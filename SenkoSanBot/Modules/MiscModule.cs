@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules
 {
-    [Summary("List of available commands")]
+    [Summary("Miscellaneous commands")]
     public class MiscModule : ModuleBase<SocketCommandContext>
     {
         public BotConfigurationService Config { get; set; }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules
 {
+    [Summary("Commands that are only for owner(s)")]
     public class OwnerModule : ModuleBase<SocketCommandContext>
     {
         public SenkoSan Senko { get; set; }
