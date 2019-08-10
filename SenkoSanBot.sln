@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenkoSanBot", "SenkoSanBot\SenkoSanBot.csproj", "{D6B77B37-B35E-4926-AC17-DD99A4369BFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeBooruApi", "SafeBooruApi\SafeBooruApi.csproj", "{ED107408-E37B-45B8-8CBE-2A287B964EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeBooruApi", "SafeBooruApi\SafeBooruApi.csproj", "{ED107408-E37B-45B8-8CBE-2A287B964EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NekosLifeApi", "NekosLifeApi\NekosLifeApi.csproj", "{26C4EAF6-39D3-4365-8DD2-C07D657AAE5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekosLifeApi", "NekosLifeApi\NekosLifeApi.csproj", "{26C4EAF6-39D3-4365-8DD2-C07D657AAE5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NekosLifeApiTests", "NekosLifeApiTests\NekosLifeApiTests.csproj", "{AA036BDB-5CBE-4884-B339-BE191F78AF57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekosLifeApiTests", "NekosLifeApiTests\NekosLifeApiTests.csproj", "{AA036BDB-5CBE-4884-B339-BE191F78AF57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeBooruApiTests", "SafeBooruApiTest\SafeBooruApiTests.csproj", "{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D6B77B37-B35E-4926-AC17-DD99A4369BFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B77B37-B35E-4926-AC17-DD99A4369BFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6B77B37-B35E-4926-AC17-DD99A4369BFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED107408-E37B-45B8-8CBE-2A287B964EC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED107408-E37B-45B8-8CBE-2A287B964EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED107408-E37B-45B8-8CBE-2A287B964EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED107408-E37B-45B8-8CBE-2A287B964EC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26C4EAF6-39D3-4365-8DD2-C07D657AAE5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26C4EAF6-39D3-4365-8DD2-C07D657AAE5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26C4EAF6-39D3-4365-8DD2-C07D657AAE5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,6 +35,10 @@ Global
 		{AA036BDB-5CBE-4884-B339-BE191F78AF57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA036BDB-5CBE-4884-B339-BE191F78AF57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA036BDB-5CBE-4884-B339-BE191F78AF57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
