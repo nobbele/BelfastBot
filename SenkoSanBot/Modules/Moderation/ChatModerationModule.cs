@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Moderation
 {
+    [Summary("Contains commands for chat moderation")]
     public class ChatModerationModule : ModuleBase<SocketCommandContext>
     {
         [Command("purge")]
+        [Summary("Deletes messages with a given amount")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
         public async Task PurgeModule(int amount = 1)

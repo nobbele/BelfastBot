@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
 {
+    [Summary("Contains commands for nekoslife")]
     public class NekosLifeModule : ModuleBase<SocketCommandContext>
     {
         public DiscordSocketClient Client { get; set; }
 
         [Command("nli")]
-        [Summary("Gets images from nekoslife with the given tag")]
+        [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")]string category)
         {
             string url = await NekosLifeApi.Client.GetSfwImageAsync(category);
@@ -26,7 +27,7 @@ namespace SenkoSanBot.Modules.Fun
         }
 
         [Command("nlg")]
-        [Summary("Gets gifs from nekoslife with the given tag")]
+        [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")]string category, [Remainder]string arg = "")
         {
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);

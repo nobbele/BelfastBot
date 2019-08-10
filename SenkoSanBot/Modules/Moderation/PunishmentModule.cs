@@ -13,6 +13,7 @@ namespace SenkoSanBot.Modules.Moderation
         public JsonDatabaseService Db { get; set; }
 
         [Command("warn")]
+        [Summary("Warns people don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task Warn(SocketGuildUser target, [Remainder] string reason = "No reason specified")

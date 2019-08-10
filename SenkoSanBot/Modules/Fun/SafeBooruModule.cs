@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
 {
+    [Summary("Commands for booru websites")]
     public class SafeBooruModule : ModuleBase<SocketCommandContext>
     {
         [Command("sbi")]
