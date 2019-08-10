@@ -8,7 +8,7 @@ namespace SenkoSanBot.Modules.Fun
     {
         [Command("sbi")]
         [Summary("Gets images from safebooru with the given tag")]
-        public async Task GetImage([Summary("Tag for search")][Remainder] string tag)
+        public async Task GetImage([Summary("Tag for search")] [Remainder] string tag)
         {
             tag = tag.Replace(' ', '_');
             string url = await SafeBooruApi.Client.GetRandomPostAsync(tag);
