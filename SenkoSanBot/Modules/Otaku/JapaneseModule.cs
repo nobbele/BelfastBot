@@ -20,6 +20,8 @@ namespace SenkoSanBot.Modules.Otaku
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
                 .WithName(japanese);
 
+            string value = string.Empty;
+
             int i = 0;
             foreach(EnglishDefinition def in result.English)
             {
@@ -31,12 +33,12 @@ namespace SenkoSanBot.Modules.Otaku
                                      ? string.Empty 
                                      : $"({info})";
 
-                string display = $"{i}. {meaning} {infoDisplay}";
-
-                fieldBuilder.WithValue(display);
+                value += $"{i}. {meaning} {infoDisplay}\n";
 
                 i++;
             }
+
+            fieldBuilder.WithValue(value);
 
             Embed embed = new EmbedBuilder()
                 .WithColor(0x53DF1D)
