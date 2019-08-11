@@ -17,6 +17,17 @@ namespace SenkoSanBot.Modules.Otaku
 
             JishoApi.SearchResult result = await Client.GetWordAsync(word);
 
+            if(result.Word == "None")
+            {
+                Embed noneEmbed = new EmbedBuilder()
+                    .WithColor(0xff0000)
+                    .WithTitle("No result found")
+                    .Build();
+
+                await ReplyAsync(embed: noneEmbed);
+                return;
+            }
+
             string japanese = string.Join("\n", result.Japanese.Select(j => $"• {j.Key} ({j.Value})"));
 
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
@@ -24,7 +35,7 @@ namespace SenkoSanBot.Modules.Otaku
 
             string value = string.Empty;
 
-            int i = 0;
+            int i = 1;
             foreach(EnglishDefinition def in result.English)
             {
                 string meaning = string.Join(", ", def.English);
@@ -39,6 +50,9 @@ namespace SenkoSanBot.Modules.Otaku
 
                 i++;
             }
+
+            if (string.IsNullOrEmpty(value))
+                value = "Nothing found";
 
             fieldBuilder.WithValue(value);
 

@@ -24,12 +24,10 @@ namespace SenkoSanBot.Modules.Moderation
         [Summary("Warns people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.BanMembers)]
-        public async Task Warn([Summary("User that will be warned")] SocketGuildUser target, 
+        public async Task WarnAsync([Summary("User that will be warned")] SocketGuildUser target, 
                                [Summary("Reason for warning the user")] [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Warning {target}");
-
-            await Context.Message.DeleteAsync();
 
             if (target == Context.User)
             {
@@ -40,9 +38,8 @@ namespace SenkoSanBot.Modules.Moderation
             DatabaseUserEntry user = Db.GetUserEntry(target.Id);
 
             user.Warns.Add(new Warn(reason, Context.User.Id));
+            Db.WriteData();
             await ReplyAsync($"Warned {target.Mention} for \"{reason}\"");
-
-            bool isHigherRole = IsBotHigherRoleThan(target);
 
             if (user.Warns.Count == 2)
                 await KickUserAsync(target, reason);
@@ -50,14 +47,74 @@ namespace SenkoSanBot.Modules.Moderation
                 await BanUserAsync(target, reason);
         }
 
+        [Command("warnings"), Alias("warns")]
+        [Summary("Show warnings that a user has")]
+        public async Task WarningsAsync([Summary("User who's warnings will be displayed")] SocketGuildUser target = null)
+        {
+            Logger.LogInfo($"Showing {target}'s warnings)");
+
+            target = target ?? Context.User as SocketGuildUser;
+            if (target == null)
+            {
+                await ReplyAsync("Couldn't find a user to target");
+                return;
+            }
+
+            DatabaseUserEntry user = Db.GetUserEntry(target.Id);
+
+            EmbedFieldBuilder builder = new EmbedFieldBuilder()
+                .WithName($"{target}'s Warnings");
+
+            string value = string.Empty;
+
+            int i = 1;
+            foreach(Warn warn in user.Warns)
+            {
+                value += $"{i}. {warn.Reason}\n";
+                i++;
+            }
+
+            if (string.IsNullOrEmpty(value))
+                value = "No warnings";
+
+            builder.WithValue(value);
+
+            Embed embed = new EmbedBuilder()
+                .WithColor(0xf09e24)
+                .WithFields(builder)
+                .Build();
+
+            await ReplyAsync(embed: embed);
+        }
+
+        [Command("deletewarn"), Alias("delwarn")]
+        [Summary("Deletes a specific warning from a user")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        public async Task DeleteWarningAsync([Summary("User who's warning will be deleted")] SocketGuildUser target, int index)
+        {
+            Logger.LogInfo($"Deleting warning number {index} from {target}");
+
+            int proIndex = index - 1;
+
+            DatabaseUserEntry user = Db.GetUserEntry(target.Id);
+            if(proIndex > user.Warns.Count)
+            {
+                await ReplyAsync($"Out of bounds, user has {user.Warns.Count} warnings");
+                return;
+            }
+
+            user.Warns.RemoveAt(proIndex);
+            Db.WriteData();
+
+            await ReplyAsync($"Deleted warning number {index} from {target.Mention}");
+        }
+
         [Command("kick")]
         [Summary("Kicks people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
-        public async Task KickUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
+        public async Task KickUserAsync([Summary("The user who will be kicked")] SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Kicking {target}");
-
-            await Context.Message.DeleteAsync();
 
             if (target == Context.User)
             {
@@ -81,11 +138,9 @@ namespace SenkoSanBot.Modules.Moderation
         [Command("ban")]
         [Summary("Bans people who don't behave properly")]
         [RequireUserPermission(GuildPermission.BanMembers)]
-        public async Task BanUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
+        public async Task BanUserAsync([Summary("The user who will be banned")] SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Banning {target}");
-
-            await Context.Message.DeleteAsync();
 
             if (target == Context.User)
             {

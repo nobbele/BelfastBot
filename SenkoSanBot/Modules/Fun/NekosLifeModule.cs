@@ -63,12 +63,16 @@ namespace SenkoSanBot.Modules.Fun
         }
 
         [Command("hug")]
-        public async Task GetHug(IUser target = null) => await GetGif("hug", target, "hugged");
+        [Summary("Hugs senko-san or user specified")]
+        public async Task GetHug([Summary("The user to hug")] IUser target = null) => await GetGif("hug", target, "hugged");
         [Command("kiss")]
-        public async Task GetKiss(IUser target = null) => await GetGif("kiss", target, "kissed");
+        [Summary("kisses senko-san or user specified")]
+        public async Task GetKiss([Summary("The user to kiss")] IUser target = null) => await GetGif("kiss", target, "kissed");
         [Command("poke")]
-        public async Task GetPoke(IUser target = null) => await GetGif("poke", target, "poked");
+        [Summary("pokes senko-san or user specified")]
+        public async Task GetPoke([Summary("The user to poke")] IUser target = null) => await GetGif("poke", target, "poked");
         [Command("slap")]
-        public async Task GetSlap(IUser target = null) => await GetGif("slap", target, "slapped");
+        [Summary("slaps senko-san or user specified")]
+        public async Task GetSlap([Summary("The user to slap")] IUser target = null) => await GetGif("slap", target, "slapped");
     }
 }

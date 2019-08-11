@@ -9,6 +9,7 @@ namespace SenkoSanBot.Modules
         public SenkoSan Senko { get; set; }
 
         [Command("stop")]
+        [Summary("Stops senko-san")]
         [RequireOwner]
         public async Task StopAsync()
         {
