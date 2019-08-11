@@ -20,7 +20,7 @@ namespace SenkoSanBot.Modules.Fun
                 .WithImageUrl(url)
                 .WithFooter(footer => {
                     footer
-                        .WithText($"Sent by {Context.User}")
+                        .WithText($"Requested by {Context.User}")
                         .WithIconUrl(Context.User.GetAvatarUrl());
                 })
                 .Build();

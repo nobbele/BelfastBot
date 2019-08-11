@@ -21,6 +21,11 @@ namespace SenkoSanBot.Modules.Fun
                 .WithColor(new Color(0xb39df2))
                 .WithTitle("Image From Nekos.Life")
                 .WithImageUrl(url)
+                .WithFooter(footer => {
+                    footer
+                        .WithText($"Requested by {Context.User}")
+                        .WithIconUrl(Context.User.GetAvatarUrl());
+                })
                 .Build();
 
             await ReplyAsync(embed: embed);
@@ -44,6 +49,11 @@ namespace SenkoSanBot.Modules.Fun
                 .WithTitle("Gif From Nekos.Life")
                 .WithDescription(Context.User + " interacted with " + target.Mention)
                 .WithImageUrl(url)
+                .WithFooter(footer => {
+                    footer
+                        .WithText($"Requested by {Context.User}")
+                        .WithIconUrl(Context.User.GetAvatarUrl());
+                })
                 .Build();
 
             await ReplyAsync(embed: embed);
