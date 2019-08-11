@@ -26,7 +26,7 @@ namespace SenkoSanBot.Modules.Otaku
                 string info = string.Join(", ", def.Info);
 
                 //Don't display anything if info doesnt exist
-                string infoDisplay = string.IsNullOrEmpty("info") 
+                string infoDisplay = string.IsNullOrEmpty(info) 
                                      ? string.Empty 
                                      : $"({info})";
 
