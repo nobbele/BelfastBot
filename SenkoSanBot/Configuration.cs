@@ -15,6 +15,9 @@ namespace SenkoSanBot
         public string StatusMessage { get; private set; }
         [DataMember]
         public ulong LogChannelID { get; private set; }
+        [DataMember]
+        public string[] BlacklistedWord { get; private set; }
+
         public ExtensionDataObject ExtensionData { get; set; }
 
         public static BotConfiguration GetDefault() => new BotConfiguration()
@@ -24,6 +27,7 @@ namespace SenkoSanBot
             WelcomeMessage = "おかえりなのじや! Welcome {0}",
             StatusMessage = "Brushes her Tail",
             LogChannelID = 0,
+            BlacklistedWord = new string[] { "thejayduck" }, 
         };
     }
 }
