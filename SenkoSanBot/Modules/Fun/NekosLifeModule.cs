@@ -1,12 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SenkoSanBot.Services;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
 {
     [Summary("Contains commands for nekoslife")]
-    public class NekosLifeModule : ModuleBase<SocketCommandContext>
+    public class NekosLifeModule : SenkoSanModuleBase
     {
         public DiscordSocketClient Client { get; set; }
 
@@ -14,6 +15,8 @@ namespace SenkoSanBot.Modules.Fun
         [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")] string category)
         {
+            Logger.LogInfo($"{Context.User} requested an image from nekoslife");
+
             string url = await NekosLifeApi.Client.GetSfwImageAsync(category);
 
             Embed embed = new EmbedBuilder()
@@ -28,12 +31,16 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
+
+            Logger.LogInfo($"Successfully sent nekoslife image");
         }
 
         [Command("nekogif"), Alias("nlg")]
         [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")] string category, [Summary("The user to do [verb] with")] IUser target = null, [Summary("The verb to display")] [Remainder] string verb = "interacted with")
         {
+            Logger.LogInfo($"{Context.User} requested a gif from nekoslife");
+
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
 
             target = target ?? Client.CurrentUser;
@@ -51,6 +58,8 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
+
+            Logger.LogInfo($"Successfully sent nekoslife gif");
         }
 
         [Command("hug")]

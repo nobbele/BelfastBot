@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 namespace SenkoSanBot.Modules.Otaku
 {
     [Summary("Commands for japanese translation")]
-    public class JapaneseModule : ModuleBase<SocketCommandContext>
+    public class JapaneseModule : SenkoSanModuleBase
     {
         [Command("Jisho"), Alias("jsh")]
         [Summary("Search word from jisho.org")]
         public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string word)
         {
+            Logger.LogInfo($"Searching for {word} on jisho");
+
             JishoApi.SearchResult result = await Client.GetWordAsync(word);
 
             string japanese = string.Join("\n", result.Japanese.Select(j => $"• {j.Key} ({j.Value})"));

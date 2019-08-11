@@ -31,7 +31,6 @@ namespace SenkoSanBot.Services
 
         public async Task InitializeAsync()
         {
-            m_logger.LogInfo("Initialized Command Line");
             while (true)
             {
                 if (m_senko.Stopped)

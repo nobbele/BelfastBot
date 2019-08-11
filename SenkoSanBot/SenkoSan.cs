@@ -62,9 +62,11 @@ namespace SenkoSanBot
 
                 //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
 
+                Logger.LogInfo("Initializing services");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
+                Logger.LogInfo("Initializing command line");
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
 
             }

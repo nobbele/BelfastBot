@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SenkoSanBot.Modules.Moderation
 {
     [Summary("Contains commands used to punish users who behave badly")]
-    public class PunishmentModule : ModuleBase<SocketCommandContext>
+    public class PunishmentModule : SenkoSanModuleBase
     {
         public JsonDatabaseService Db { get; set; }
 
@@ -27,6 +27,8 @@ namespace SenkoSanBot.Modules.Moderation
         public async Task Warn([Summary("User that will be warned")] SocketGuildUser target, 
                                [Summary("Reason for warning the user")] [Remainder] string reason = "No reason specified")
         {
+            Logger.LogInfo($"Warning {target}");
+
             await Context.Message.DeleteAsync();
 
             if (target == Context.User)
@@ -52,6 +54,10 @@ namespace SenkoSanBot.Modules.Moderation
         [RequireUserPermission(GuildPermission.KickMembers)]
         public async Task KickUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
+            Logger.LogInfo($"Kicking {target}");
+
+            await Context.Message.DeleteAsync();
+
             if (target == Context.User)
             {
                 await ReplyAsync($"{Context.User.Mention} You cannot kick yourself");
@@ -75,6 +81,10 @@ namespace SenkoSanBot.Modules.Moderation
         [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task BanUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
+            Logger.LogInfo($"Banning {target}");
+
+            await Context.Message.DeleteAsync();
+
             if (target == Context.User)
             {
                 await ReplyAsync($"{Context.User.Mention} You cannot ban yourself");
