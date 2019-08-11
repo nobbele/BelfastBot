@@ -62,6 +62,7 @@ namespace SenkoSanBot
 
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+                await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
             }
         }
@@ -96,6 +97,7 @@ namespace SenkoSanBot
                 .AddSingleton<HttpClient>()
                 .AddSingleton<SenkoSan>()
                 .AddSingleton<JsonDatabaseService>()
+                .AddSingleton<WordBlacklistService>()
                 .BuildServiceProvider();
     }
 }
