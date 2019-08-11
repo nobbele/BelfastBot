@@ -8,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services
 {
-    public class JsonDatabaseService : IDisposable
+    public class JsonDatabaseService
     {
         public static readonly string DbFilePath = $"db.json";
         public List<DatabaseUserEntry> Db { get; private set; }
 
-        private static readonly int writeInterval = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
-        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly object writeLock = new object();
 
         private readonly LoggingService m_logger;
@@ -26,29 +24,11 @@ namespace SenkoSanBot.Services
 
         public async Task InitializeAsync()
         {
-            var _ = Task.Run(async () =>
-            {
-                while (true)
-                {
-                    try
-                    {
-                        WriteData();
-                    }
-                    catch (Exception e)
-                    {
-                        m_logger.LogCritical(e);
-                    }
-
-                    if (tokenSource.Token.IsCancellationRequested)
-                        break;
-                    await Task.Delay(writeInterval, tokenSource.Token);
-                }
-            }, tokenSource.Token);
-
             m_logger.LogInfo("Reader database from file");
             lock (writeLock)
             {
-                File.Create(DbFilePath).Dispose();
+                if (!File.Exists(DbFilePath))
+                    File.Create(DbFilePath).Dispose();
                 string json = File.ReadAllText(DbFilePath);
                 Db = string.IsNullOrEmpty(json) ? new List<DatabaseUserEntry>() : JsonConvert.DeserializeObject<List<DatabaseUserEntry>>(json);
             }
@@ -67,11 +47,6 @@ namespace SenkoSanBot.Services
                 File.WriteAllText(DbFilePath, json);
             }
             m_logger.LogInfo("done writing database to file");
-        }
-
-        public void Dispose()
-        {
-            tokenSource.Cancel();
         }
     }
 }

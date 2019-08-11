@@ -1,18 +1,21 @@
 ﻿using Discord;
 using Discord.Commands;
+using SenkoSanBot.Services;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Moderation
 {
     [Summary("Contains commands for chat moderation")]
-    public class ChatModerationModule : ModuleBase<SocketCommandContext>
+    public class ChatModerationModule : SenkoSanModuleBase
     {
         [Command("purge")]
         [Summary("Deletes messages with a given amount")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
-        public async Task PurgeModule(int amount = 1)
+        public async Task PurgeModule([Summary("Amount of messages to purge")] int amount = 1)
         {
+            Logger.LogInfo($"Purge request of {amount} messages from {Context.Channel} sent by {Context.User}");
+
             if (amount > 100)
             {
                 var botMessage = await ReplyAsync(":x: You cannot go higher than 100!");
@@ -29,6 +32,8 @@ namespace SenkoSanBot.Modules.Moderation
             var botMessage_2 = await ReplyAsync("Purged " + amount + " messages.");
             await Task.Delay(5000);
             await botMessage_2.DeleteAsync();
+
+            Logger.LogInfo($"Successfully purged messages");
         }
     }
 }

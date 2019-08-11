@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SenkoSanBot.Modules
 {
     [Summary("Miscellaneous commands")]
-    public class MiscModule : ModuleBase<SocketCommandContext>
+    public class MiscModule : SenkoSanModuleBase
     {
         public BotConfigurationService Config { get; set; }
         public CommandService Command { get; set; }
@@ -15,11 +15,12 @@ namespace SenkoSanBot.Modules
         [Command("help")]
         public async Task HelpAsync(string command = null)
         {
+            Logger.LogInfo($"{Context.User} asked for help about {command ?? "all commands"}");
+
             string prefix = Config.Configuration.Prefix;
 
             if (command == null)
             {
-
                 EmbedBuilder builder = new EmbedBuilder();
 
                 builder.Description = $"Do {prefix}help [command] to get more information about a command";
@@ -66,6 +67,8 @@ namespace SenkoSanBot.Modules
         [Command("about")]
         public async Task About()
         {
+            Logger.LogInfo($"{Context.User} requested about page");
+
             Embed embed = new EmbedBuilder()
                 .WithTitle("Made by: Team Shinaosu")
                 .WithColor(0xcfbadb)

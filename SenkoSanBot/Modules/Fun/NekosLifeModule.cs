@@ -1,12 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SenkoSanBot.Services;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
 {
     [Summary("Contains commands for nekoslife")]
-    public class NekosLifeModule : ModuleBase<SocketCommandContext>
+    public class NekosLifeModule : SenkoSanModuleBase
     {
         public DiscordSocketClient Client { get; set; }
 
@@ -14,6 +15,8 @@ namespace SenkoSanBot.Modules.Fun
         [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")] string category)
         {
+            Logger.LogInfo($"{Context.User} requested an image from nekoslife");
+
             string url = await NekosLifeApi.Client.GetSfwImageAsync(category);
 
             Embed embed = new EmbedBuilder()
@@ -28,12 +31,16 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
+
+            Logger.LogInfo($"Successfully sent nekoslife image");
         }
 
         [Command("nekogif"), Alias("nlg")]
         [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")] string category, [Summary("The user to do [verb] with")] IUser target = null, [Summary("The verb to display")] [Remainder] string verb = "interacted with")
         {
+            Logger.LogInfo($"{Context.User} requested a gif from nekoslife");
+
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
 
             target = target ?? Client.CurrentUser;
@@ -51,15 +58,21 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
+
+            Logger.LogInfo($"Successfully sent nekoslife gif");
         }
 
         [Command("hug")]
-        public async Task GetHug(IUser target = null) => await GetGif("hug", target, "hugged");
+        [Summary("Hugs senko-san or user specified")]
+        public async Task GetHug([Summary("The user to hug")] IUser target = null) => await GetGif("hug", target, "hugged");
         [Command("kiss")]
-        public async Task GetKiss(IUser target = null) => await GetGif("kiss", target, "kissed");
+        [Summary("kisses senko-san or user specified")]
+        public async Task GetKiss([Summary("The user to kiss")] IUser target = null) => await GetGif("kiss", target, "kissed");
         [Command("poke")]
-        public async Task GetPoke(IUser target = null) => await GetGif("poke", target, "poked");
+        [Summary("pokes senko-san or user specified")]
+        public async Task GetPoke([Summary("The user to poke")] IUser target = null) => await GetGif("poke", target, "poked");
         [Command("slap")]
-        public async Task GetSlap(IUser target = null) => await GetGif("slap", target, "slapped");
+        [Summary("slaps senko-san or user specified")]
+        public async Task GetSlap([Summary("The user to slap")] IUser target = null) => await GetGif("slap", target, "slapped");
     }
 }
