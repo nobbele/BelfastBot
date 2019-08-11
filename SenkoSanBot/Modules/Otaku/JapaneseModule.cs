@@ -10,7 +10,7 @@ namespace SenkoSanBot.Modules.Otaku
     public class JapaneseModule : ModuleBase<SocketCommandContext>
     {
         [Command("Jisho"), Alias("jsh")]
-        [Summary("Search word from jisho.org")]
+        [Summary("Searches given word from jisho.org")]
         public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string word)
         {
             JishoApi.SearchResult result = await Client.GetWordAsync(word);

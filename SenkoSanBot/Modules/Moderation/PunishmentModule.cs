@@ -49,6 +49,7 @@ namespace SenkoSanBot.Modules.Moderation
         }
 
         [Command("kick")]
+        [Summary("Kicks people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         public async Task KickUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
@@ -72,6 +73,7 @@ namespace SenkoSanBot.Modules.Moderation
         }
 
         [Command("ban")]
+        [Summary("Bans people who don't behave properly")]
         [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task BanUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
