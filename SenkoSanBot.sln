@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekosLifeApi", "NekosLifeAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekosLifeApiTests", "NekosLifeApiTests\NekosLifeApiTests.csproj", "{AA036BDB-5CBE-4884-B339-BE191F78AF57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeBooruApiTests", "SafeBooruApiTest\SafeBooruApiTests.csproj", "{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeBooruApiTests", "SafeBooruApiTest\SafeBooruApiTests.csproj", "{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JishoApi", "JishoApi\JishoApi.csproj", "{34184405-6BAC-4379-BCDF-8F49B201A336}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JishoApiTests", "JishoApiTests\JishoApiTests.csproj", "{7A7B4215-E6E5-4B7F-B281-B75663F9607A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34184405-6BAC-4379-BCDF-8F49B201A336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34184405-6BAC-4379-BCDF-8F49B201A336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34184405-6BAC-4379-BCDF-8F49B201A336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34184405-6BAC-4379-BCDF-8F49B201A336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
