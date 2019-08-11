@@ -60,10 +60,13 @@ namespace SenkoSanBot
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
 
+                //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
+
             }
         }
 

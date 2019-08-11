@@ -12,6 +12,8 @@ namespace SenkoSanBot
         [DataMember]
         public string WelcomeMessage { get; private set; }
         [DataMember]
+        public string StatusMessage { get; private set; }
+        [DataMember]
         public ulong LogChannelID { get; private set; }
         [DataMember]
         public string[] BlacklistedWord { get; private set; }
@@ -23,6 +25,7 @@ namespace SenkoSanBot
             Token = "YOUR TOKEN",
             Prefix = ".",
             WelcomeMessage = "おかえりなのじや! Welcome {0}",
+            StatusMessage = "Brushes her Tail",
             LogChannelID = 0,
             BlacklistedWord = new string[] { "thejayduck" }, 
         };
