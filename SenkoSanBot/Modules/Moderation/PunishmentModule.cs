@@ -12,6 +12,14 @@ namespace SenkoSanBot.Modules.Moderation
     {
         public JsonDatabaseService Db { get; set; }
 
+        private bool IsBotHigherRoleThan(SocketGuildUser target)
+        {
+            int targetMaxRole = target.Roles.Max(role => role.Position);
+            int botMaxRole = Context.Guild.GetUser(Context.User.Id).Roles.Max(role => role.Position);
+
+            return botMaxRole > targetMaxRole;
+        }
+
         [Command("warn")]
         [Summary("Warns people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
@@ -32,32 +40,57 @@ namespace SenkoSanBot.Modules.Moderation
             user.Warns.Add(new Warn(reason, Context.User.Id));
             await ReplyAsync($"Warned {target.Mention} for \"{reason}\"");
 
-            int targetMaxRole = target.Roles.Max(role => role.Position);
-            int botMaxRole = Context.Guild.GetUser(Context.User.Id).Roles.Max(role => role.Position);
+            bool isHigherRole = IsBotHigherRoleThan(target);
 
             if (user.Warns.Count == 2)
-            {
-                if (botMaxRole > targetMaxRole)
-                {
-                    await target.KickAsync(reason);
-                    await ReplyAsync($"Kicked {target.Mention} for having too many warns");
-                }
-                else
-                {
-                    await ReplyAsync($"Can't kick {target.Mention} with higher role than me");
-                }
-            }
+                await KickUserAsync(target, reason);
             else if (user.Warns.Count >= 3)
+                await BanUserAsync(target, reason);
+        }
+
+        [Command("kick")]
+        [RequireUserPermission(GuildPermission.KickMembers)]
+        public async Task KickUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
+        {
+            if (target == Context.User)
             {
-                if (botMaxRole > targetMaxRole)
-                {
-                    await target.BanAsync(0, reason);
-                    await ReplyAsync($"Banned {target.Mention} for having too many warns");
-                }
-                else
-                {
-                    await ReplyAsync($"Can't ban {target.Mention} with higher role than me");
-                }
+                await ReplyAsync($"{Context.User.Mention} You cannot kick yourself");
+                return;
+            }
+
+            bool isHigherRole = IsBotHigherRoleThan(target);
+
+            if (isHigherRole)
+            {
+                await target.KickAsync(reason);
+                await ReplyAsync($"Kicked {target.Mention} for having too many warns");
+            }
+            else
+            {
+                await ReplyAsync($"Can't kick {target.Mention} with higher role than me");
+            }
+        }
+
+        [Command("ban")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
+        public async Task BanUserAsync(SocketGuildUser target, [Remainder] string reason = "No reason specified")
+        {
+            if (target == Context.User)
+            {
+                await ReplyAsync($"{Context.User.Mention} You cannot ban yourself");
+                return;
+            }
+
+            bool isHigherRole = IsBotHigherRoleThan(target);
+
+            if (isHigherRole)
+            {
+                await target.BanAsync(0, reason);
+                await ReplyAsync($"Banned {target.Mention} for having too many warns");
+            }
+            else
+            {
+                await ReplyAsync($"Can't ban {target.Mention} with higher role than me");
             }
         }
     }

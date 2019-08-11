@@ -37,9 +37,6 @@ namespace SenkoSanBot.Modules.Fun
         {
             string url = await NekosLifeApi.Client.GetSfwGifAsync(category);
 
-            if (target.IsBot)
-                return;
-
             target = target ?? Client.CurrentUser;
 
             Embed embed = new EmbedBuilder()
