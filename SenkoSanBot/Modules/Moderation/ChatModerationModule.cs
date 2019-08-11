@@ -16,7 +16,7 @@ namespace SenkoSanBot.Modules.Moderation
             if (amount > 100)
             {
                 var botMessage = await ReplyAsync(":x: You cannot go higher than 100!");
-                await Task.Delay(2000);
+                await Task.Delay(5000);
                 await botMessage.DeleteAsync();
                 return;
             }
@@ -27,7 +27,7 @@ namespace SenkoSanBot.Modules.Moderation
                 await Context.Channel.DeleteMessageAsync(message);
             }
             var botMessage_2 = await ReplyAsync("Purged " + amount + " messages.");
-            await Task.Delay(2000);
+            await Task.Delay(5000);
             await botMessage_2.DeleteAsync();
         }
     }
