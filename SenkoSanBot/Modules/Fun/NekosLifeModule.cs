@@ -11,7 +11,7 @@ namespace SenkoSanBot.Modules.Fun
     {
         public DiscordSocketClient Client { get; set; }
 
-        [Command("nli")]
+        [Command("nekoimg"), Alias("nli")]
         [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")]string category)
         {
@@ -26,7 +26,7 @@ namespace SenkoSanBot.Modules.Fun
             await ReplyAsync(embed: embed);
         }
 
-        [Command("nlg")]
+        [Command("nekogif"), Alias("nlg")]
         [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")]string category, [Remainder]string arg = "")
         {

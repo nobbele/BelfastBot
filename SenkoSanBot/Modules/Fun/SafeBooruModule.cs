@@ -7,9 +7,9 @@ namespace SenkoSanBot.Modules.Fun
     [Summary("Commands for booru websites")]
     public class SafeBooruModule : ModuleBase<SocketCommandContext>
     {
-        [Command("sbi")]
+        [Command("booru"), Alias("sbi")]
         [Summary("Gets images from safebooru with the given tag")]
-        public async Task GetImage([Summary("Tag for search")] [Remainder] string tag)
+        public async Task GetImage([Summary("Tag for search")] [Remainder] string tag = "sewayaki_kitsune_no_senko-san")
         {
             tag = tag.Replace(' ', '_');
             string url = await SafeBooruApi.Client.GetRandomPostAsync(tag);
@@ -18,6 +18,11 @@ namespace SenkoSanBot.Modules.Fun
                 .WithColor(new Color(0xb39df2))
                 .WithTitle("Image From Safebooru.org")
                 .WithImageUrl(url)
+                .WithFooter(footer => {
+                    footer
+                        .WithText($"Sent by {Context.User}")
+                        .WithIconUrl(Context.User.GetAvatarUrl());
+                })
                 .Build();
 
             await ReplyAsync(embed: embed);

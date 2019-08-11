@@ -21,7 +21,7 @@ namespace SenkoSanBot.Modules
 
             builder.Description = $"Do {prefix}help [command] to get more information about a command";
 
-            foreach(ModuleInfo module in Command.Modules.GroupBy(x => x.Name).Select(y => y.First()))
+            foreach (ModuleInfo module in Command.Modules.GroupBy(x => x.Name).Select(y => y.First()))
             {
                 string[] commandNames = module.Commands.Select(cmd => cmd.Name).ToArray();
                 if (commandNames.Length > 0)

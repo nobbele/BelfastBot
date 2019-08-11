@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace SenkoSanBot
 {
@@ -12,15 +9,18 @@ namespace SenkoSanBot
         public string Token { get; private set; }
         [DataMember]
         public string Prefix { get; private set; }
-        public ExtensionDataObject ExtensionData { get; set; }
         [DataMember]
         public string WelcomeMessage { get; private set; }
+        [DataMember]
+        public ulong LogChannelID { get; private set; }
+        public ExtensionDataObject ExtensionData { get; set; }
 
         public static BotConfiguration GetDefault() => new BotConfiguration()
         {
             Token = "YOUR TOKEN",
             Prefix = ".",
             WelcomeMessage = "おかえりなのじや! Welcome {0}",
+            LogChannelID = 0,
         };
     }
 }
