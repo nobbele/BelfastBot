@@ -55,6 +55,11 @@ namespace SenkoSanBot
                     await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention));
                 };
 
+                client.Ready += async () =>
+                {
+                    await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                };
+
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
 
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
