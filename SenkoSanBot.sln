@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NekosLifeApiTests", "NekosL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeBooruApiTests", "SafeBooruApiTest\SafeBooruApiTests.csproj", "{90CA3315-CDB6-4C26-8B5E-EEF053E23B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JishoApi", "JishoApi\JishoApi.csproj", "{34184405-6BAC-4379-BCDF-8F49B201A336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JishoApi", "JishoApi\JishoApi.csproj", "{34184405-6BAC-4379-BCDF-8F49B201A336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JishoApiTests", "JishoApiTests\JishoApiTests.csproj", "{7A7B4215-E6E5-4B7F-B281-B75663F9607A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JishoApiTests", "JishoApiTests\JishoApiTests.csproj", "{7A7B4215-E6E5-4B7F-B281-B75663F9607A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AniListApi", "AnilistApi\AniListApi.csproj", "{369CD9CF-C05D-493F-984B-6BE636A4F745}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A7B4215-E6E5-4B7F-B281-B75663F9607A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{369CD9CF-C05D-493F-984B-6BE636A4F745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{369CD9CF-C05D-493F-984B-6BE636A4F745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{369CD9CF-C05D-493F-984B-6BE636A4F745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{369CD9CF-C05D-493F-984B-6BE636A4F745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
