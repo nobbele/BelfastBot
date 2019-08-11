@@ -1,16 +1,7 @@
-﻿using Discord;
-using Discord.Audio;
-using Discord.Commands;
-using Discord.Rest;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using SenkoSanBot.Modules;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services

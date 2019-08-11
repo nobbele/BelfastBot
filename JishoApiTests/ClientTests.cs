@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace JishoApiTests
 {
     [TestClass]
-    public class UnitTest1
+    public class ClientTests
     {
         public TestContext TestContext { get; set; }
 

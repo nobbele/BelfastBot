@@ -15,7 +15,7 @@ namespace SenkoSanBot.Modules.Fun
             string url = await SafeBooruApi.Client.GetRandomPostAsync(tag);
 
             Embed embed = new EmbedBuilder()
-                .WithColor(new Color(0xb39df2))
+                .WithColor(0xb39df2)
                 .WithTitle("Image From Safebooru.org")
                 .WithImageUrl(url)
                 .WithFooter(footer => {
