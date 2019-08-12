@@ -12,10 +12,10 @@ namespace SenkoSanBot.Services.Moderation
     public class WordBlacklistService
     {
         private readonly DiscordSocketClient m_client;
-        private readonly BotConfigurationService m_config;
+        private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
 
-        public WordBlacklistService(DiscordSocketClient client, BotConfigurationService config, LoggingService logger)
+        public WordBlacklistService(DiscordSocketClient client, IBotConfigurationService config, LoggingService logger)
         {
             m_client = client;
             m_config = config;

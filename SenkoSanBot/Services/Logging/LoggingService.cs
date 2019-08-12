@@ -60,7 +60,7 @@ namespace SenkoSanBot.Services.Logging
 
         public void Log(bool writeToFile, LogLevel logLevel, object format, params object[] args)
         {
-            string message = string.Format(format.ToString(), args);
+            string message = string.Format(format?.ToString() ?? "null", args);
 
             ConsoleColor color;
             string level = LogLevelToString(logLevel, out color);

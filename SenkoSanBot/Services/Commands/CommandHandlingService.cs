@@ -9,12 +9,12 @@ using SenkoSanBot.Services.Logging;
 
 namespace SenkoSanBot.Services.Commands
 {
-    public class CommandHandlingService
+    public class CommandHandlingService : ICommandHandlingService
     {
         private readonly IServiceProvider m_services;
         private readonly DiscordSocketClient m_client;
         private readonly CommandService m_command;
-        private readonly BotConfigurationService m_config;
+        private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
 
         public CommandHandlingService(IServiceProvider services)
@@ -22,7 +22,7 @@ namespace SenkoSanBot.Services.Commands
             m_services = services;
             m_client = services.GetRequiredService<DiscordSocketClient>();
             m_command = services.GetRequiredService<CommandService>();
-            m_config = services.GetRequiredService<BotConfigurationService>();
+            m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
         }
 
@@ -62,7 +62,7 @@ namespace SenkoSanBot.Services.Commands
                 if (!result.IsSuccess)
                 {
                     await context.Channel.SendMessageAsync(result.ErrorReason);
-                    m_logger.LogCritical(result.ErrorReason);
+                    m_logger.LogInfo($"Unknown command {result.ErrorReason}");
                 }
                 else
                 {

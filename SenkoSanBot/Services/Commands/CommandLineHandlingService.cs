@@ -13,7 +13,7 @@ namespace SenkoSanBot.Services.Commands
     {
         private readonly DiscordSocketClient m_client;
         private readonly CommandService m_command;
-        private readonly BotConfigurationService m_config;
+        private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
         private readonly SenkoSan m_senko;
         private readonly JsonDatabaseService m_database;
@@ -22,7 +22,7 @@ namespace SenkoSanBot.Services.Commands
         {
             m_client = services.GetRequiredService<DiscordSocketClient>();
             m_command = services.GetRequiredService<CommandService>();
-            m_config = services.GetRequiredService<BotConfigurationService>();
+            m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
             m_senko = services.GetRequiredService<SenkoSan>();
             m_database = services.GetRequiredService<JsonDatabaseService>();

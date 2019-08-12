@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace SenkoSanBot.Services.Configuration
 {
-    public class BotConfigurationService : IDisposable
+    public class BotConfigurationService : IDisposable, IBotConfigurationService
     {
         public static string ConfigurationFilePath => "config.xml";
         public static readonly int FileBufferSize = 4096;

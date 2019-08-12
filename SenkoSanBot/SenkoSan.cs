@@ -11,7 +11,9 @@ using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Commands;
 using SenkoSanBot.Services.Moderation;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
 {
     public class SenkoSan
@@ -53,7 +55,7 @@ namespace SenkoSanBot
         {
             Logger = services.GetRequiredService<LoggingService>();
             await Logger.InitializeAsync();
-            var config = services.GetRequiredService<BotConfigurationService>();
+            var config = services.GetRequiredService<IBotConfigurationService>();
 
             if (config.Initialize())
             {
@@ -80,7 +82,7 @@ namespace SenkoSanBot
 
                 Logger.LogInfo("Initializing services");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
-                await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+                await services.GetRequiredService<ICommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 Logger.LogInfo("Initializing command line");
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
@@ -110,9 +112,9 @@ namespace SenkoSanBot
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton<BotConfigurationService>()
+                .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<CommandService>()
-                .AddSingleton<CommandHandlingService>()
+                .AddSingleton<ICommandHandlingService, CommandHandlingService>()
                 .AddSingleton<CommandLineHandlingService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<SenkoSan>()

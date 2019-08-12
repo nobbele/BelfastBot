@@ -6,17 +6,17 @@ namespace SenkoSanBot.Services.Configuration
     public class BotConfiguration : IExtensibleDataObject
     {
         [DataMember]
-        public string Token { get; private set; } = "YOUR TOKEN";
+        public string Token { get; internal set; } = "YOUR TOKEN";
         [DataMember]
-        public string Prefix { get; private set; } = ".";
+        public string Prefix { get; internal set; } = ".";
         [DataMember]
-        public string WelcomeMessage { get; private set; } = "おかえりなのじや! Welcome {0}";
+        public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0}";
         [DataMember]
-        public string StatusMessage { get; private set; } = "With Her Tail";
+        public string StatusMessage { get; internal set; } = "With Her Tail";
         [DataMember]
-        public ulong LogChannelID { get; private set; } = 0;
+        public ulong LogChannelID { get; internal set; } = 0;
         [DataMember]
-        public string[] BlacklistedWord { get; private set; } = new string[] { "thejayduck" };
+        public string[] BlacklistedWord { get; internal set; } = new string[] { "thejayduck" };
 
         public ExtensionDataObject ExtensionData { get; set; }
 
