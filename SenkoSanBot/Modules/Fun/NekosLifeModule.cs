@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using SenkoSanBot.Services;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
@@ -13,7 +12,7 @@ namespace SenkoSanBot.Modules.Fun
 
         [Command("nekoimg"), Alias("nli")]
         [Summary("Sends a random image from nekoslife with the given tag")]
-        public async Task GetImage([Summary("Category to search")] string category)
+        public async Task GetImage([Summary("Category to search")] string category = "neko")
         {
             Logger.LogInfo($"{Context.User} requested an image from nekoslife");
 
