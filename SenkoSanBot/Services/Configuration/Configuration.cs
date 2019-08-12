@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SenkoSanBot
+namespace SenkoSanBot.Services.Configuration
 {
     [DataContract(Name = "Configuration", Namespace = "")]
     public struct BotConfiguration : IExtensibleDataObject

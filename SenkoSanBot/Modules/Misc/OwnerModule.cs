@@ -1,7 +1,8 @@
 ﻿using Discord.Commands;
+using SenkoSanBot.Services.Commands;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Modules
+namespace SenkoSanBot.Modules.Misc
 {
     [Summary("Commands that are only for owner")]
     public class OwnerModule : SenkoSanModuleBase

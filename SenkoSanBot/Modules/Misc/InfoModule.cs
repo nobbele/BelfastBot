@@ -1,13 +1,14 @@
 ﻿using Discord;
 using Discord.Commands;
 using SenkoSanBot.Services;
+using SenkoSanBot.Services.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Modules
+namespace SenkoSanBot.Modules.Misc
 {
-    [Summary("Miscellaneous commands")]
-    public class MiscModule : SenkoSanModuleBase
+    [Summary("Commands for information")]
+    public class InfoModule : SenkoSanModuleBase
     {
         public BotConfigurationService Config { get; set; }
         public CommandService Command { get; set; }

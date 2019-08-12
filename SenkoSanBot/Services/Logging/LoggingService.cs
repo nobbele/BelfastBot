@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Logging
 {
     public class LoggingService : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot
 {
     public static class ListExtensionMethods
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Configuration
 {
     public class BotConfigurationService : IDisposable
     {

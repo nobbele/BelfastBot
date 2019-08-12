@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Database
 {
     public class JsonDatabaseService
     {

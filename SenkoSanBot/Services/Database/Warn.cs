@@ -1,4 +1,4 @@
-﻿namespace SenkoSanBot.Services
+﻿namespace SenkoSanBot.Services.Database
 {
     public struct Warn
     {

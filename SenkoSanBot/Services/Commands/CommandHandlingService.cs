@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Commands
 {
     public class CommandHandlingService
     {

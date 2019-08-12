@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Database
 {
     public class DatabaseUserEntry
     {
