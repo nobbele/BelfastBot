@@ -107,7 +107,6 @@ namespace SenkoSanBot.Services.Logging
 
         private void WriteBuffer()
         {
-            LogInfo("Writing log buffer to file");
             lock (writeLock)
             {
                 string data = m_fileBuffer.ToString().TrimEnd();
@@ -115,12 +114,13 @@ namespace SenkoSanBot.Services.Logging
                     writer.WriteLine(data);
                 m_fileBuffer.Clear();
             }
-            LogInfo("done writing log buffer to file");
+            LogInfo("wrote log buffer to file");
         }
 
         public void Dispose()
         {
             tokenSource.Cancel();
+            WriteBuffer();
         }
     }
 }

@@ -13,6 +13,8 @@ namespace SenkoSanBot.Services.Configuration
 
         public BotConfiguration Configuration { get; private set; }
 
+        private bool m_failure = false;
+
         private readonly LoggingService m_logger;
 
         public BotConfigurationService(LoggingService logger)
@@ -25,32 +27,54 @@ namespace SenkoSanBot.Services.Configuration
             if (!File.Exists(ConfigurationFilePath))
             {
                 m_logger.LogCritical("Configuration not found");
-                Configuration = BotConfiguration.GetDefault();
+                Configuration = new BotConfiguration();
                 return false;
             }
             else
             {
                 m_logger.LogInfo("Reading configuration");
-                var serializer = new DataContractSerializer(typeof(BotConfiguration));
-                using (var fs = new FileStream(ConfigurationFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: FileBufferSize, useAsync: true))
-                    Configuration = (BotConfiguration)serializer.ReadObject(fs);
-                m_logger.LogInfo("Done reading configuration");
-                return true;
+                try
+                {
+                    var serializer = new DataContractSerializer(typeof(BotConfiguration));
+                    using (var fs = new FileStream(ConfigurationFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: FileBufferSize, useAsync: true))
+                        Configuration = (BotConfiguration)serializer.ReadObject(fs);
+                    if (Configuration == null)
+                        throw new Exception("Configuration is null");
+                    m_logger.LogInfo("Done reading configuration");
+                    return WithFailure(false);
+                } catch (Exception e)
+                {
+                    m_logger.LogCritical($"Couldn't load configuration. {e.Message}");
+                    return WithFailure(true);
+                }
             }
         }
 
+        /// <summary>
+        /// Sets failure flag and returns opposite
+        /// </summary>
+        private bool WithFailure(bool value) => !(m_failure = value);
+
         public void Dispose()
         {
-            m_logger.LogInfo("Writing configuration");
-            var settings = new XmlWriterSettings()
+            if (m_failure)
             {
-                Indent = true,
-            };
-            DataContractSerializer serializer = new DataContractSerializer(typeof(BotConfiguration));
-            using (var fs = new FileStream(ConfigurationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: FileBufferSize, useAsync: true))
-            using (var writer = XmlWriter.Create(fs, settings))
-                serializer.WriteObject(writer, Configuration);
-            m_logger.LogInfo("Done writing configuration");
+                m_logger.LogInfo("Not writing due to invalid configuration");
+                return;
+            }
+            else
+            {
+                m_logger.LogInfo("Writing configuration");
+                var settings = new XmlWriterSettings()
+                {
+                    Indent = true,
+                };
+                DataContractSerializer serializer = new DataContractSerializer(typeof(BotConfiguration));
+                using (var fs = new FileStream(ConfigurationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: FileBufferSize, useAsync: true))
+                using (var writer = XmlWriter.Create(fs, settings))
+                    serializer.WriteObject(writer, Configuration);
+                m_logger.LogInfo("Done writing configuration");
+            }
         }
-    } 
+    }
 }

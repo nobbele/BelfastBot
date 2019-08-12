@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using SenkoSanBot.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Moderation
@@ -18,22 +20,18 @@ namespace SenkoSanBot.Modules.Moderation
 
             if (amount > 100)
             {
-                var botMessage = await ReplyAsync(":x: You cannot go higher than 100!");
+                IUserMessage botMessage = await ReplyAsync(":x: You cannot go higher than 100!");
                 await Task.Delay(5000);
                 await botMessage.DeleteAsync();
                 return;
             }
 
-            var messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
-            foreach(IMessage message in messages)
-            {
-                await Context.Channel.DeleteMessageAsync(message);
-            }
-            var botMessage_2 = await ReplyAsync("Purged " + amount + " messages.");
-            await Task.Delay(5000);
-            await botMessage_2.DeleteAsync();
+            IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
+            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
 
-            Logger.LogInfo($"Successfully purged messages");
+            IUserMessage msg = await ReplyAsync($"Purged {amount} messages");
+            await Task.Delay(5000);
+            await msg.DeleteAsync();
         }
     }
 }

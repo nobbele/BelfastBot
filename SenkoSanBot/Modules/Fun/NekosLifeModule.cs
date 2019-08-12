@@ -31,8 +31,6 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
-
-            Logger.LogInfo($"Successfully sent nekoslife image");
         }
 
         [Command("nekogif"), Alias("nlg")]
@@ -58,8 +56,6 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
-
-            Logger.LogInfo($"Successfully sent nekoslife gif");
         }
 
         [Command("hug")]

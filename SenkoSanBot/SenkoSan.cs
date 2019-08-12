@@ -6,6 +6,11 @@ using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
 using SenkoSanBot.Services;
+using SenkoSanBot.Services.Logging;
+using SenkoSanBot.Services.Configuration;
+using SenkoSanBot.Services.Database;
+using SenkoSanBot.Services.Commands;
+using SenkoSanBot.Services.Moderation;
 
 namespace SenkoSanBot
 {
@@ -24,12 +29,17 @@ namespace SenkoSanBot
                     var mainTask = Instance.MainAsync(services);
                     mainTask.GetAwaiter().GetResult();
                 }
+                catch (ConfigurationException e)
+                {
+                    Instance.Logger.LogCritical(e.Message);
+                }
                 catch (Exception e)
                 {
                     Instance.Logger.LogCritical(e.ToString());
-                    Console.ReadKey();
                 }
             }
+            Console.Write("\nPress any key to exit");
+            Console.ReadKey();
         }
 
         public bool Stopped { get; private set; } = false;
@@ -54,7 +64,6 @@ namespace SenkoSanBot
                 {
                     await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention));
                 };
-
                 client.Ready += async () =>
                 {
                     await client.SetGameAsync($"{config.Configuration.StatusMessage}");
@@ -62,10 +71,12 @@ namespace SenkoSanBot
 
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
 
+                if (config.Configuration.Token == "YOUR TOKEN")
+                    throw new ConfigurationException("Default token detected, please put your token in the config file");
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
 
-                //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                await client.SetGameAsync($"{config.Configuration.StatusMessage}");
 
                 Logger.LogInfo("Initializing services");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
@@ -98,7 +109,6 @@ namespace SenkoSanBot
         });
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
-                .AddSingleton<LoggingService>()
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<BotConfigurationService>()
                 .AddSingleton<CommandService>()
@@ -108,6 +118,7 @@ namespace SenkoSanBot
                 .AddSingleton<SenkoSan>()
                 .AddSingleton<JsonDatabaseService>()
                 .AddSingleton<WordBlacklistService>()
+                .AddSingleton<LoggingService>()
                 .BuildServiceProvider();
     }
 }
