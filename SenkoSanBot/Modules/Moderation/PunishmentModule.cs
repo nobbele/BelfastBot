@@ -36,16 +36,25 @@ namespace SenkoSanBot.Modules.Moderation
                 return;
             }
 
-            DatabaseUserEntry user = Db.GetUserEntry(target.Id);
+            bool isHigherRole = IsBotHigherRoleThan(target);
 
-            user.Warns.Add(new Warn(reason, Context.User.Id));
-            Db.WriteData();
-            await ReplyAsync($"Warned {target.Mention} for \"{reason}\"");
+            if (isHigherRole)
+            {
+                DatabaseUserEntry user = Db.GetUserEntry(target.Guild.Id, target.Id);
 
-            if (user.Warns.Count == 2)
-                await KickUserAsync(target, reason);
-            else if (user.Warns.Count >= 3)
-                await BanUserAsync(target, reason);
+                user.Warns.Add(new Warn(reason, Context.User.Id));
+                Db.WriteData();
+                await ReplyAsync($"Warned {target.Mention} for \"{reason}\"");
+
+                if (user.Warns.Count == 2)
+                    await KickUserAsync(target, reason);
+                else if (user.Warns.Count >= 3)
+                    await BanUserAsync(target, reason);
+            }
+            else
+            {
+                await ReplyAsync($"Can't warn {target.Mention} with higher role than me");
+            }
         }
 
         [Command("warnings"), Alias("warns")]
@@ -61,7 +70,7 @@ namespace SenkoSanBot.Modules.Moderation
                 return;
             }
 
-            DatabaseUserEntry user = Db.GetUserEntry(target.Id);
+            DatabaseUserEntry user = Db.GetUserEntry(target.Guild.Id, target.Id);
 
             EmbedFieldBuilder builder = new EmbedFieldBuilder()
                 .WithName($"{target}'s Warnings");
@@ -97,7 +106,7 @@ namespace SenkoSanBot.Modules.Moderation
 
             int proIndex = index - 1;
 
-            DatabaseUserEntry user = Db.GetUserEntry(target.Id);
+            DatabaseUserEntry user = Db.GetUserEntry(target.Guild.Id, target.Id);
             if(proIndex > user.Warns.Count)
             {
                 await ReplyAsync($"Out of bounds, user has {user.Warns.Count} warnings");

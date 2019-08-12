@@ -12,7 +12,7 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public string WelcomeMessage { get; private set; } = "おかえりなのじや! Welcome {0}";
         [DataMember]
-        public string StatusMessage { get; private set; } = "Brushes her Tail";
+        public string StatusMessage { get; private set; } = "With Her Tail";
         [DataMember]
         public ulong LogChannelID { get; private set; } = 0;
         [DataMember]
