@@ -1,4 +1,6 @@
 ﻿using Discord.WebSocket;
+using SenkoSanBot.Services.Configuration;
+using SenkoSanBot.Services.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;

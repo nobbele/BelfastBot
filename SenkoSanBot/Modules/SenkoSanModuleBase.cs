@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using SenkoSanBot.Services;
+using SenkoSanBot.Services.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;

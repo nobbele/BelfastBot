@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using Discord.WebSocket;
+using SenkoSanBot.Services.Configuration;
+using SenkoSanBot.Services.Logging;
 
 namespace SenkoSanBot.Services.Commands
 {
