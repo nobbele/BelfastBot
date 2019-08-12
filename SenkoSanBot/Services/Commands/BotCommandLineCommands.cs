@@ -1,4 +1,4 @@
-﻿namespace SenkoSanBot
+﻿namespace SenkoSanBot.Services.Commands
 {
     public static class BotCommandLineCommands
     {

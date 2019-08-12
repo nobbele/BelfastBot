@@ -1,10 +1,13 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using SenkoSanBot.Services.Configuration;
+using SenkoSanBot.Services.Database;
+using SenkoSanBot.Services.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Commands
 {
     public class CommandLineHandlingService
     {

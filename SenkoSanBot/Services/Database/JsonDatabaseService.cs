@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SenkoSanBot.Services.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SenkoSanBot.Services
+namespace SenkoSanBot.Services.Database
 {
     public class JsonDatabaseService
     {

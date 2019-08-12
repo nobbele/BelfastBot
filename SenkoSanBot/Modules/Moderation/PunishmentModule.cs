@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using SenkoSanBot.Services;
+using SenkoSanBot.Services.Database;
 using System.Linq;
 using System.Threading.Tasks;
 

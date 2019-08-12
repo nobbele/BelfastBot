@@ -29,8 +29,6 @@ namespace SenkoSanBot.Modules.Fun
                 .Build();
 
             await ReplyAsync(embed: embed);
-
-            Logger.LogInfo($"Successfully sent safebooru image");
         }
 
     }
