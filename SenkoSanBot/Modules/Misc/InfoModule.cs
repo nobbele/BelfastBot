@@ -1,7 +1,5 @@
 ﻿using Discord;
 using Discord.Commands;
-using SenkoSanBot.Services;
-using SenkoSanBot.Services.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -76,7 +74,7 @@ namespace SenkoSanBot.Modules.Misc
             Embed embed = new EmbedBuilder()
                 .WithTitle("Made by: Team Shinaosu")
                 .WithColor(0xcfbadb)
-                .AddField("Developers", "Nobbele & JayDuck", true)
+                .AddField("Developers", "**Nobbele & JayDuck**", true)
                 .WithFooter("09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/571686869163704320/Shinaosu.png")
                 .Build();
