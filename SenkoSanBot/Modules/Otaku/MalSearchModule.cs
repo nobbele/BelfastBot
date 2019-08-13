@@ -43,7 +43,7 @@ namespace SenkoSanBot.Modules.Otaku
                             .WithText($"Requested by {Context.User}")
                             .WithIconUrl(Context.User.GetAvatarUrl());
                     })
-                    .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
+                    .WithThumbnailUrl(result.ImageUrl)
                     .Build();
 
                 await ReplyAsync(embed: embed);

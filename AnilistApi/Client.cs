@@ -26,6 +26,7 @@ namespace MalApi
                     {
                         Id = jsonResult.mal_id,
                         Title = jsonResult.title,
+                        ImageUrl = jsonResult.image_url,
                     };
                     i++;
                 }

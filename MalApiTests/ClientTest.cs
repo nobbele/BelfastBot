@@ -25,6 +25,7 @@ namespace MalApiTests
             foreach(SearchResult result in results)
             {
                 Assert.IsFalse(string.IsNullOrEmpty(result.Title));
+                Assert.IsFalse(string.IsNullOrEmpty(result.ImageUrl));
                 Assert.IsTrue(result.Id > 0);
             }
 

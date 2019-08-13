@@ -4,5 +4,6 @@
     {
         public ulong Id;
         public string Title;
+        public string ImageUrl;
     }
 }
