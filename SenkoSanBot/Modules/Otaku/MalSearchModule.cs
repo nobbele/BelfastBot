@@ -1,12 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using MalApi;
 using SenkoSanBot.Services.Pagination;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Otaku
@@ -16,13 +11,13 @@ namespace SenkoSanBot.Modules.Otaku
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
-        [Summary("Search for anime on mal")]
         [Command("mal")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 5)
+        [Summary("Search for anime on myanimelist")]
+        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name  )
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            MalApi.SearchResult[] results = await Client.SearchAnimeAsync(name, limit);
+            MalApi.SearchResult[] results = await Client.SearchAnimeAsync(name);
 
             Embed GetEmbed(int i) => GenerateEmbedFor(results[i], new EmbedFooterBuilder()
                 .WithText($"page {i + 1} out of {results.Length}"));
@@ -43,11 +38,15 @@ namespace SenkoSanBot.Modules.Otaku
         private Embed GenerateEmbedFor(MalApi.SearchResult result, EmbedFooterBuilder footer)
         {
             return new EmbedBuilder()
-                    .WithColor(0x53DF1D)
+                    .WithColor(0x2E51A2)
                     .WithTitle($"**{result.Title}**")
-                    .AddField("Results", result.Title)
+                    .WithDescription(result.Synopsis)
+                    .AddField("Title", $"**[{result.Title}]({result.AnimeUrl})**")
+                    .AddField("Type", result.Type, true)
+                    .AddField("Episodes", result.Episodes, true)
+                    .AddField("Score", result.Score)
                     .WithFooter(footer)
-                    .WithThumbnailUrl(result.ImageUrl)
+                    .WithImageUrl(result.ImageUrl)
                     .Build();
         }
     }

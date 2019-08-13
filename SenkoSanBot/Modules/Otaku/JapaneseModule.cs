@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Otaku
 {
-    [Summary("Commands for japanese translation")]
+    [Summary("Commands for Japan related stuff")]
     public class JapaneseModule : SenkoSanModuleBase
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
@@ -18,7 +18,7 @@ namespace SenkoSanBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {searchWord} on jisho");
 
-            JishoApi.SearchResult[] results = await Client.GetWordAsync(searchWord);
+            JishoApi.SearchResult[] results = await JishoApi.Client.GetWordAsync(searchWord);
 
             await PaginatedMessageService.SendPaginatedDataMessage(
                 Context.Channel, 
@@ -30,6 +30,7 @@ namespace SenkoSanBot.Modules.Otaku
         private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
         {
             string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
+            string url = searchWord.Replace(" ", "%20");
 
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
                 .WithName(japanese);
@@ -56,11 +57,51 @@ namespace SenkoSanBot.Modules.Otaku
             return new EmbedBuilder()
                 .WithColor(0x53DF1D)
                 .WithTitle($"Search Result For **{searchWord}**")
+                .AddField("Word", $"**[{searchWord}](https://jisho.org/search/{url})**")
                 .AddField(fieldBuilder)
-                .WithDescription($"\n Link: https://jisho.org/search/{searchWord}")
                 .WithFooter(footer)
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
                 .Build();
+        }
+
+        //Mal Module
+        [Command("mal")]
+        [Summary("Search for anime on myanimelist")]
+        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name)
+        {
+            Logger.LogInfo($"Searching for {name} on myanimelist");
+
+            MalApi.SearchResult[] results = await MalApi.Client.SearchAnimeAsync(name);
+
+            Embed GetEmbed(int i) => GenerateEmbedFor(results[i], new EmbedFooterBuilder()
+                .WithText($"page {i + 1} out of {results.Length}"));
+
+            IUserMessage message = await ReplyAsync(embed: GetEmbed(0));
+
+            await message.AddReactionsAsync(PaginatedMessageService.ReactionEmotes);
+
+            PaginatedMessageService.AddCallback(message.Id, results.Length, async (IUserMessage msg, int i) =>
+            {
+                await msg.ModifyAsync((MessageProperties properties) =>
+                {
+                    properties.Embed = Optional.Create(GetEmbed(i));
+                });
+            });
+        }
+
+        private Embed GenerateEmbedFor(MalApi.SearchResult result, EmbedFooterBuilder footer)
+        {
+            return new EmbedBuilder()
+                    .WithColor(0x2E51A2)
+                    .WithTitle($"**{result.Title}**")
+                    .WithDescription(result.Synopsis)
+                    .AddField("Title", $"**[{result.Title}]({result.AnimeUrl})**")
+                    .AddField("Type", result.Type, true)
+                    .AddField("Episodes", result.Episodes, true)
+                    .AddField("Score", result.Score)
+                    .WithFooter(footer)
+                    .WithImageUrl(result.ImageUrl)
+                    .Build();
         }
     }
 }

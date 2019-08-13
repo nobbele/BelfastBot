@@ -8,17 +8,17 @@ namespace MalApi
     {
         public static readonly string BaseUrl = "https://api.jikan.moe/v3/search/anime";
 
-        public static async Task<SearchResult[]> SearchAnimeAsync(string name, int limit)
+        public static async Task<SearchResult[]> SearchAnimeAsync(string name)
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}?q={name}&limit={limit}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}?q={name}");
 
                 dynamic obj = JObject.Parse(json);
 
                 dynamic[] jsonResults = (dynamic[])obj.results.ToObject<dynamic[]>();
 
-                SearchResult[] results = new SearchResult[jsonResults.Length];
+                SearchResult[] results = new SearchResult[jsonResults.Length];  
                 int i = 0;
                 foreach (dynamic jsonResult in jsonResults) {
 
@@ -26,9 +26,16 @@ namespace MalApi
                     {
                         Id = jsonResult.mal_id,
                         Title = jsonResult.title,
+                        Synopsis = jsonResult.synopsis,
+                        Type = jsonResult.type,
+                        Episodes = jsonResult.episodes,
+                        Score = jsonResult.score,
                         ImageUrl = jsonResult.image_url,
+                        AnimeUrl = jsonResult.url,
                     };
                     i++;
+
+
                 }
 
                 return results;

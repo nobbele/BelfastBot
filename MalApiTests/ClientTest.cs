@@ -18,7 +18,7 @@ namespace MalApiTests
         public async Task SearchAnimeAsync(string name)
         {
             TestContext.WriteLine($"Trying to find {name} with limit 5");
-            SearchResult[] results = await Client.SearchAnimeAsync(name, 5);
+            SearchResult[] results = await Client.SearchAnimeAsync(name);
             Assert.IsNotNull(results);
             Assert.IsTrue(results.Length > 0);
 
