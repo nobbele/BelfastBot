@@ -12,6 +12,7 @@ using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Commands;
 using SenkoSanBot.Services.Moderation;
 using System.Runtime.CompilerServices;
+using SenkoSanBot.Services.Pagination;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
@@ -84,6 +85,7 @@ namespace SenkoSanBot
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<ICommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
+                await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 Logger.LogInfo("Initializing command line");
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
 
@@ -121,6 +123,7 @@ namespace SenkoSanBot
                 .AddSingleton<JsonDatabaseService>()
                 .AddSingleton<WordBlacklistService>()
                 .AddSingleton<LoggingService>()
+                .AddSingleton<PaginatedMessageService>()
                 .BuildServiceProvider();
     }
 }

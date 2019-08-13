@@ -10,7 +10,7 @@ namespace JishoApi
     {
         public static readonly string BaseUrl = "https://jisho.org/api/v1/search/words";
 
-        public static async Task<SearchResult> GetWordAsync(string word)
+        public static async Task<SearchResult[]> GetWordAsync(string word)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -18,23 +18,23 @@ namespace JishoApi
 
                 dynamic obj = JObject.Parse(json);
 
-                if (((dynamic[])obj.data.ToObject<dynamic[]>()).Length < 1)
-                    return new SearchResult()
-                    {
-                        Word = "None",
-                        Japanese = new KeyValuePair<string, string>[0],
-                        English = new EnglishDefinition[0],
-                    };
-                dynamic jsonResult = obj.data[0];
+                dynamic[] jsonResults = (dynamic[])obj.data.ToObject<dynamic[]>();
 
-                SearchResult result = new SearchResult
+                SearchResult[] results = new SearchResult[jsonResults.Length];
+
+                int i = 0;
+                foreach (dynamic jsonResult in jsonResults)
                 {
-                    Word = jsonResult.slug,
-                    Japanese = ((dynamic[])jsonResult.japanese.ToObject<dynamic[]>()).Select(o => new KeyValuePair<string, string>((string)o.word, (string)o.reading)).ToArray(),
-                    English = ((dynamic[])jsonResult.senses.ToObject<dynamic[]>()).Select(o => new EnglishDefinition((string[])o.english_definitions.ToObject<string[]>(), (string[])o.info.ToObject<string[]>())).ToArray()
-                };
+                    results[i] = new SearchResult
+                    {
+                        Word = jsonResult.slug,
+                        Japanese = ((dynamic[])jsonResult.japanese.ToObject<dynamic[]>()).Select(o => new KeyValuePair<string, string>((string)o.word, (string)o.reading)).ToArray(),
+                        English = ((dynamic[])jsonResult.senses.ToObject<dynamic[]>()).Select(o => new EnglishDefinition((string[])o.english_definitions.ToObject<string[]>(), (string[])o.info.ToObject<string[]>())).ToArray()
+                    };
+                    i++;
+                }
 
-                return result;
+                return results;
             }
         }
     }

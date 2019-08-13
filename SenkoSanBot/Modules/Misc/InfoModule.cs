@@ -32,7 +32,7 @@ namespace SenkoSanBot.Modules.Misc
                 string[] commandNames = module.Commands.Select(cmd => cmd.Name).ToArray();
                 if (commandNames.Length > 0)
                 {
-                    builder.AddField($"{module.Name.Replace("Module", " ")} - {module.Summary ?? ""}", string.Join(", ", commandNames));
+                    builder.AddField($"{module.Name.Replace("Module", " ")} - {module.Summary ?? ""}", commandNames.CommaSeperatedString());
                 }
             }
 

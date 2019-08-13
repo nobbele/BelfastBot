@@ -23,24 +23,9 @@ namespace JishoApiTests
         public async Task SearchWordAsync(string word)
         {
             TestContext.WriteLine($"Trying word {word}");
-            SearchResult result = await Client.GetWordAsync(word);
-            Assert.IsNotNull(result);
-            Assert.IsFalse(string.IsNullOrEmpty(word));
-            Assert.IsTrue(result.Japanese.Length > 0);
-            Assert.IsTrue(result.English.Length > 0);
-
-            foreach(KeyValuePair<string, string> japWord in result.Japanese)
-            {
-                Assert.IsFalse(string.IsNullOrEmpty(japWord.Value));
-            }
-            foreach (EnglishDefinition engDef in result.English)
-            {
-                Assert.IsTrue(engDef.English.Length > 0);
-                foreach (string engWord in engDef.English)
-                {
-                    Assert.IsFalse(string.IsNullOrEmpty(engWord));
-                }
-            }
+            SearchResult[] results = await Client.GetWordAsync(word);
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Length > 0);
 
             await Task.Delay(100);
         }

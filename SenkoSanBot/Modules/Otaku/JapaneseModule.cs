@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using JishoApi;
+using SenkoSanBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,26 +10,26 @@ namespace SenkoSanBot.Modules.Otaku
     [Summary("Commands for japanese translation")]
     public class JapaneseModule : SenkoSanModuleBase
     {
+        public PaginatedMessageService PaginatedMessageService { get; set; }
+
         [Command("Jisho"), Alias("jsh")]
         [Summary("Searches given word from jisho.org")]
-        public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string word)
+        public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string searchWord)
         {
-            Logger.LogInfo($"Searching for {word} on jisho");
+            Logger.LogInfo($"Searching for {searchWord} on jisho");
 
-            JishoApi.SearchResult result = await Client.GetWordAsync(word);
+            JishoApi.SearchResult[] results = await Client.GetWordAsync(searchWord);
 
-            if(result.Word == "None")
-            {
-                Embed noneEmbed = new EmbedBuilder()
-                    .WithColor(0xff0000)
-                    .WithTitle("No results found")
-                    .Build();
+            await PaginatedMessageService.SendPaginatedDataMessage(
+                Context.Channel, 
+                results, 
+                (result, index, footer) => GenerateEmbedFor(result, searchWord, footer)
+            );
+        }
 
-                await ReplyAsync(embed: noneEmbed);
-                return;
-            }
-
-            string japanese = string.Join("\n", result.Japanese.Select(j => $"• {j.Key} ({j.Value})"));
+        private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
+        {
+            string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
 
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
                 .WithName(japanese);
@@ -36,41 +37,30 @@ namespace SenkoSanBot.Modules.Otaku
             string value = string.Empty;
 
             int i = 1;
-            foreach(EnglishDefinition def in result.English)
+            foreach (EnglishDefinition def in result.English)
             {
-                string meaning = string.Join(", ", def.English);
-                string info = string.Join(", ", def.Info);
+                string meaning = def.English.CommaSeperatedString();
+                string info = def.Info.CommaSeperatedString();
 
-                //Don't display anything if info doesnt exist
-                string infoDisplay = string.IsNullOrEmpty(info) 
-                                     ? string.Empty 
-                                     : $"({info})";
+                string infoDisplay = $"({info})".NothingIfCheckNullOrEmpty(info);
 
                 value += $"{i}. {meaning} {infoDisplay}\n";
 
                 i++;
             }
 
-            if (string.IsNullOrEmpty(value))
-                value = "Nothing found";
+            value = "Nothing found".IfTargetNullOrEmpty(value);
 
             fieldBuilder.WithValue(value);
 
-            Embed embed = new EmbedBuilder()
+            return new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"First Search Result For **{word}**")
+                .WithTitle($"Search Result For **{searchWord}**")
                 .AddField(fieldBuilder)
-                .WithDescription($"\n Link: https://jisho.org/search/{word}")
-                .WithFooter(footer => {
-                    footer
-                        .WithText($"Requested by {Context.User}")
-                        .WithIconUrl(Context.User.GetAvatarUrl());
-                })
+                .WithDescription($"\n Link: https://jisho.org/search/{searchWord}")
+                .WithFooter(footer)
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
                 .Build();
-
-            await ReplyAsync(embed: embed);
         }
-
     }
 }

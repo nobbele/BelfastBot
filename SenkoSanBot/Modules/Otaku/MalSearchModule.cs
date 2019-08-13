@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using MalApi;
+using SenkoSanBot.Services.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,9 @@ namespace SenkoSanBot.Modules.Otaku
     [Summary("Command for searching anime on mal")]
     public class MalSearchModule : SenkoSanModuleBase
     {
+        public PaginatedMessageService PaginatedMessageService { get; set; }
+
+        [Summary("Search for anime on mal")]
         [Command("mal")]
         public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 5)
         {
@@ -19,36 +24,31 @@ namespace SenkoSanBot.Modules.Otaku
 
             MalApi.SearchResult[] results = await Client.SearchAnimeAsync(name, limit);
 
-            foreach (MalApi.SearchResult result in results)
+            Embed GetEmbed(int i) => GenerateEmbedFor(results[i], new EmbedFooterBuilder()
+                .WithText($"page {i + 1} out of {results.Length}"));
+
+            IUserMessage message = await ReplyAsync(embed: GetEmbed(0));
+
+            await message.AddReactionsAsync(PaginatedMessageService.ReactionEmotes);
+
+            PaginatedMessageService.AddCallback(message.Id, results.Length, async (IUserMessage msg, int i) =>
             {
-
-                if (result.Title == "None")
+                await msg.ModifyAsync((MessageProperties properties) =>
                 {
-                    Embed noneEmbed = new EmbedBuilder()
-                        .WithColor(0xff0000)
-                        .WithTitle("No results found")
-                        .Build();
-
-                    await ReplyAsync(embed: noneEmbed);
-                    return;
-                }
-
-                Embed embed = new EmbedBuilder()
-                    .WithColor(0x53DF1D)
-                    .WithTitle($"{results.Length} Results For **{name}**")
-                    .AddField("Results", result.Title)
-                    .WithFooter(footer =>
-                    {
-                        footer
-                            .WithText($"Requested by {Context.User}")
-                            .WithIconUrl(Context.User.GetAvatarUrl());
-                    })
-                    .WithThumbnailUrl(result.ImageUrl)
-                    .Build();
-
-                await ReplyAsync(embed: embed);
-            }
+                    properties.Embed = Optional.Create(GetEmbed(i));
+                });
+            });
         }
 
+        private Embed GenerateEmbedFor(MalApi.SearchResult result, EmbedFooterBuilder footer)
+        {
+            return new EmbedBuilder()
+                    .WithColor(0x53DF1D)
+                    .WithTitle($"**{result.Title}**")
+                    .AddField("Results", result.Title)
+                    .WithFooter(footer)
+                    .WithThumbnailUrl(result.ImageUrl)
+                    .Build();
+        }
     }
 }
