@@ -90,7 +90,7 @@ namespace SenkoSanBot
             }
         }
 
-        private async Task LogMessageAsync(LogMessage msg) => await Task.Run(() => {
+        private async Task LogMessageAsync(LogMessage msg) => await Task.Factory.StartNew(() => {
             LogLevel level = LogLevel.Info;
             switch (msg.Severity)
             {

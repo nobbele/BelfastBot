@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -10,7 +8,7 @@ namespace MalApi
     {
         public static readonly string BaseUrl = "https://api.jikan.moe/v3/search/anime";
 
-        public static async Task<SearchResult> SearchAnimeAsync(string name, int limit)
+        public static async Task<SearchResult[]> SearchAnimeAsync(string name, int limit)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -18,21 +16,21 @@ namespace MalApi
 
                 dynamic obj = JObject.Parse(json);
 
-                if (((dynamic[])obj.results.ToObject<dynamic[]>()).Length < 1)
-                    return new SearchResult()
+                dynamic[] jsonResults = (dynamic[])obj.results.ToObject<dynamic[]>();
+
+                SearchResult[] results = new SearchResult[jsonResults.Length];
+                int i = 0;
+                foreach (dynamic jsonResult in jsonResults) {
+
+                    results[i] = new SearchResult
                     {
-                        Id = 0,
-                        Title = "None",
+                        Id = jsonResult.mal_id,
+                        Title = jsonResult.title,
                     };
-                dynamic jsonResult = obj.results[0];
+                    i++;
+                }
 
-                SearchResult result = new SearchResult
-                {
-                    Id = jsonResult.mal_id,
-                    Title = jsonResult.title,
-                };
-
-                return result;
+                return results;
             }
         }
     }

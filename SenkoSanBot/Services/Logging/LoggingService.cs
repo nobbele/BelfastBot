@@ -23,7 +23,7 @@ namespace SenkoSanBot.Services.Logging
         /// <returns></returns>
         public async Task InitializeAsync()
         {
-            var _ = Task.Run(async () =>
+            var _ = Task.Factory.StartNew(async () =>
             {
                 while (true)
                 {
@@ -60,7 +60,9 @@ namespace SenkoSanBot.Services.Logging
 
         public void Log(bool writeToFile, LogLevel logLevel, object format, params object[] args)
         {
-            string message = string.Format(format?.ToString() ?? "null", args);
+            string message = format?.ToString() ?? "null";
+            if ((args?.Length ?? 0) > 0)
+                message = string.Format(message, args);
 
             ConsoleColor color;
             string level = LogLevelToString(logLevel, out color);
