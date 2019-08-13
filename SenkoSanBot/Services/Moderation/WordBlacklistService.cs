@@ -33,6 +33,8 @@ namespace SenkoSanBot.Services.Moderation
         {
             if (!(messageParam is SocketUserMessage))
                 m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
+            if ((messageParam.Author as SocketGuildUser)?.GuildPermissions.Administrator ?? false)
+                return;
             var message = messageParam as SocketUserMessage;
 
             string letterOnlyMessage = new string(message.Content.Where(c => char.IsLetter(c)).ToArray());
