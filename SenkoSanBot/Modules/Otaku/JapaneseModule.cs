@@ -21,7 +21,7 @@ namespace SenkoSanBot.Modules.Otaku
             {
                 Embed noneEmbed = new EmbedBuilder()
                     .WithColor(0xff0000)
-                    .WithTitle("No result found")
+                    .WithTitle("No results found")
                     .Build();
 
                 await ReplyAsync(embed: noneEmbed);

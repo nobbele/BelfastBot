@@ -12,7 +12,6 @@ namespace SafeBooruApi
 
         public static async Task<string> GetRandomPostAsync(string tag)
         {
-
             using (HttpClient client = new HttpClient())
             {
                 Stream fileStream = await client.GetStreamAsync($"{BaseUrl}&tags={tag}");
