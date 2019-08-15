@@ -2,9 +2,7 @@
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services.Moderation

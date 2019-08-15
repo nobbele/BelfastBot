@@ -98,7 +98,7 @@ namespace SenkoSanBot.Modules.Otaku
                     .AddField("Title", $"**[{result.Title}]({result.AnimeUrl})**")
                     .AddField("Type", result.Type, true)
                     .AddField("Episodes", result.Episodes, true)
-                    .AddField("Score", result.Score)
+                    .AddField("Score", result.Score, true)
                     .WithFooter(footer)
                     .WithImageUrl(result.ImageUrl)
                     .Build();

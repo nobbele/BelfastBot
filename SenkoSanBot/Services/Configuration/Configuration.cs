@@ -16,7 +16,7 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public ulong LogChannelID { get; internal set; } = 0;
         [DataMember]
-        public string[] BlacklistedWord { get; internal set; } = new string[] { "thejayduck" };
+        public string[] BlacklistedWord { get; internal set; } = new string[] { "gay" };
         [DataMember]
         public string InviteLinkWhitelist { get; internal set; } = "http://discord.gg/MYSERVERINV";
 

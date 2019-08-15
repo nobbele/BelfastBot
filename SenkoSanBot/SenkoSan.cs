@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
-using SenkoSanBot.Services;
 using SenkoSanBot.Services.Logging;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;

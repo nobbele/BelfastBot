@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Commands;
-using SenkoSanBot.Services;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
