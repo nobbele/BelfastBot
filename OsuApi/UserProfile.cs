@@ -1,10 +1,11 @@
 ﻿namespace OsuApi
 {
-    public struct UserResult
+    public struct UserProfile
     {
         public ulong UserId;
-        public float PP;
         public string UserName;
+        public int Mode;
+        public float PP;
         public float Level;
         public ulong PlayCount;
         public float Accuracy;
