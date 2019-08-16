@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using OsuApi;
 using Discord;
-using SenkoSanBot.Services.Configuration;
 using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
@@ -111,9 +110,9 @@ namespace SenkoSanBot.Modules.Osu
 
         private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"Recent plays by playername")
+                .WithTitle($"Recents plays from Player")
                 .AddField("Rank", result.Rank)
-                .AddField("Beatmap", $"**[beatmapName](https://osu.ppy.sh/beatmapsets/{result.BeatmapId})**")
+                .AddField("Beatmap", $"**[beatmapName](https://osu.ppy.sh/b/{result.BeatmapId})**")
                 .WithFooter(footer)
                 .WithThumbnailUrl("")
                 .Build();

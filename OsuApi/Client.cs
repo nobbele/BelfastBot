@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OsuApi
 {
-    public class Client
+    public partial class Client
     {
         public static readonly string BaseUrl = "https://osu.ppy.sh/api/";
 
@@ -79,11 +79,6 @@ namespace OsuApi
                 };
                 return result;
             }
-        }
-
-        public struct Beatmap
-        {
-            public string BeatmapName;
         }
     }
 }
