@@ -23,7 +23,7 @@ namespace SenkoSanBot.Modules.Osu
         [Summary("Set osu name")]
         public async Task SetUserAsync([Summary("Name to set")] string name = null)
         {
-            Db.GetUserEntry(Context.Guild.Id, Context.User.Id).OsuName = name;
+            Db.GetUserEntry(0, Context.User.Id).OsuName = name;
             Db.WriteData();
             await ReplyAsync($"Set name to {name}");
         }
@@ -74,7 +74,7 @@ namespace SenkoSanBot.Modules.Osu
 
         private string GetOsuUsername(IUser user)
         {
-            string name = Db.GetUserEntry(Context.Guild.Id, user.Id).OsuName;
+            string name = Db.GetUserEntry(0, user.Id).OsuName;
             if (string.IsNullOrEmpty(name))
             {
                 return null;
