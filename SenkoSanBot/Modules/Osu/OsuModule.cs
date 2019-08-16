@@ -5,6 +5,7 @@ using Discord;
 using SenkoSanBot.Services.Configuration;
 using System.Linq;
 using SenkoSanBot.Services.Database;
+using SenkoSanBot.Services.Pagination;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -55,6 +56,43 @@ namespace SenkoSanBot.Modules.Osu
                 .Build();
 
             await ReplyAsync(embed: embed);
+        }
+
+        public async Task GetRecentPlays(string name, int modeIndex)
+        {
+            UserRecent[] results = await Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, name, modeIndex);
+
+            await PaginatedMessageService.SendPaginatedDataMessage(
+                Context.Channel,
+                results,
+                (result, index, footer) => GenerateEmbedFor(result, name, footer)
+            );
+
+
+
+        }
+
+        private Embed GenerateEmbedFor(UserRecent result, string searchWord, EmbedFooterBuilder footer)
+        {
+            EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
+                .WithName("Recent Plays");
+
+            string value = string.Empty;
+
+            int i = 1;
+
+            value = "Nothing found".IfTargetNullOrEmpty(value);
+
+            fieldBuilder.WithValue(value);
+
+            return new EmbedBuilder()
+                .WithColor(0x53DF1D)
+                .WithTitle($"Search Result For **{searchWord}**")
+                .AddField("Beatmap", $"**[{searchWord}](https://jisho.org/search/{url})**")
+                .AddField(fieldBuilder)
+                .WithFooter(footer)
+                .WithThumbnailUrl("")
+                .Build();
         }
 
         [Command("std"), Alias("osu")]
