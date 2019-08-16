@@ -20,7 +20,7 @@ namespace OsuApi
 
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
 
-                UserProfile result = new UserProfile
+                return new UserProfile
                 {
                     UserId = jsonResult.user_id.ToObject<ulong>(),
                     UserName = jsonResult.username.ToObject<string>(),
@@ -30,11 +30,12 @@ namespace OsuApi
                     PlayCount = jsonResult.playcount.ToObject<ulong?>() ?? (ulong)0,
                     Accuracy = jsonResult.accuracy.ToObject<float?>() ?? (float)0,
                 };
-                return result;
             }
         }
-        public static async Task<PlayResult[]> GetUserRecentAsync(string token, string user, int mode)
+        public static async Task<PlayResult> GetUserRecentAsync(string token, string user, int mode)
         {
+            Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
+
             using (HttpClient httpClient = new HttpClient())
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user_recent?u={user}&k={token}&m={mode}");
@@ -43,22 +44,22 @@ namespace OsuApi
 
                 dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
 
-                PlayResult[] results = new PlayResult[jsonResults.Length];
+                if (jsonResults.Length <= 0)
+                    return new PlayResult();
+                dynamic jsonResult = jsonResults[0];
 
-                int i = 0;
-                foreach (dynamic jsonResult in jsonResults)
+                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode);
+
+                await Task.WhenAll(userDataTask, beatmapDataTask);
+
+                return new PlayResult
                 {
-                    results[i] = new PlayResult
-                    {
-                        PlayerData = await GetUserAsync(token, user, mode),
-                        BeatmapData = await GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode),
-                        Score = jsonResult.score.ToObject<ulong>(),
-                        Combo = jsonResult.maxcombo.ToObject<int>(),
-                        Rank = jsonResult.rank.ToObject<string>(),
-                    };
-                    i++;
-                }
-                return results;
+                    PlayerData = userDataTask.Result,
+                    BeatmapData = beatmapDataTask.Result,
+                    Score = jsonResult.score.ToObject<ulong>(),
+                    Combo = jsonResult.maxcombo.ToObject<int>(),
+                    Rank = jsonResult.rank.ToObject<string>(),
+                };
             }
         }
 
@@ -74,7 +75,7 @@ namespace OsuApi
 
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
 
-                Beatmap result = new Beatmap
+                return new Beatmap
                 {
                     Name = jsonResult.title.ToObject<string>(),
                     Id = jsonResult.beatmap_id.ToObject<ulong>(),
@@ -82,7 +83,6 @@ namespace OsuApi
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
                     Bpm = jsonResult.bpm.ToObject<int>(),
                 };
-                return result;
             }
         }
     }

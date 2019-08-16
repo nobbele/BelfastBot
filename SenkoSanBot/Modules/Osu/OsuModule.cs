@@ -103,7 +103,7 @@ namespace SenkoSanBot.Modules.Osu
 
             const int modeCount = 4;
             var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, i));
-            IEnumerable<UserProfile> results = await Task.WhenAll(taskList);
+            UserProfile[] results = await Task.WhenAll(taskList);
 
             await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, results, GetUserProfileEmbed);
         }
@@ -138,10 +138,12 @@ namespace SenkoSanBot.Modules.Osu
             }
 
             const int modeCount = 4;
-            var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i));
-            IEnumerable<PlayResult> results = (await Task.WhenAll(taskList)).Select(recents => recents.FirstOrDefault());
+            Task<PlayResult>[] taskList = new Task<PlayResult>[modeCount];
+            for(int i = 0; i < modeCount; i++)
+                taskList[i] = Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i);
+            PlayResult[] results = await Task.WhenAll(taskList);
 
-            IEnumerable<PlayResult> validResults = results.Where(result => result.BeatmapData.Id != 0);
+            PlayResult[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
             await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetBeatmapResultEmbed);
         }

@@ -37,9 +37,10 @@ namespace SenkoSanBot.Services.Commands
 
         public async Task HandleCommandAsync(SocketMessage messageParam)
         {
-            if (!(messageParam is SocketUserMessage))
-                m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
             var message = messageParam as SocketUserMessage;
+
+            if (message == null)
+                m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
 
             int argPos = 0;
 
@@ -48,29 +49,21 @@ namespace SenkoSanBot.Services.Commands
                 message.Author.IsBot)
                 return;
 
-            m_logger.LogInfo("Handling command " + message.Content);
-
             var context = new SocketCommandContext(m_client, message);
 
-            using (context.Channel.EnterTypingState())
+            IResult result = await m_command.ExecuteAsync(
+                context: context,
+                argPos: argPos,
+                services: m_services);
+
+            if (!result.IsSuccess)
             {
-                CancellationTokenSource tokenSource = new CancellationTokenSource();
-                tokenSource.CancelAfter(TimeSpan.FromSeconds(10));
-
-                IResult result = await Task.Run(() => m_command.ExecuteAsync(
-                    context: context,
-                    argPos: argPos,
-                    services: m_services), tokenSource.Token);
-
-                if (!result.IsSuccess)
-                {
-                    await context.Channel.SendMessageAsync(result.ErrorReason);
-                    m_logger.LogInfo($"Unknown command {result.ErrorReason}");
-                }
-                else
-                {
-                    m_logger.LogInfo("Successfully handled command");
-                }
+                await context.Channel.SendMessageAsync(result.ErrorReason);
+                m_logger.LogInfo($"Unknown command {result.ErrorReason}");
+            }
+            else
+            {
+                m_logger.LogInfo("Successfully handled command");
             }
         }
     }

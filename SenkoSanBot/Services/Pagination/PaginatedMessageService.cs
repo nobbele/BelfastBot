@@ -48,14 +48,21 @@ namespace SenkoSanBot.Services.Pagination
             if (reaction.User.Value.Id == m_client.CurrentUser.Id)
                 return;
 
+            if (m_callbacks.UsedSpots == 0)
+                return;
+
             IUserMessage message = await channel.GetMessageAsync(cache.Id) as IUserMessage;
 
             if (!ReactionEmotes.Any(message.Reactions.ContainsKey))
                 return;
 
-            var callback = m_callbacks.SingleOrDefault(tup => tup.Id == message.Id).Callback;
+            var entry = m_callbacks.TryFindBackwards(tup => tup.Id == message.Id);
+            if (!entry.HasValue)
+                return;
 
-            await callback?.Invoke(message, GetMoveFromEmote(reaction.Emote));
+            var callback = entry.Value.Callback;
+
+            await callback.Invoke(message, GetMoveFromEmote(reaction.Emote));
         }
 
         private PaginationMove GetMoveFromEmote(IEmote emote)
@@ -74,9 +81,9 @@ namespace SenkoSanBot.Services.Pagination
 
         public void AddCallback(ulong id, ReactionCallback callback)
         {
-            if (m_callbacks.Count >= m_callbacks.Capacity)
-                m_callbacks.Dequeue();
-            m_callbacks.Enqueue((id, callback));
+            if (m_callbacks.IsFull)
+                m_callbacks.Free();
+            m_callbacks.Insert((id, callback));
         }
 
         public void AddCallback(ulong id, int pageCount, Func<IUserMessage, int, Task> callback)
@@ -105,11 +112,11 @@ namespace SenkoSanBot.Services.Pagination
             });
         }
 
-        public async Task SendPaginatedDataMessage<T>(IMessageChannel channel, IEnumerable<T> pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
+        public async Task SendPaginatedDataMessage<T>(IMessageChannel channel, T[] pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
         {
             Embed GetEmbed(int i)
             {
-                return getEmbed(pageData.ElementAt(i), i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
+                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
             }
 
             IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
