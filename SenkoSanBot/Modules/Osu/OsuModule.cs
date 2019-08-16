@@ -36,7 +36,7 @@ namespace SenkoSanBot.Modules.Osu
 
         private async Task SearchUserAsync(string name, int modeIndex)
         {
-            UserResult result = await Client.GetUser(Config.Configuration.OsuApiToken, name, modeIndex);
+            UserResult result = await Client.GetUserAsync(Config.Configuration.OsuApiToken, name, modeIndex);
 
             Embed embed = new EmbedBuilder()
                 .WithColor(0xE664A0)
