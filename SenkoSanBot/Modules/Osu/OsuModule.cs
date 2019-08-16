@@ -59,7 +59,7 @@ namespace SenkoSanBot.Modules.Osu
             await ReplyAsync(embed: embed);
         }
 
-        [Command("recents")]
+        [Command("osurecents")]
         [Summary("Get recent plays")]
         public async Task GetRecentPlays(string name, int modeIndex)
         {
@@ -81,7 +81,7 @@ namespace SenkoSanBot.Modules.Osu
                 .WithColor(0x53DF1D)
                 .WithTitle($"Recent plays by {name}")
                 .AddField("Rank", result.Rank)
-                .AddField("Beatmap", $"**[{beatmapName}](https://jisho.org/search/{url})**")
+                .AddField("Beatmap", $"**[{beatmapName}](https://osu.ppy.sh/beatmapsets/{result.BeatmapId})**")
                 .WithFooter(footer)
                 .WithThumbnailUrl("")
                 .Build();
