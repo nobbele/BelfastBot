@@ -23,10 +23,22 @@ namespace OsuApiTests
         {
             TestContext.WriteLine($"Trying to find {name} on mode {mode}");
             string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
-            UserResult result = await Client.GetUser(token, name, mode);
+            UserResult result = await Client.GetUserAsync(token, name, mode);
             Assert.IsNotNull(result);
 
             Assert.IsFalse(string.IsNullOrEmpty(result.UserName));
+
+            await Task.Delay(100);
+        }
+
+        [DataTestMethod]
+        [DataRow("Nobbele", 0)]
+        public async Task GetUserRecent(string name, int mode)
+        {
+            TestContext.WriteLine($"Trying to find {name} on mode {mode}");
+            string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
+            UserRecent[] results = await Client.GetUserRecentAsync(token, name, mode);
+            Assert.IsNotNull(results);
 
             await Task.Delay(100);
         }
