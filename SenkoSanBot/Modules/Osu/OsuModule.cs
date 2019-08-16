@@ -49,6 +49,8 @@ namespace SenkoSanBot.Modules.Osu
                 await SearchUserAsync(mentionedUser, 0);
             else if (!string.IsNullOrEmpty(name))
                 await SearchUserAsync(name, 0);
+            else if (mentionedUser != null)
+                await SearchUserAsync(mentionedUser, 0);
             else
                 await SearchUserAsync(Context.User, 0);
         }

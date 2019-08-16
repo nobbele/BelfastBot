@@ -59,5 +59,30 @@ namespace OsuApi
                 return results;
             }
         }
+
+        public static async Task<Beatmap> GetBeatmapAsync(string token, ulong id, int mode)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUrl}get_beatmaps?b={id}&k={token}&m={mode}");
+
+                json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
+
+                dynamic obj = JObject.Parse(json);
+
+                dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
+
+                Beatmap result = new Beatmap
+                {
+                    BeatmapName = jsonResult.user_id.ToObject<string>(),
+                };
+                return result;
+            }
+        }
+
+        public struct Beatmap
+        {
+            public string BeatmapName;
+        }
     }
 }
