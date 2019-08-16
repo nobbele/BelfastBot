@@ -7,6 +7,7 @@ using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using Discord.WebSocket;
+using System.Collections.Generic;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -27,130 +28,123 @@ namespace SenkoSanBot.Modules.Osu
             await ReplyAsync($"Set name to {name}");
         }
 
-        private async Task SearchUserAsync(IUser user, int modeIndex)
+        private string GetNameForModeIndex(int mode)
         {
-            user = user ?? Context.User;
+            switch(mode)
+            {
+                case 0:
+                    return "standard";
+                case 1:
+                    return "taiko";
+                case 2:
+                    return "ctb";
+                case 3:
+                    return "mania";
+            }
+            return "Unknown";
+        }
+
+        private string GetLinkSuffixForModeIndex(int mode)
+        {
+            switch (mode)
+            {
+                case 0:
+                    return "osu";
+                case 1:
+                    return "taiko";
+                case 2:
+                    return "fruits";
+                case 3:
+                    return "mania";
+            }
+            return "";
+        }
+
+        private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+                .WithColor(0xE664A0)
+                .WithTitle($"User Profile for mode osu!{GetNameForModeIndex(user.Mode)}")
+                .AddField("Username", $"**[{user.UserName}](https://osu.ppy.sh/users/{user.UserId}/{GetLinkSuffixForModeIndex(user.Mode)})**")
+                .AddField("Accuracy", user.Accuracy.ToString("00.00"), true)
+                .AddField("PP", user.PP.ToString("00.00"), true)
+                .AddField("Play Count", user.PlayCount, true)
+                .AddField("Level", user.Level.ToString("00.00"), true)
+                .WithThumbnailUrl($"https://a.ppy.sh/{user.UserId}")
+                .WithFooter(footer)
+                .Build();
+
+        private string GetOsuUsername(IUser user)
+        {
             string name = Db.GetUserEntry(Context.Guild.Id, user.Id).OsuName;
             if (string.IsNullOrEmpty(name))
             {
-                await ReplyAsync("Please set your osu name");
-                return;
+                return null;
             }
-            await SearchUserAsync(name, modeIndex);
+            return name;
         }
 
         [Command("std"), Alias("osu")]
         [Summary("Get std profile details from an user")]
-        public async Task OsuSearchUserAsync([Summary("Name to search")]string name = "")
+        public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
         {
-            IUser mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+            string username = null;
 
-            if (mentionedUser != null)
-                await SearchUserAsync(mentionedUser, 0);
-            else if (!string.IsNullOrEmpty(name))
-                await SearchUserAsync(name, 0);
+            IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+            if (target != null)
+                username = GetOsuUsername(target);
+            else if (!string.IsNullOrEmpty(target_name))
+                username = target_name;
             else
-                await SearchUserAsync(Context.User, 0);
+                username = GetOsuUsername(Context.User);
+
+            if (username == null)
+            {
+                await ReplyAsync("Couldn't find a valid user, have you set your username using osuset?");
+                return;
+            }
+
+            const int modeCount = 4;
+            var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, i));
+            IEnumerable<UserProfile> results = await Task.WhenAll(taskList);
+
+            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, results, GetUserProfileEmbed);
         }
 
-        private async Task SearchUserAsync(string name, int modeIndex)
-        {
-            UserResult result = await Client.GetUserAsync(Config.Configuration.OsuApiToken, name, modeIndex);
-
-            Embed embed = new EmbedBuilder()
-                .WithColor(0xE664A0)
-                .WithTitle("User Profile")
-                .AddField("Username", $"**[{result.UserName}](https://osu.ppy.sh/users/{result.UserId})**")
-                .AddField("Accuracy", result.Accuracy.ToString("00.00"), true)
-                .AddField("PP", result.PP.ToString("0000"), true)
-                .AddField("Play Count", result.PlayCount, true)
-                .AddField("Level", result.Level.ToString("00"), true)
-                .WithThumbnailUrl($"https://a.ppy.sh/{result.UserId}")
-                .WithFooter(footer => {
-                    footer
-                        .WithText($"Requested by {Context.User}")
-                        .WithIconUrl(Context.User.GetAvatarUrl());
-                })
-                .Build();
-
-            await ReplyAsync(embed: embed);
-        }
-
-        [Command("osurecents")]
-        [Summary("Get recent plays")]
-        public async Task GetRecentPlays(string name, int modeIndex)
-        {
-            UserRecent[] results = await Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, name, modeIndex);
-
-            await PaginatedMessageService.SendPaginatedDataMessage(
-                Context.Channel,
-                results,
-                (result, index, footer) => GenerateEmbedFor(result, name, footer)
-            );
-        }
-
-        private Embed GenerateEmbedFor(UserRecent result, string name, EmbedFooterBuilder footer)
-        {
-            // JayDuck
-            string beatmapName = result.BeatmapId.ToString();
-
-            return new EmbedBuilder()
+        private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"Recent plays by {name}")
+                .WithTitle($"Recent plays by playername")
                 .AddField("Rank", result.Rank)
-                .AddField("Beatmap", $"**[{beatmapName}](https://osu.ppy.sh/beatmapsets/{result.BeatmapId})**")
+                .AddField("Beatmap", $"**[beatmapName](https://osu.ppy.sh/beatmapsets/{result.BeatmapId})**")
                 .WithFooter(footer)
                 .WithThumbnailUrl("")
                 .Build();
-        }
 
-        //[Command("std"), Alias("osu")]
-        //[Summary("Get std profile details from an user")]
-        //public async Task OsuSearchUserAsync([Summary("Name to search")] string name)
-        //{
-        //    await SearchUserAsync(name, 0);
-        //}
-
-        [Command("taiko")]
-        [Summary("Get taiko profile details from an user")]
-        public async Task TaikoSearchUserAsync([Summary("Name to search")] IUser user = null)
+        [Command("recent"), Alias("rs")]
+        [Summary("Get recent play")]
+        public async Task GetRecentPlay([Summary("Name to search")] string target_name = "")
         {
-            await SearchUserAsync(user, 1);
-        }
+            string username = null;
 
-        [Command("taiko")]
-        [Summary("Get taiko profile details from an user")]
-        public async Task TaikoSearchUserAsync([Summary("Name to search")] string name)
-        {
-            await SearchUserAsync(name, 1);
-        }
+            IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+            if (target != null)
+                username = GetOsuUsername(target);
+            else if (!string.IsNullOrEmpty(target_name))
+                username = target_name;
+            else
+                username = GetOsuUsername(Context.User);
 
-        [Command("ctb")]
-        [Summary("Get ctb profile details from an user")]
-        public async Task CtbSearchUserAsync([Summary("Name to search")] IUser user = null)
-        {
-            await SearchUserAsync(user, 2);
-        }
+            if (username == null)
+            {
+                await ReplyAsync("Couldn't find a valid user, have you set your username using osuset?");
+                return;
+            }
 
-        [Command("ctb")]
-        [Summary("Get ctb profile details from an user")]
-        public async Task CtbSearchUserAsync([Summary("Name to search")] string name)
-        {
-            await SearchUserAsync(name, 2);
-        }
+            const int modeCount = 4;
+            var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i));
+            IEnumerable<PlayResult> results = (await Task.WhenAll(taskList)).Select(recents => recents.FirstOrDefault());
 
-        [Command("mania")]
-        [Summary("Get mania profile details from an user")]
-        public async Task ManiaSearchUserAsync([Summary("Name to search")] IUser user = null)
-        {
-            await SearchUserAsync(user, 3);
-        }
+            IEnumerable<PlayResult> validResults = results.Where(result => result.BeatmapId != 0);
 
-        [Command("mania")]
-        [Summary("Get mania profile details from an user")]
-        public async Task ManiaSearchUserAsync([Summary("Name to search")] string name)
-        {
-            await SearchUserAsync(name, 3);
+            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetBeatmapResultEmbed);
         }
     }
 }

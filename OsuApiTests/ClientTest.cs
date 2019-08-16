@@ -23,7 +23,7 @@ namespace OsuApiTests
         {
             TestContext.WriteLine($"Trying to find {name} on mode {mode}");
             string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
-            UserResult result = await Client.GetUserAsync(token, name, mode);
+            UserProfile result = await Client.GetUserAsync(token, name, mode);
             Assert.IsNotNull(result);
 
             Assert.IsFalse(string.IsNullOrEmpty(result.UserName));
@@ -37,7 +37,7 @@ namespace OsuApiTests
         {
             TestContext.WriteLine($"Trying to find {name} on mode {mode}");
             string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
-            UserRecent[] results = await Client.GetUserRecentAsync(token, name, mode);
+            PlayResult[] results = await Client.GetUserRecentAsync(token, name, mode);
             Assert.IsNotNull(results);
 
             await Task.Delay(100);

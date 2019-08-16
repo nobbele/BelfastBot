@@ -8,7 +8,7 @@ namespace OsuApi
     {
         public static readonly string BaseUrl = "https://osu.ppy.sh/api/";
 
-        public static async Task<UserResult> GetUserAsync(string token, string user, int mode)
+        public static async Task<UserProfile> GetUserAsync(string token, string user, int mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -20,10 +20,11 @@ namespace OsuApi
 
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
 
-                UserResult result = new UserResult
+                UserProfile result = new UserProfile
                 {
                     UserId = jsonResult.user_id.ToObject<ulong>(),
                     UserName = jsonResult.username.ToObject<string>(),
+                    Mode = mode,
                     PP = jsonResult.pp_raw.ToObject<float?>() ?? (float)0,
                     Level = jsonResult.level.ToObject<float?>() ?? (float)0,
                     PlayCount = jsonResult.playcount.ToObject<ulong?>() ?? (ulong)0,
@@ -32,7 +33,7 @@ namespace OsuApi
                 return result;
             }
         }
-        public static async Task<UserRecent[]> GetUserRecentAsync(string token, string user, int mode)
+        public static async Task<PlayResult[]> GetUserRecentAsync(string token, string user, int mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -42,12 +43,12 @@ namespace OsuApi
 
                 dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
 
-                UserRecent[] results = new UserRecent[jsonResults.Length];
+                PlayResult[] results = new PlayResult[jsonResults.Length];
 
                 int i = 0;
                 foreach (dynamic jsonResult in jsonResults)
                 {
-                    results[i] = new UserRecent
+                    results[i] = new PlayResult
                     {
                         BeatmapId = jsonResult.beatmap_id.ToObject<ulong>(),
                         Score = jsonResult.score.ToObject<ulong>(),

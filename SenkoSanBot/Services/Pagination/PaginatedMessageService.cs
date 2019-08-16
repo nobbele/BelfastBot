@@ -26,7 +26,7 @@ namespace SenkoSanBot.Services.Pagination
 
         private Buffer<(ulong Id, ReactionCallback Callback)> m_callbacks = new Buffer<(ulong, ReactionCallback)>(16);
 
-        private IServiceProvider m_services;
+        private readonly IServiceProvider m_services;
         public DiscordSocketClient m_client;
 
         public PaginatedMessageService(IServiceProvider services)
@@ -105,16 +105,18 @@ namespace SenkoSanBot.Services.Pagination
             });
         }
 
-        public async Task SendPaginatedDataMessage<T>(IMessageChannel channel, IList<T> pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
+        public async Task SendPaginatedDataMessage<T>(IMessageChannel channel, IEnumerable<T> pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
         {
-            Embed GetEmbed(int i) => getEmbed(pageData[i], i, new EmbedFooterBuilder()
-                .WithText($"page {i + 1} out of {pageData.Count}"));
+            Embed GetEmbed(int i)
+            {
+                return getEmbed(pageData.ElementAt(i), i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
+            }
 
             IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
 
-            AddCallback(message.Id, pageData.Count, async (IUserMessage msg, int i) =>
+            AddCallback(message.Id, pageData.Count(), async (IUserMessage msg, int i) =>
             {
                 await msg.ModifyAsync((MessageProperties properties) =>
                 {
