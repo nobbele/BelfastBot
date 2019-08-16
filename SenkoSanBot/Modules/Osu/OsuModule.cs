@@ -79,8 +79,6 @@ namespace SenkoSanBot.Modules.Osu
 
             string value = string.Empty;
 
-            int i = 1;
-
             value = "Nothing found".IfTargetNullOrEmpty(value);
 
             fieldBuilder.WithValue(value);
@@ -88,7 +86,7 @@ namespace SenkoSanBot.Modules.Osu
             return new EmbedBuilder()
                 .WithColor(0x53DF1D)
                 .WithTitle($"Search Result For **{searchWord}**")
-                .AddField("Beatmap", $"**[{searchWord}](https://jisho.org/search/{url})**")
+                .AddField("Beatmap", $"**[{searchWord}](https://osu.ppy.sh/beatmapsets/{result.BeatmapId})**")
                 .AddField(fieldBuilder)
                 .WithFooter(footer)
                 .WithThumbnailUrl("")
