@@ -38,9 +38,7 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}get_user_recent?u={user}&k={token}&m={mode}");
 
-                json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
-
-                dynamic obj = JObject.Parse(json);
+                dynamic obj = JArray.Parse(json);
 
                 dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
 
