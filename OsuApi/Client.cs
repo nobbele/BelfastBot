@@ -6,13 +6,13 @@ namespace OsuApi
 {
     public partial class Client
     {
-        public static readonly string BaseUrl = "https://osu.ppy.sh/api/";
+        public static readonly string BaseUrl = "https://osu.ppy.sh/api";
 
         public static async Task<UserProfile> GetUserAsync(string token, string user, int mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}get_user?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user?u={user}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
@@ -37,7 +37,7 @@ namespace OsuApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}get_user_recent?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user_recent?u={user}&k={token}&m={mode}");
 
                 dynamic obj = JArray.Parse(json);
 
@@ -50,9 +50,10 @@ namespace OsuApi
                 {
                     results[i] = new PlayResult
                     {
-                        BeatmapId = jsonResult.beatmap_id.ToObject<ulong>(),
+                        PlayerData = await GetUserAsync(token, user, mode),
+                        BeatmapData = await GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode),
                         Score = jsonResult.score.ToObject<ulong>(),
-                        MaxCombo = jsonResult.maxcombo.ToObject<int>(),
+                        Combo = jsonResult.maxcombo.ToObject<int>(),
                         Rank = jsonResult.rank.ToObject<string>(),
                     };
                     i++;
@@ -65,7 +66,7 @@ namespace OsuApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}get_beatmaps?b={id}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_beatmaps?b={id}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
@@ -75,7 +76,11 @@ namespace OsuApi
 
                 Beatmap result = new Beatmap
                 {
-                    BeatmapName = jsonResult.user_id.ToObject<string>(),
+                    Name = jsonResult.title.ToObject<string>(),
+                    Id = jsonResult.beatmap_id.ToObject<ulong>(),
+                    SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
+                    StarRating = jsonResult.difficultyrating.ToObject<float>(),
+                    Bpm = jsonResult.bpm.ToObject<int>(),
                 };
                 return result;
             }

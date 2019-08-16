@@ -2,9 +2,10 @@
 {
     public struct PlayResult
     {
-        public ulong BeatmapId;
+        public UserProfile PlayerData;
+        public Beatmap BeatmapData;
         public ulong Score;
-        public int MaxCombo;
+        public int Combo;
         public string Rank;
     }
 }

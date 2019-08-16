@@ -110,11 +110,11 @@ namespace SenkoSanBot.Modules.Osu
 
         private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"Recents plays from Player")
-                .AddField("Rank", result.Rank)
-                .AddField("Beatmap", $"**[beatmapName](https://osu.ppy.sh/b/{result.BeatmapId})**")
+                .WithTitle($"Recents plays from {result.PlayerData.UserName}")
+                .AddField("Details", $"**Rank: {result.Rank} 🠺 Score: {result.Score} | Combo: {result.Combo}**")
+                .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) [{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm**")
+                .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
                 .WithFooter(footer)
-                .WithThumbnailUrl("")
                 .Build();
 
         [Command("recent"), Alias("rs")]
@@ -141,7 +141,7 @@ namespace SenkoSanBot.Modules.Osu
             var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i));
             IEnumerable<PlayResult> results = (await Task.WhenAll(taskList)).Select(recents => recents.FirstOrDefault());
 
-            IEnumerable<PlayResult> validResults = results.Where(result => result.BeatmapId != 0);
+            IEnumerable<PlayResult> validResults = results.Where(result => result.BeatmapData.Id != 0);
 
             await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetBeatmapResultEmbed);
         }

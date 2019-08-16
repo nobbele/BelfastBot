@@ -2,7 +2,10 @@
 {
     public struct Beatmap
     {
-        public string BeatmapName;
-        public float Difficulty;
+        public string Name;
+        public ulong Id;
+        public ulong SetId;
+        public float StarRating;
+        public int Bpm;
     }
 }
