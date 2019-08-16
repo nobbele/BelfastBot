@@ -38,13 +38,20 @@ namespace SafeBooruApi
                 XElement post;
                 string[] tags;
 
+                int tries = 0;
                 do
                 {
+                    if (tries > 25)
+                    {
+                        post = null;
+                        break;
+                    }
                     post = posts.Random();
                     tags = post.Attribute("tags").Value.Split(' ');
+                    tries++;
                 } while (BlacklistedTags.Any(tags.Contains));
 
-                return post.Attribute("file_url").Value;
+                return post?.Attribute("file_url")?.Value;
             }
         }
     }

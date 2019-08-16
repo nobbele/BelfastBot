@@ -8,11 +8,13 @@ namespace SenkoSanBot.Services.Database
     {
         public ulong Id { get; set; }
         public List<Warn> Warns { get; set; }
+        public string OsuName { get; set; }
 
         public static DatabaseUserEntry CreateNew(ulong userId) => new DatabaseUserEntry
         {
             Id = userId,
             Warns = new List<Warn>(),
+            OsuName = null,
         };
     }
 }

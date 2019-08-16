@@ -10,7 +10,7 @@ namespace SenkoSanBot.Services.Logging
     {
         public static readonly string LogFilePath = $"logs/{DateTime.Now:MM-dd-yyyy_HH-mm-ss}.log";
 
-        private static readonly int logFileWriteInterval = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+        private static readonly int logFileWriteInterval = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
         private static readonly int fileBufferSize = 4096;
 
         private readonly StringBuilder m_fileBuffer = new StringBuilder(fileBufferSize);

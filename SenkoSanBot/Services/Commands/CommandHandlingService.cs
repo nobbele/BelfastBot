@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Logging;
+using System.Threading;
 
 namespace SenkoSanBot.Services.Commands
 {
@@ -53,11 +54,13 @@ namespace SenkoSanBot.Services.Commands
 
             using (context.Channel.EnterTypingState())
             {
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+                tokenSource.CancelAfter(TimeSpan.FromSeconds(10));
 
-                var result = await m_command.ExecuteAsync(
+                IResult result = await Task.Run(() => m_command.ExecuteAsync(
                     context: context,
                     argPos: argPos,
-                    services: m_services);
+                    services: m_services), tokenSource.Token);
 
                 if (!result.IsSuccess)
                 {

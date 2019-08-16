@@ -18,7 +18,7 @@ namespace SenkoSanBot.Modules.Fun
 
             if(url == null)
             {
-                await ReplyAsync("The requested tag is blacklisted or doesn't exist");
+                await ReplyAsync("The requested tag is blacklisted, doesn't exist or all recent posts contain blacklisted tags");
                 return;
             }
 
