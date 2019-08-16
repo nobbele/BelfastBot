@@ -10,9 +10,26 @@ namespace SenkoSanBot.Modules.Osu
     {
         [Command("osu")]
         [Summary("Get profile details from an user")]
-        public async Task SearchUserAsync([Summary("Name to search")] [Remainder] string name)
+        public async Task SearchUserAsync([Summary("Name to search")] [Remainder] string name, string mode = "std")
         {
-            UserResult result = await Client.GetUser(name);
+            int modeIndex = 0;
+            switch (mode)
+            {
+                case "std":
+                    modeIndex = 0;
+                    break;
+                case "taiko":
+                    modeIndex = 1;
+                    break;
+                case "ctb":
+                    modeIndex = 2;
+                    break;
+                case "mania":
+                    modeIndex = 3;
+                    break;
+            }
+
+            UserResult result = await Client.GetUser(name, modeIndex);
 
             Embed embed = new EmbedBuilder()
                 .WithColor(0xE664A0)
