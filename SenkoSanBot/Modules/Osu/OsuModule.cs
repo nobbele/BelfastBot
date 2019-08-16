@@ -6,6 +6,7 @@ using SenkoSanBot.Services.Configuration;
 using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
+using Discord.WebSocket;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -14,6 +15,8 @@ namespace SenkoSanBot.Modules.Osu
     {
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        public DiscordSocketClient IClient { get; set; }
+
 
         [Command("osuset")]
         [Summary("Set osu name")]
@@ -34,6 +37,20 @@ namespace SenkoSanBot.Modules.Osu
                 return;
             }
             await SearchUserAsync(name, modeIndex);
+        }
+
+        [Command("std"), Alias("osu")]
+        [Summary("Get std profile details from an user")]
+        public async Task OsuSearchUserAsync([Summary("Name to search")]string name = "")
+        {
+            IUser mentionedUser = Context.Message.MentionedUsers.FirstOrDefault();
+
+            if (mentionedUser != null)
+                await SearchUserAsync(mentionedUser, 0);
+            else if (!string.IsNullOrEmpty(name))
+                await SearchUserAsync(name, 0);
+            else
+                await SearchUserAsync(Context.User, 0);
         }
 
         private async Task SearchUserAsync(string name, int modeIndex)
@@ -87,19 +104,12 @@ namespace SenkoSanBot.Modules.Osu
                 .Build();
         }
 
-        [Command("std"), Alias("osu")]
-        [Summary("Get std profile details from an user")]
-        public async Task OsuSearchUserAsync([Summary("Name to search")] IUser user = null)
-        {
-            await SearchUserAsync(user, 0);
-        }
-
-        [Command("std"), Alias("osu")]
-        [Summary("Get std profile details from an user")]
-        public async Task OsuSearchUserAsync([Summary("Name to search")] string name)
-        {
-            await SearchUserAsync(name, 0);
-        }
+        //[Command("std"), Alias("osu")]
+        //[Summary("Get std profile details from an user")]
+        //public async Task OsuSearchUserAsync([Summary("Name to search")] string name)
+        //{
+        //    await SearchUserAsync(name, 0);
+        //}
 
         [Command("taiko")]
         [Summary("Get taiko profile details from an user")]

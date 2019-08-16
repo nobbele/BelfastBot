@@ -8,7 +8,7 @@ namespace OsuApi
     {
         public static readonly string BaseUrl = "https://osu.ppy.sh/api/";
 
-        public static async Task<UserResult> GetUserAsync   (string token, string user, int mode)
+        public static async Task<UserResult> GetUserAsync(string token, string user, int mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
