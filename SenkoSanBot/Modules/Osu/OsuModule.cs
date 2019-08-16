@@ -13,6 +13,7 @@ namespace SenkoSanBot.Modules.Osu
     public class OsuModule : SenkoSanModuleBase
     {
         public JsonDatabaseService Db { get; set; }
+        public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("osuset")]
         [Summary("Set osu name")]
@@ -58,6 +59,8 @@ namespace SenkoSanBot.Modules.Osu
             await ReplyAsync(embed: embed);
         }
 
+        [Command("recents")]
+        [Summary("Get recent plays")]
         public async Task GetRecentPlays(string name, int modeIndex)
         {
             UserRecent[] results = await Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, name, modeIndex);
@@ -67,29 +70,18 @@ namespace SenkoSanBot.Modules.Osu
                 results,
                 (result, index, footer) => GenerateEmbedFor(result, name, footer)
             );
-
-
-
         }
 
-        private Embed GenerateEmbedFor(UserRecent result, string searchWord, EmbedFooterBuilder footer)
+        private Embed GenerateEmbedFor(UserRecent result, string name, EmbedFooterBuilder footer)
         {
-            EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
-                .WithName("Recent Plays");
-
-            string value = string.Empty;
-
-            int i = 1;
-
-            value = "Nothing found".IfTargetNullOrEmpty(value);
-
-            fieldBuilder.WithValue(value);
+            // JayDuck
+            string beatmapName = result.BeatmapId.ToString();
 
             return new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"Search Result For **{searchWord}**")
-                .AddField("Beatmap", $"**[{searchWord}](https://jisho.org/search/{url})**")
-                .AddField(fieldBuilder)
+                .WithTitle($"Recent plays by {name}")
+                .AddField("Rank", result.Rank)
+                .AddField("Beatmap", $"**[{beatmapName}](https://jisho.org/search/{url})**")
                 .WithFooter(footer)
                 .WithThumbnailUrl("")
                 .Build();
