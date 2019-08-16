@@ -17,6 +17,7 @@
     <ProjectReference Include="..\AnilistApi\MalApi.csproj" />
     <ProjectReference Include="..\JishoApi\JishoApi.csproj" />
     <ProjectReference Include="..\NekosLifeApi\NekosLifeApi.csproj" />
+    <ProjectReference Include="..\OsuApi\OsuApi.csproj" />
     <ProjectReference Include="..\SafeBooruApi\SafeBooruApi.csproj" />
   </ItemGroup>
 

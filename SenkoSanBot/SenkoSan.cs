@@ -69,6 +69,7 @@ namespace SenkoSanBot
                 client.Ready += async () =>
                 {
                     await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                    await client.SetStatusAsync(config.Configuration.OnlineStatus);
                 };
 
                 services.GetRequiredService<CommandService>().Log += LogMessageAsync;
@@ -78,7 +79,8 @@ namespace SenkoSanBot
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
 
-                await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                //await client.SetStatusAsync(config.Configuration.OnlineStatus);
 
                 Logger.LogInfo("Initializing services");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();

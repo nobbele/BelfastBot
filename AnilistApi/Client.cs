@@ -12,7 +12,7 @@ namespace MalApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}?q={name}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}?q={name}&limit=10");
 
                 dynamic obj = JObject.Parse(json);
 
@@ -34,10 +34,7 @@ namespace MalApi
                         AnimeUrl = jsonResult.url,
                     };
                     i++;
-
-
-                }
-
+                }   
                 return results;
             }
         }

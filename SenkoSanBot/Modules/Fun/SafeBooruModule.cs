@@ -16,6 +16,12 @@ namespace SenkoSanBot.Modules.Fun
             tag = tag.Replace(' ', '_');
             string url = await SafeBooruApi.Client.GetRandomPostAsync(tag);
 
+            if(url == null)
+            {
+                await ReplyAsync("The requested tag is blacklisted or doesn't exist");
+                return;
+            }
+
             Embed embed = new EmbedBuilder()
                 .WithColor(0xb39df2)
                 .WithTitle("Image From Safebooru.org")

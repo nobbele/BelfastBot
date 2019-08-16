@@ -29,6 +29,12 @@ namespace SenkoSanBot.Modules.Moderation
         {
             Logger.LogInfo($"Warning {target}");
 
+            if (target.IsBot)
+            {
+                await ReplyAsync($"{Context.User.Mention} You cannot warn another bot");
+                return;
+            }
+
             if (target == Context.User)
             {
                 await ReplyAsync($"{Context.User.Mention} You cannot warn yourself");
@@ -65,6 +71,12 @@ namespace SenkoSanBot.Modules.Moderation
         {
             Logger.LogInfo($"Kicking {target}");
 
+            if (target.IsBot)
+            {
+                await ReplyAsync($"{Context.User.Mention} You cannot kick another bot");
+                return;
+            }
+
             if (target == Context.User)
             {
                 await ReplyAsync($"{Context.User.Mention} You cannot kick yourself");
@@ -92,6 +104,12 @@ namespace SenkoSanBot.Modules.Moderation
         public async Task BanUserAsync([Summary("The user who will be banned")] SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Banning {target}");
+
+            if (target.IsBot)
+            {
+                await ReplyAsync($"{Context.User.Mention} You cannot ban another bot");
+                return;
+            }
 
             if (target == Context.User)
             {
