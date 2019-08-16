@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using OsuApi;
 using Discord;
+using SenkoSanBot.Services.Configuration;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -10,26 +11,36 @@ namespace SenkoSanBot.Modules.Osu
     {
         [Command("osu")]
         [Summary("Get profile details from an user")]
-        public async Task SearchUserAsync([Summary("Name to search")] [Remainder] string name, string mode = "std")
+        public async Task SearchUserAsync(string mode, [Summary("Name to search")] [Remainder] string name = "")
         {
             int modeIndex = 0;
             switch (mode)
             {
+                case "0":
                 case "std":
                     modeIndex = 0;
                     break;
+                case "1":
                 case "taiko":
                     modeIndex = 1;
                     break;
+                case "2":
                 case "ctb":
                     modeIndex = 2;
                     break;
+                case "3":
                 case "mania":
                     modeIndex = 3;
                     break;
+                default:
+                    if (!string.IsNullOrEmpty(name))
+                        name = $"{mode} {name}";
+                    else
+                        name = mode;
+                    break;
             }
 
-            UserResult result = await Client.GetUser(name, modeIndex);
+            UserResult result = await Client.GetUser(Config.Configuration.OsuApiToken, name, modeIndex);
 
             Embed embed = new EmbedBuilder()
                 .WithColor(0xE664A0)

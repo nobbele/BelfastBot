@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SafeBooruApi;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SafeBooruApiTests
@@ -20,7 +21,7 @@ namespace SafeBooruApiTests
         {
             TestContext.WriteLine($"Trying tag {tag}");
             string url = await Client.GetRandomPostAsync(tag);
-            Assert.IsFalse(string.IsNullOrEmpty(url));
+            Assert.IsFalse(string.IsNullOrEmpty(url) && !Client.BlacklistedTags.Contains(tag));
             await Task.Delay(100);
         }
     }

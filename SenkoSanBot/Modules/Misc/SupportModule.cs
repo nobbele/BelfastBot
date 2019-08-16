@@ -6,8 +6,6 @@ namespace SenkoSanBot.Modules.Misc
 {
     public class SupportModule : SenkoSanModuleBase
     {
-        public IBotConfigurationService Config { get; set; }
-
         [Command("tag")]
         public async Task TagAsync([Remainder] string tag)
         {
