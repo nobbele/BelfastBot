@@ -26,12 +26,12 @@ namespace MalApi
                 return new AnimeResult
                 {
                     Id = jsonResult.mal_id,
-                    Airing = jsonResult.airing,
+                    Status = jsonResult.status,
                     Title = jsonResult.title,
                     Synopsis = jsonResult.synopsis,
                     Type = jsonResult.type,
-                    Episodes = jsonResult.episodes,
-                    Score = jsonResult.score,
+                    Episodes = jsonResult.episodes.ToObject<int?>(),
+                    Score = jsonResult.score.ToObject<float?>(),
                     ImageUrl = jsonResult.image_url,
                     AnimeUrl = jsonResult.url,
                     //Detailed
@@ -65,24 +65,6 @@ namespace MalApi
                 }
                 return results;
             }
-        }
-        public static async Task<StudioResult> GetStudioResultsAsync(int id)
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                string json = await httpClient.GetStringAsync($"{BaseUri}/producer/{id}");
-
-                dynamic obj = JObject.Parse(json);
-
-                dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
-
-                return new StudioResult
-                {
-                    Name = jsonResult.meta.name.ToObject<string>(),
-                    StudioUrl = jsonResult.meta.url.ToObject<string>(),
-                };
-            }
-
         }
     }
 }

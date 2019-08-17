@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using MalApi;
+using System.Linq;
 
 namespace MalApiTests
 {
@@ -18,7 +19,9 @@ namespace MalApiTests
         public async Task SearchAnimeAsync(string name)
         {
             TestContext.WriteLine($"Trying to find {name} with limit 5");
-            AnimeResult[] results = await Client.GetAnimeResultAsync(name);
+            ulong[] ids = await Client.GetAnimeIdAsync(name, 10);
+            AnimeResult[] results = await Task.WhenAll(ids.Select(id => Client.GetDetailedAnimeResultsAsync(id)));
+
             Assert.IsNotNull(results);
             Assert.IsTrue(results.Length > 0);
 

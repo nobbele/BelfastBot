@@ -51,7 +51,7 @@ namespace SenkoSanBot.Modules.Otaku
                 i++;
             }
 
-            value = "Nothing found".IfTargetNullOrEmpty(value);
+            value = "Nothing found".IfTargetIsNullOrEmpty(value);
 
             fieldBuilder.WithValue(value);
 
@@ -72,7 +72,7 @@ namespace SenkoSanBot.Modules.Otaku
         //Mal Module
         [Command("mal")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 5)
+        public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 10)
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -90,14 +90,6 @@ namespace SenkoSanBot.Modules.Otaku
             });
         }
 
-        [Command("studio")]
-        public async Task SearchStudioAsync([Summary("Title to search")] int id = 43)
-        {
-            //Logger.LogInfo($"Searching for studio with {id} on myanimelist");
-            MalApi.StudioResult result = await MalApi.Client.GetStudioResultsAsync(id);
-            await ReplyAsync(result.Name);
-        }
-
         private Embed GetAnimeResultEmbed(MalApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
                 .WithColor(0x2E51A2)
                 .WithAuthor(author => {
@@ -107,25 +99,14 @@ namespace SenkoSanBot.Modules.Otaku
                         .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
                 })
                 .WithDescription(result.Synopsis.ShortenText())
-                .AddField("Details", $"► Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
-                $"► Episodes: **{result.Episodes}** | Duration: **{result.Duration}**" +
-                $"\n► [**Trailer**]({result.TrailerUrl}) | Studio: **[{result.Studio}]({result.StudioUrl})**" +
-                $"\n[Broadcast Time: {result.Broadcast}]")
+                .AddField("Details", 
+                $"► Type: **{result.Type}** | Status: **{result.Status}** | Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
+                $"► Episodes: **{(result.Episodes != null ? result.Episodes.ToString() : "Unknown")}** | Duration: **{result.Duration}**\n" +
+                $"► **{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}** | Studio: **[{(result.Studio != null ? result.Studio : "Unknown")}]({result.StudioUrl})**\n" +
+                $"Broadcast Time: **[{result.Broadcast}]**")
                 .WithFooter(footer)
                 .WithImageUrl(result.ImageUrl)
                 .Build();
-
-        private string GetAiringType(bool state)
-        {
-            switch (state)
-            {
-                case false:
-                    return "Finished";
-                case true:
-                    return "Airing";
-            }
-            return "Unknown";
-        }
     }
 
     public static class StringExtentionMethods
