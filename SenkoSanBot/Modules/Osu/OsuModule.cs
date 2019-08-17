@@ -91,7 +91,7 @@ namespace SenkoSanBot.Modules.Osu
             .WithFooter(footer)
             .WithAuthor(author => {
                 author
-                    .WithName($"{result.PlayerData.UserName}'s Best Plays")
+                    .WithName($"{result.PlayerData.UserName}'s Best Plays on osu!{GetNameForModeIndex(result.PlayerData.Mode)}")
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
