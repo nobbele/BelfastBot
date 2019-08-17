@@ -20,7 +20,7 @@ namespace SenkoSanBot.Modules.Otaku
 
             JishoApi.SearchResult[] results = await JishoApi.Client.GetWordAsync(searchWord);
 
-            await PaginatedMessageService.SendPaginatedDataMessage(
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(
                 Context.Channel, 
                 results, 
                 (result, index, footer) => GenerateEmbedFor(result, searchWord, footer)
@@ -76,10 +76,11 @@ namespace SenkoSanBot.Modules.Otaku
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
             ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name, limit);
-            var resultsTask = ids.Select(r => MalApi.Client.GetDetailedAnimeResultsAsync(r));
-            MalApi.AnimeResult[] results = await Task.WhenAll(resultsTask);
 
-            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, results, GetAnimeResultEmbed);
+            await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
+                MalApi.AnimeResult result = await MalApi.Client.GetDetailedAnimeResultsAsync(id);
+                return GetAnimeResultEmbed(result, index, footer);
+            });
         }
 
         [Command("studio")]

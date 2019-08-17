@@ -112,7 +112,7 @@ namespace SenkoSanBot.Services.Pagination
             });
         }
 
-        public async Task SendPaginatedDataMessage<T>(IMessageChannel channel, T[] pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
+        public async Task SendPaginatedDataMessageAsync<T>(IMessageChannel channel, T[] pageData, Func<T, int, EmbedFooterBuilder, Embed> getEmbed)
         {
             Embed GetEmbed(int i)
             {
@@ -128,6 +128,27 @@ namespace SenkoSanBot.Services.Pagination
                 await msg.ModifyAsync((MessageProperties properties) =>
                 {
                     properties.Embed = Optional.Create(GetEmbed(i));
+                });
+            });
+        }
+
+        public async Task SendPaginatedDataAsyncMessageAsync<T>(IMessageChannel channel, T[] pageData, Func<T, int, EmbedFooterBuilder, Task<Embed>> getEmbed)
+        {
+             Task<Embed> GetEmbedTask(int i)
+            {
+                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
+            }
+
+            IUserMessage message = await channel.SendMessageAsync(embed: await GetEmbedTask(0));
+
+            await message.AddReactionsAsync(ReactionEmotes);
+
+            AddCallback(message.Id, pageData.Count(), async (IUserMessage msg, int i) =>
+            {
+                Embed embed = await GetEmbedTask(i);
+                await msg.ModifyAsync((MessageProperties properties) =>
+                {
+                    properties.Embed = Optional.Create(embed);
                 });
             });
         }
