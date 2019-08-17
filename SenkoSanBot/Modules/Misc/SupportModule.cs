@@ -19,7 +19,7 @@ namespace SenkoSanBot.Modules.Misc
             if (Config.Configuration.Tags.Count <= 0)
                 await ReplyAsync("No tags found");
 
-            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, Config.Configuration.Tags.ToArray(), GetTagEmbed);
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, Config.Configuration.Tags.ToArray(), GetTagEmbed);
         }
 
         private Embed GetTagEmbed(KeyValuePair<string, string> data, int index, EmbedFooterBuilder footer) => new EmbedBuilder()

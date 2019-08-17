@@ -147,7 +147,7 @@ namespace SenkoSanBot.Modules.Osu
             var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, i));
             UserProfile[] results = await Task.WhenAll(taskList);
 
-            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, results, GetUserProfileEmbed);
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
 
         [Command("recent"), Alias("rs")]
@@ -181,7 +181,7 @@ namespace SenkoSanBot.Modules.Osu
 
             PlayResult[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
-            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetBeatmapResultEmbed);
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
         }
 
         [Command("best"), Alias("bs")]
@@ -214,7 +214,7 @@ namespace SenkoSanBot.Modules.Osu
 
             UserBest[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
-            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetUserBestEmbed);
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
         }
     }
 
