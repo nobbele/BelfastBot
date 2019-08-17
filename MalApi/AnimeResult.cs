@@ -1,6 +1,6 @@
 ﻿namespace MalApi
 {
-    public struct SearchResult
+    public struct AnimeResult
     {
         public ulong Id;
         public bool Airing;
@@ -11,5 +11,12 @@
         public float Score;
         public string ImageUrl;
         public string AnimeUrl;
+        //Detailed Information
+        public string Source;
+        public string Duration;
+        public string Broadcast;
+        public string TrailerUrl;
+        public string Studio;
+        public string StudioUrl;
     }
 }

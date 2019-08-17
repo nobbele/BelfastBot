@@ -5,5 +5,7 @@
         BotConfiguration Configuration { get; }
 
         bool Initialize();
+
+        void WriteData();
     }
 }

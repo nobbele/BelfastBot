@@ -71,31 +71,26 @@ namespace SenkoSanBot.Modules.Otaku
         //Mal Module
         [Command("mal")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name)
+        public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 5)
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            MalApi.SearchResult[] results = await MalApi.Client.SearchAnimeAsync(name);
+            ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name, limit);
+            var resultsTask = ids.Select(r => MalApi.Client.GetDetailedAnimeResultsAsync(r));
+            MalApi.AnimeResult[] results = await Task.WhenAll(resultsTask);
 
-            Embed GetEmbed(int i) => GenerateEmbedFor(results[i], new EmbedFooterBuilder()
-                .WithText($"page {i + 1} out of {results.Length}"));
-
-            IUserMessage message = await ReplyAsync(embed: GetEmbed(0));
-
-            await message.AddReactionsAsync(PaginatedMessageService.ReactionEmotes);
-
-            PaginatedMessageService.AddCallback(message.Id, results.Length, async (IUserMessage msg, int i) =>
-            {
-                await msg.ModifyAsync((MessageProperties properties) =>
-                {
-                    properties.Embed = Optional.Create(GetEmbed(i));
-                });
-            });
+            await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, results, GetAnimeResultEmbed);
         }
 
-        private Embed GenerateEmbedFor(MalApi.SearchResult result, EmbedFooterBuilder footer)
+        [Command("studio")]
+        public async Task SearchStudioAsync([Summary("Title to search")] int id = 43)
         {
-            return new EmbedBuilder()
+            //Logger.LogInfo($"Searching for studio with {id} on myanimelist");
+            MalApi.StudioResult result = await MalApi.Client.GetStudioResultsAsync(id);
+            await ReplyAsync(result.Name);
+        }
+
+        private Embed GetAnimeResultEmbed(MalApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
                     .WithColor(0x2E51A2)
                     .WithAuthor(author => {
                         author
@@ -109,7 +104,6 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithFooter(footer)
                     .WithImageUrl(result.ImageUrl)
                     .Build();
-        }
 
         private string GetAiringType(bool state)
         {

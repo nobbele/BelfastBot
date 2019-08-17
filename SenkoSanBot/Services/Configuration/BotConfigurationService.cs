@@ -55,7 +55,7 @@ namespace SenkoSanBot.Services.Configuration
         /// </summary>
         private bool WithFailure(bool value) => !(m_failure = value);
 
-        public void Dispose()
+        public void WriteData()
         {
             if (m_failure)
             {
@@ -76,5 +76,7 @@ namespace SenkoSanBot.Services.Configuration
                 m_logger.LogInfo("Done writing configuration");
             }
         }
+
+        public void Dispose() => WriteData();
     }
 }
