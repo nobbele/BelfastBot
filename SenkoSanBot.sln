@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.645
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenkoSanBot", "SenkoSanBot\SenkoSanBot.csproj", "{D6B77B37-B35E-4926-AC17-DD99A4369BFB}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiTests", "ApiTests", "{1AEEF7C4-5EDB-4861-B541-D5B4A854B190}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{4D71602E-4759-4520-B80D-E3A633C3ED7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnilistApi", "AnilistApi\AnilistApi.csproj", "{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{4D71602E-4759-4520-B80D-E3A633C3ED7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D71602E-4759-4520-B80D-E3A633C3ED7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D71602E-4759-4520-B80D-E3A633C3ED7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{FB4A18A7-9650-46ED-A393-DA694F540D77} = {1AEEF7C4-5EDB-4861-B541-D5B4A854B190}
 		{AEC9FB47-22C3-4F09-85C9-589DD4805B31} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 		{B6D81A55-79C6-4C08-A1AA-2C3E95D3E40A} = {1AEEF7C4-5EDB-4861-B541-D5B4A854B190}
+		{8ECD668C-CAF3-4CAC-A319-A9B5DE7010E2} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DADD416-3B64-4BBE-9FE6-943BE0DE3B92}

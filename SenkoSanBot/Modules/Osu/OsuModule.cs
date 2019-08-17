@@ -70,7 +70,7 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{user.UserId}/{GetLinkSuffixForModeIndex(user.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{user.UserId}");
             })
-            .AddField("Accuracy", user.Accuracy.ToString("0.00"), true)
+            .AddField("<:rankingS:462313719762911233> Accuracy", user.Accuracy.ToString("0.00"), true)
             .AddField("PP", user.PP.ToString("0.00"), true)
             .AddField("Play Count", user.PlayCount, true)
             .AddField("Level", user.Level.ToString("0"), true)
