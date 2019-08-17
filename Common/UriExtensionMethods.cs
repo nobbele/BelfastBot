@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 
-namespace NekosLifeApi
+namespace Common
 {
-    public static class UriExtensions
+    public static class UriExtensionMethods
     {
         public static Uri Append(this Uri uri, params string[] paths)
         {

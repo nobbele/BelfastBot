@@ -1,4 +1,6 @@
-﻿namespace OsuApi
+﻿using System;
+
+namespace OsuApi
 {
     public struct Beatmap
     {
@@ -7,7 +9,7 @@
         public ulong SetId;
         public float StarRating;
         public int Bpm;
-        public int Lenght;
+        public TimeSpan Lenght;
         public string CreatorName;
         public ulong CreatorId;
     }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Common;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,13 +8,13 @@ namespace OsuApi
 {
     public static class Client
     {
-        public static readonly string BaseUrl = "https://osu.ppy.sh/api";
+        public static readonly Uri BaseUrl = new Uri("https://osu.ppy.sh/api");
 
         public static async Task<UserProfile> GetUserAsync(string token, string user, int mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user")}?u={user}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
@@ -39,7 +40,7 @@ namespace OsuApi
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user_recent?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={user}&k={token}&m={mode}");
 
                 dynamic obj = JArray.Parse(json);
 
@@ -68,7 +69,7 @@ namespace OsuApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_beatmaps?b={id}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_beatmaps")}?b={id}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
@@ -85,7 +86,7 @@ namespace OsuApi
                     SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
                     Bpm = jsonResult.bpm.ToObject<int>(),
-                    Lenght = null,
+                    Lenght = TimeSpan.FromSeconds((int)jsonResult.total_length.ToObject<int>()),
                 };
             }
         }
@@ -96,7 +97,7 @@ namespace OsuApi
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user_best?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={user}&k={token}&m={mode}");
 
                 dynamic obj = JArray.Parse(json);
 

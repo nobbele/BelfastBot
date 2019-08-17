@@ -30,7 +30,7 @@ namespace SenkoSanBot.Services.Pagination
         /// <returns>Returns an element that satisfies parameter <paramref name="f"/>. if none was found it returns null</returns>
         public T? TryFindBackwards(Func<T, bool> f)
         {
-            for(uint i = m_index - 1; i > 0; i--)
+            for(uint i = m_index - 1; i >= 0; i--)
             {
                 T element = m_arr[i];
                 if (f(element))

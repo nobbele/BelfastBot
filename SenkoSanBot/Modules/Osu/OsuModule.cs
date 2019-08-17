@@ -83,7 +83,7 @@ namespace SenkoSanBot.Modules.Osu
             .WithTitle($"Recents plays from {result.PlayerData.UserName}")
             .AddField("Details", $"**Rank: {result.Rank} ► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
-            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Lenght: {result.BeatmapData.Lenght}" +
+            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
@@ -211,6 +211,27 @@ namespace SenkoSanBot.Modules.Osu
             UserBest[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
             await PaginatedMessageService.SendPaginatedDataMessage(Context.Channel, validResults, GetUserBestEmbed);
+        }
+    }
+
+    public static class TimeSpanExtensionMethods
+    {
+        public static string ToShortForm(this TimeSpan t)
+        {
+            string shortForm = "";
+            if (t.Hours > 0)
+            {
+                shortForm += string.Format("{0}h", t.Hours.ToString());
+            }
+            if (t.Minutes > 0)
+            {
+                shortForm += string.Format("{0}m", t.Minutes.ToString());
+            }
+            if (t.Seconds > 0)
+            {
+                shortForm += string.Format("{0}s", t.Seconds.ToString());
+            }
+            return shortForm;
         }
     }
 }
