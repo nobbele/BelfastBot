@@ -6,6 +6,7 @@ using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using Discord.WebSocket;
+using System;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -82,7 +83,7 @@ namespace SenkoSanBot.Modules.Osu
             .WithTitle($"Recents plays from {result.PlayerData.UserName}")
             .AddField("Details", $"**Rank: {result.Rank} ► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
-            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
+            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Lenght: {result.BeatmapData.Lenght}" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)

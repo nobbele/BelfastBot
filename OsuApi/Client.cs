@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -84,6 +85,7 @@ namespace OsuApi
                     SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
                     Bpm = jsonResult.bpm.ToObject<int>(),
+                    Lenght = null,
                 };
             }
         }
