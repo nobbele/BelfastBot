@@ -2,6 +2,7 @@
 using Discord.Commands;
 using JishoApi;
 using SenkoSanBot.Services.Pagination;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -98,7 +99,7 @@ namespace SenkoSanBot.Modules.Otaku
                             .WithUrl($"{result.AnimeUrl}")
                             .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
                     })
-                    .WithDescription(result.Synopsis)
+                    .WithDescription(result.Synopsis.ShortenText())
                     .AddField("Details", $"Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
                     $"Episodes: **{result.Episodes}** | Score: **{result.Score}**")
                     .WithFooter(footer)
@@ -115,6 +116,17 @@ namespace SenkoSanBot.Modules.Otaku
                     return "Airing";
             }
             return "Unknown";
+        }
+    }
+
+    public static class StringExtentionMethods
+    {
+        public static string ShortenText(this string text)
+        {
+            if(text.Length > 256)
+                text = text?.Substring(0, 256) + "...";
+
+            return text;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MalApi
                 {
                     Id = jsonResult.mal_id,
                     Airing = jsonResult.airing,
-                    Title = jsonResult.title_english,
+                    Title = jsonResult.title,
                     Synopsis = jsonResult.synopsis,
                     Type = jsonResult.type,
                     Episodes = jsonResult.episodes,
