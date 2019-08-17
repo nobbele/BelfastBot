@@ -56,8 +56,12 @@ namespace SenkoSanBot.Modules.Otaku
 
             return new EmbedBuilder()
                 .WithColor(0x53DF1D)
-                .WithTitle($"Search Result For **{searchWord}**")
-                .AddField("Word", $"**[{searchWord}](https://jisho.org/search/{url})**")
+                .WithAuthor(author => {
+                    author
+                        .WithName($"Results For {searchWord}")
+                        .WithUrl($"https://jisho.org/search/{url}")
+                        .WithIconUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png");
+                })
                 .AddField(fieldBuilder)
                 .WithFooter(footer)
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
@@ -93,9 +97,13 @@ namespace SenkoSanBot.Modules.Otaku
         {
             return new EmbedBuilder()
                     .WithColor(0x2E51A2)
-                    .WithTitle($"**{result.Title}**")
+                    .WithAuthor(author => {
+                        author
+                            .WithName($"{result.Title}")
+                            .WithUrl($"{result.AnimeUrl}")
+                            .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+                    })
                     .WithDescription(result.Synopsis)
-                    .AddField("Title", $"**[{result.Title}]({result.AnimeUrl})**")
                     .AddField("Type", result.Type, true)
                     .AddField("Episodes", result.Episodes, true)
                     .AddField("Score", result.Score, true)

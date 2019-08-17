@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OsuApi
 {
-    public partial class Client
+    public static class Client
     {
         public static readonly string BaseUrl = "https://osu.ppy.sh/api";
 
@@ -82,6 +82,38 @@ namespace OsuApi
                     SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
                     Bpm = jsonResult.bpm.ToObject<int>(),
+                };
+            }
+        }
+
+        public static async Task<UserBest> GetUserBestAsync(string token, string user, int mode)
+        {
+            Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/get_user_best?u={user}&k={token}&m={mode}");
+
+                dynamic obj = JArray.Parse(json);
+
+                dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
+
+                if (jsonResults.Length <= 0)
+                    return new UserBest();
+                dynamic jsonResult = jsonResults[0];
+
+                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode);
+
+                await Task.WhenAll(userDataTask, beatmapDataTask);
+
+                return new UserBest
+                {
+                    PlayerData = userDataTask.Result,
+                    BeatmapData = beatmapDataTask.Result,
+                    Score = jsonResult.score.ToObject<ulong>(),
+                    Combo = jsonResult.maxcombo.ToObject<int>(),
+                    Rank = jsonResult.rank.ToObject<string>(),
+                    PP = jsonResult.pp.ToObject<float>(),
                 };
             }
         }
