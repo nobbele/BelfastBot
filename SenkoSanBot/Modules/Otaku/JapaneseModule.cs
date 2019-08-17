@@ -99,20 +99,21 @@ namespace SenkoSanBot.Modules.Otaku
         }
 
         private Embed GetAnimeResultEmbed(MalApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-                    .WithColor(0x2E51A2)
-                    .WithAuthor(author => {
-                        author
-                            .WithName($"{result.Title}")
-                            .WithUrl($"{result.AnimeUrl}")
-                            .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
-                    })
-                    .WithDescription(result.Synopsis.ShortenText())
-                    .AddField("Details", $"► Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
-                    $"► Episodes: **{result.Episodes}** | Duration: **{result.Duration}**" +
-                    $"\n► [Trailer]({result.TrailerUrl}) | Studio: **[{result.Studio}]({result.StudioUrl})**")
-                    .WithFooter(footer)
-                    .WithImageUrl(result.ImageUrl)
-                    .Build();
+                .WithColor(0x2E51A2)
+                .WithAuthor(author => {
+                    author
+                        .WithName($"{result.Title}")
+                        .WithUrl($"{result.AnimeUrl}")
+                        .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+                })
+                .WithDescription(result.Synopsis.ShortenText())
+                .AddField("Details", $"► Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
+                $"► Episodes: **{result.Episodes}** | Duration: **{result.Duration}**" +
+                $"\n► [**Trailer**]({result.TrailerUrl}) | Studio: **[{result.Studio}]({result.StudioUrl})**" +
+                $"\n[Broadcast Time: {result.Broadcast}]")
+                .WithFooter(footer)
+                .WithImageUrl(result.ImageUrl)
+                .Build();
 
         private string GetAiringType(bool state)
         {
