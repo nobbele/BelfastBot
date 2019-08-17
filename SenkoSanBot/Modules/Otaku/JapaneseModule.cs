@@ -77,10 +77,16 @@ namespace SenkoSanBot.Modules.Otaku
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
             ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name, limit);
+            MalApi.AnimeResult[] resultCache = new MalApi.AnimeResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
-                MalApi.AnimeResult result = await MalApi.Client.GetDetailedAnimeResultsAsync(id);
-                return GetAnimeResultEmbed(result, index, footer);
+                if (resultCache[index].Id != 0)
+                    return GetAnimeResultEmbed(resultCache[index], index, footer);
+                else
+                {
+                    MalApi.AnimeResult result = resultCache[index] = await MalApi.Client.GetDetailedAnimeResultsAsync(id);
+                    return GetAnimeResultEmbed(result, index, footer);
+                }
             });
         }
 

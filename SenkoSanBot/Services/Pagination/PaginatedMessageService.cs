@@ -53,6 +53,9 @@ namespace SenkoSanBot.Services.Pagination
 
             IUserMessage message = await channel.GetMessageAsync(cache.Id) as IUserMessage;
 
+            if (message.Author.Id != m_client.CurrentUser.Id)
+                return;
+
             if (!ReactionEmotes.Any(message.Reactions.ContainsKey))
                 return;
 
