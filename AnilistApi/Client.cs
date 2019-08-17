@@ -25,6 +25,7 @@ namespace MalApi
                     results[i] = new SearchResult
                     {
                         Id = jsonResult.mal_id,
+                        Airing = jsonResult.airing,
                         Title = jsonResult.title,
                         Synopsis = jsonResult.synopsis,
                         Type = jsonResult.type,

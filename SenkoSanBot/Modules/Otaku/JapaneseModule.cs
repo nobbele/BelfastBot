@@ -104,12 +104,23 @@ namespace SenkoSanBot.Modules.Otaku
                             .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
                     })
                     .WithDescription(result.Synopsis)
-                    .AddField("Type", result.Type, true)
-                    .AddField("Episodes", result.Episodes, true)
-                    .AddField("Score", result.Score, true)
+                    .AddField("Details", $"Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
+                    $"Episodes: **{result.Episodes}** | Score: **{result.Score}**")
                     .WithFooter(footer)
                     .WithImageUrl(result.ImageUrl)
                     .Build();
+        }
+
+        private string GetAiringType(bool state)
+        {
+            switch (state)
+            {
+                case false:
+                    return "Finished";
+                case true:
+                    return "Airing";
+            }
+            return "Unknown";
         }
     }
 }
