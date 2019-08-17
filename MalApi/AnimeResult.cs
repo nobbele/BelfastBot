@@ -8,7 +8,7 @@
         public string Synopsis;
         public string Type;
         public int Episodes;
-        public float Score;
+        public float Score;//--
         public string ImageUrl;
         public string AnimeUrl;
         //Detailed Information

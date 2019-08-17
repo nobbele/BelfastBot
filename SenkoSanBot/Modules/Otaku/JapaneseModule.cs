@@ -100,8 +100,9 @@ namespace SenkoSanBot.Modules.Otaku
                             .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
                     })
                     .WithDescription(result.Synopsis.ShortenText())
-                    .AddField("Details", $"Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
-                    $"Episodes: **{result.Episodes}** | Score: **{result.Score}**")
+                    .AddField("Details", $"► Type: **{result.Type}** | Status: **{GetAiringType(result.Airing)}**\n" +
+                    $"► Episodes: **{result.Episodes}** | Duration: **{result.Duration}**" +
+                    $"\n► [Trailer]({result.TrailerUrl}) | Studio: **[{result.Studio}]({result.StudioUrl})**")
                     .WithFooter(footer)
                     .WithImageUrl(result.ImageUrl)
                     .Build();
