@@ -81,7 +81,7 @@ namespace SenkoSanBot.Modules.Osu
         private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
             .WithTitle($"Recents plays from {result.PlayerData.UserName}")
-            .AddField("Details", $"**Rank: {result.Rank} ► Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField("Details", $"► **Rank: {result.Rank.Replace("X", "SS")}\n► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
@@ -120,7 +120,6 @@ namespace SenkoSanBot.Modules.Osu
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
         {
-
             string username = null;
 
             IUser target = Context.Message.MentionedUsers.FirstOrDefault();
