@@ -81,7 +81,9 @@ namespace SenkoSanBot.Modules.Osu
             .WithColor(0xE664A0)
             .WithTitle($"Recents plays from {result.PlayerData.UserName}")
             .AddField("Details", $"**Rank: {result.Rank} ► Score: {result.Score} | Combo: {result.Combo}**")
-            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) [{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm**")
+            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
+            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
+            $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
             .Build();
@@ -96,7 +98,9 @@ namespace SenkoSanBot.Modules.Osu
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
             .AddField("Details", $"**Rank: {result.Rank} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
-            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) [{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm**")
+            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
+            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
+            $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .Build();
         #endregion

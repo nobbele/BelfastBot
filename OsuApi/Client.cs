@@ -78,6 +78,8 @@ namespace OsuApi
                 return new Beatmap
                 {
                     Name = jsonResult.title.ToObject<string>(),
+                    CreatorName = jsonResult.creator.ToObject<string>(),
+                    CreatorId = jsonResult.creator_id.ToObject<ulong>(),
                     Id = jsonResult.beatmap_id.ToObject<ulong>(),
                     SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
