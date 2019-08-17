@@ -80,7 +80,12 @@ namespace SenkoSanBot.Modules.Osu
 
         private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
-            .WithTitle($"Recents plays from {result.PlayerData.UserName}")
+            .WithAuthor(author => {
+                author
+                    .WithName($"{result.PlayerData.UserName}'s Recent osu!{GetNameForModeIndex(result.PlayerData.Mode)} Play")
+                    .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
+                    .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
+            })
             .AddField("Details", $"► **Rank: {result.Rank.Replace("X", "SS")}\n► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
