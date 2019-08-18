@@ -28,7 +28,7 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public Dictionary<string, string> Tags { get; internal set; } = new Dictionary<string, string>
         {
-            {"test", "test response"}
+
         };
 
         public ExtensionDataObject ExtensionData { get; set; }

@@ -19,7 +19,7 @@ namespace MalApiTests
         public async Task SearchAnimeAsync(string name)
         {
             TestContext.WriteLine($"Trying to find {name} with limit 5");
-            ulong[] ids = await Client.GetAnimeIdAsync(name, 10);
+            ulong[] ids = await Client.GetAnimeIdAsync(name);
             AnimeResult[] results = await Task.WhenAll(ids.Select(id => Client.GetDetailedAnimeResultsAsync(id)));
 
             Assert.IsNotNull(results);

@@ -44,12 +44,44 @@ namespace MalApi
                 };
             }
         }
-
-        public static async Task<ulong[]> GetAnimeIdAsync(string name, int limit)
+        public static async Task<MangaResult> GetDetailedMangaResultsAsync(ulong id)
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUri}/search/anime?q={name}&limit={limit}");
+                string json = await httpClient.GetStringAsync($"{BaseUri}/manga/{id}");
+
+                dynamic obj = JObject.Parse(json);
+
+                dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
+
+                dynamic[] authors = (dynamic[])jsonResult.authors.ToObject<dynamic[]>();
+                dynamic author = authors.ElementAtOrDefault(0);
+
+                return new MangaResult
+                {
+                    Id = jsonResult.mal_id, 
+                    Status = jsonResult.status,
+                    Title = jsonResult.title,
+                    Synopsis = jsonResult.synopsis,
+                    Type = jsonResult.type,
+                    Chapters = jsonResult.chapters.ToObject<int?>(),
+                    Volumes = jsonResult.volumes.ToObject<int?>(),
+                    Score = jsonResult.score.ToObject<float?>(),
+                    ImageUrl = jsonResult.image_url,
+                    MangaUrl = jsonResult.url,
+                    //Detailed
+                    Author = author?.name,
+                    AuthorUrl = author?.url,
+                };
+            }
+        }
+
+
+        public static async Task<ulong[]> GetAnimeIdAsync(string name)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUri}/search/anime?q={name}&limit=10");
 
                 dynamic obj = JObject.Parse(json);
 
@@ -60,6 +92,26 @@ namespace MalApi
                 foreach (dynamic jsonResult in jsonResults)
                 {
 
+                    results[i] = jsonResult.mal_id;
+                    i++;
+                }
+                return results;
+            }
+        }
+        public static async Task<ulong[]> GetMangaIdAsync(string name)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUri}/search/manga?q={name}&limit=10");
+
+                dynamic obj = JObject.Parse(json);
+
+                dynamic[] jsonResults = (dynamic[])obj.results.ToObject<dynamic[]>();
+
+                ulong[] results = new ulong[jsonResults.Length];
+                int i = 0;
+                foreach (dynamic jsonResult in jsonResults)
+                {
                     results[i] = jsonResult.mal_id;
                     i++;
                 }

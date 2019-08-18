@@ -17,7 +17,10 @@ namespace SenkoSanBot.Modules.Misc
         public async Task TagsAsync()
         {
             if (Config.Configuration.Tags.Count <= 0)
+            {
                 await ReplyAsync("No tags found");
+                return;
+            }
 
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, Config.Configuration.Tags.ToArray(), GetTagEmbed);
         }
@@ -42,7 +45,6 @@ namespace SenkoSanBot.Modules.Misc
 
         [Command("tagadd")]
         [Summary("Adds a tag with the given value")]
-        [RequireOwner]
         public async Task AddTagAsync(string tag, [Remainder] string value)
         {
             Config.Configuration.Tags.Add(tag, value);
@@ -52,7 +54,6 @@ namespace SenkoSanBot.Modules.Misc
 
         [Command("tagedit")]
         [Summary("Edits a tag with given value")]
-        [RequireOwner]
         public async Task EditTagAsync(string tag, [Remainder] string value)
         {
             if (!Config.Configuration.Tags.TryGetValue(tag, out string content))
@@ -67,7 +68,6 @@ namespace SenkoSanBot.Modules.Misc
 
         [Command("tagdelete"), Alias("tagdel")]
         [Summary("Deletes a tag with given name")]
-        [RequireOwner]
         public async Task DeleteTagAsync([Remainder] string tag)
         {
             if (!Config.Configuration.Tags.TryGetValue(tag, out string content))

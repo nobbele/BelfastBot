@@ -121,7 +121,7 @@ namespace SenkoSanBot.Modules.Osu
             return name;
         }
 
-        [Command("std"), Alias("osu")]
+        [Command("osu"), Alias("prf")]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
         {
@@ -150,7 +150,7 @@ namespace SenkoSanBot.Modules.Osu
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
 
-        [Command("recent"), Alias("rs")]
+        [Command("osu recent"), Alias("rs")]
         [Summary("Get recent play")]
         public async Task GetRecentPlay([Summary("Name to search")] string target_name = "")
         {
@@ -184,7 +184,7 @@ namespace SenkoSanBot.Modules.Osu
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
         }
 
-        [Command("best"), Alias("bs")]
+        [Command("osu best"), Alias("bs")]
         [Summary("Get recent play")]
         public async Task GetBestPlays([Summary("Name to search")] string target_name = "")
         {

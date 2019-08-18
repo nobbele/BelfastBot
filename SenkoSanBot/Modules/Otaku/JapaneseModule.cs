@@ -13,7 +13,7 @@ namespace SenkoSanBot.Modules.Otaku
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
-        [Command("Jisho"), Alias("jsh")]
+        [Command("jisho"), Alias("jsh")]
         [Summary("Searches given word from jisho.org")]
         public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string searchWord)
         {
@@ -70,13 +70,13 @@ namespace SenkoSanBot.Modules.Otaku
         }
 
         //Mal Module
-        [Command("mal")]
+        [Command("mal anime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] string name, int limit = 10)
+        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name)
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name, limit);
+            ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name);
             MalApi.AnimeResult[] resultCache = new MalApi.AnimeResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
@@ -90,23 +90,64 @@ namespace SenkoSanBot.Modules.Otaku
             });
         }
 
+        [Command("mal manga"), Alias("malm")]
+        public async Task SearchMangaAsync([Summary("Title to search")] [Remainder]string name)
+        {
+            Logger.LogInfo($"Searching for {name} on myanimelist");
+
+            ulong[] ids = await MalApi.Client.GetMangaIdAsync(name);
+            MalApi.MangaResult[] resultCache = new MalApi.MangaResult[ids.Length];
+
+            await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
+                if (resultCache[index].Id != 0)
+                    return GetMangaResultEmbed(resultCache[index], index, footer);
+                else
+                {
+                    MalApi.MangaResult result = resultCache[index] = await MalApi.Client.GetDetailedMangaResultsAsync(id);
+                    return GetMangaResultEmbed(result, index, footer);
+                }
+            });
+        }
+
+        private Embed GetMangaResultEmbed(MalApi.MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithColor(0x2E51A2)
+            .WithAuthor(author => {
+                author
+                    .WithName($"{result.Title}")
+                    .WithUrl($"{result.MangaUrl}")
+                    .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+            })
+            .WithDescription(result.Synopsis.ShortenText())
+            .AddField("Details",
+            $"► Type: **{result.Type}**\n" +
+            $"► Status: **{result.Status}**\n" +
+            $"► Chapters: **{(result.Chapters != null ? result.Chapters.ToString() : "Unknown")} [Volumes: {result.Volumes}]** \n" +
+            $"► Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
+            $"► Author: **[{(result.Author != null ? result.Author : "Unknown")}]({result.AuthorUrl})**\n")
+            .WithFooter(footer)
+            .WithImageUrl(result.ImageUrl)
+            .Build();
+
         private Embed GetAnimeResultEmbed(MalApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-                .WithColor(0x2E51A2)
-                .WithAuthor(author => {
-                    author
-                        .WithName($"{result.Title}")
-                        .WithUrl($"{result.AnimeUrl}")
-                        .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
-                })
-                .WithDescription(result.Synopsis.ShortenText())
-                .AddField("Details", 
-                $"► Type: **{result.Type}** | Status: **{result.Status}** | Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
-                $"► Episodes: **{(result.Episodes != null ? result.Episodes.ToString() : "Unknown")}** | Duration: **{result.Duration}**\n" +
-                $"► **{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}** | Studio: **[{(result.Studio != null ? result.Studio : "Unknown")}]({result.StudioUrl})**\n" +
-                $"Broadcast Time: **[{result.Broadcast}]**")
-                .WithFooter(footer)
-                .WithImageUrl(result.ImageUrl)
-                .Build();
+            .WithColor(0x2E51A2)
+            .WithAuthor(author => {
+                author
+                    .WithName($"{result.Title}")
+                    .WithUrl($"{result.AnimeUrl}")
+                    .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+            })
+            .WithDescription(result.Synopsis.ShortenText())
+            .AddField("Details", 
+            $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
+            $"► Status: **{result.Status}**\n" +
+            $"► Episodes: **{(result.Episodes != null ? result.Episodes.ToString() : "Unknown")} [{result.Duration}]** \n" +
+            $"► Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
+            $"► Studio: **[{(result.Studio != null ? result.Studio : "Unknown")}]({result.StudioUrl})**\n" +
+            $"Broadcast Time: **[{(result.Broadcast != null ? result.Broadcast.ToString() : "Unknown")}]**\n" +
+            $"**{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}**\n")
+            .WithFooter(footer)
+            .WithImageUrl(result.ImageUrl)
+            .Build();
     }
 
     public static class StringExtentionMethods
