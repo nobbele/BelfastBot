@@ -44,6 +44,7 @@ namespace SenkoSanBot.Modules.Misc
         }
 
         [Command("tagadd")]
+        [RequireOwner]
         [Summary("Adds a tag with the given value")]
         public async Task AddTagAsync(string tag, [Remainder] string value)
         {
@@ -53,6 +54,7 @@ namespace SenkoSanBot.Modules.Misc
         }
 
         [Command("tagedit")]
+        [RequireOwner]
         [Summary("Edits a tag with given value")]
         public async Task EditTagAsync(string tag, [Remainder] string value)
         {
@@ -67,6 +69,7 @@ namespace SenkoSanBot.Modules.Misc
         }
 
         [Command("tagdelete"), Alias("tagdel")]
+        [RequireOwner]
         [Summary("Deletes a tag with given name")]
         public async Task DeleteTagAsync([Remainder] string tag)
         {
