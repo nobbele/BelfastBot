@@ -55,11 +55,10 @@ namespace MalApi
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
 
                 dynamic[] authors = (dynamic[])jsonResult.authors.ToObject<dynamic[]>();
-                dynamic author = authors.ElementAtOrDefault(0);
 
                 return new MangaResult
                 {
-                    Id = jsonResult.mal_id, 
+                    Id = jsonResult.mal_id,
                     Status = jsonResult.status,
                     Title = jsonResult.title,
                     Synopsis = jsonResult.synopsis,
@@ -70,8 +69,11 @@ namespace MalApi
                     ImageUrl = jsonResult.image_url,
                     MangaUrl = jsonResult.url,
                     //Detailed
-                    Author = author?.name,
-                    AuthorUrl = author?.url,
+                    Authors = authors.Select(author => new Author()
+                    {
+                        Name = (string)author.name.ToObject<string>(),
+                        Url = (string)author.url.ToObject<string>()
+                    }).ToArray(),
                 };
             }
         }

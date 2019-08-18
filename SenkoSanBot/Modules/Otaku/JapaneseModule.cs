@@ -121,9 +121,9 @@ namespace SenkoSanBot.Modules.Otaku
             .AddField("Details",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Chapters: **{(result.Chapters != null ? result.Chapters.ToString() : "Unknown")} [Volumes: {result.Volumes}]** \n" +
+            $"► Chapters: **{(result.Chapters != null ? result.Chapters.ToString() : "Unknown")} [Volumes: {(result.Volumes != null  ? result.Volumes.ToString() : "Unknown")}]** \n" +
             $"► Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
-            $"► Author: **[{(result.Author != null ? result.Author : "Unknown")}]({result.AuthorUrl})**\n")
+            $"► Author(s): **{(result.Authors.Length > 0 ? result.Authors.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();

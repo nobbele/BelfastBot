@@ -12,7 +12,6 @@
         public float? Score;
         public string ImageUrl;
         public string MangaUrl;
-        public string Author;
-        public string AuthorUrl;
+        public Author[] Authors;
     }
 }
