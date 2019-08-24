@@ -78,7 +78,6 @@ namespace MalApi
             }
         }
 
-
         public static async Task<ulong[]> GetAnimeIdAsync(string name)
         {
             using (HttpClient httpClient = new HttpClient())

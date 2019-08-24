@@ -6,23 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace SafeBooruApi
+namespace KonachanApi
 {
     public static class Client
     {
-        public static readonly string BaseUrl = "https://safebooru.org/index.php?page=dapi&s=post&q=index";
+        public static readonly string BaseUrl = "https://konachan.net/post.xml";
         public static readonly string[] BlacklistedTags = new string[]
         {
-            "ass",
-            "nude",
-            "anus",
-            "uncensored",
-            "penis",
-            "pussy",
-            "panties",
-            "underwear",
-            "pantyshot",
-            "skirt_lift",
+
         };
 
         public static async Task<string> GetRandomPostAsync(string tag)
@@ -32,7 +23,7 @@ namespace SafeBooruApi
 
             using (HttpClient client = new HttpClient())
             {
-                Stream fileStream = await client.GetStreamAsync($"{BaseUrl}&tags={tag}");
+                Stream fileStream = await client.GetStreamAsync($"{BaseUrl}?tags={tag}");
                 XDocument xdoc = await XDocument.LoadAsync(fileStream, LoadOptions.None, CancellationToken.None);
                 XElement root = xdoc.Element("posts");
                 var posts = root.Elements("post");

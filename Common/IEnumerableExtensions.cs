@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SafeBooruApi
+namespace Common
 {
     public static class IEnumerableExtensions
     {

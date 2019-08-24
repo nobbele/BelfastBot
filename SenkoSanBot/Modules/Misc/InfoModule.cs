@@ -11,7 +11,7 @@ namespace SenkoSanBot.Modules.Misc
         public CommandService Command { get; set; }
 
         [Command("help")]
-        public async Task HelpAsync(string command = null)
+        public async Task HelpAsync([Remainder] string command = null)
         {
             Logger.LogInfo($"{Context.User} asked for help about {command ?? "all commands"}");
 

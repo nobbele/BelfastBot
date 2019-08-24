@@ -12,11 +12,13 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public string OsuApiToken { get; internal set; } = "YOUR TOKEN";
         [DataMember]
+        public string AlphaCodersApiToken { get; internal set; } = "YOUR TOKEN";
+        [DataMember]
         public string Prefix { get; internal set; } = ".";
         [DataMember]
         public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0}";
         [DataMember]
-        public string StatusMessage { get; internal set; } = "With Her Tail";
+        public string StatusMessage { get; internal set; } = "With My Tail";
         [DataMember]
         public UserStatus OnlineStatus = UserStatus.DoNotDisturb;
         [DataMember]

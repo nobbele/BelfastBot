@@ -2,7 +2,6 @@
 using Discord.Commands;
 using JishoApi;
 using SenkoSanBot.Services.Pagination;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
