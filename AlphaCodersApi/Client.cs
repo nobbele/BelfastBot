@@ -8,11 +8,11 @@ namespace AlphaCodersApi
     {
         public static readonly string BaseUrl = "https://wall.alphacoders.com/api2.0/get.php";
 
-        public static async Task<ulong[]> GetWallpaperIdAsync(string token, string search)
+        public static async Task<ulong[]> GetWallpaperIdAsync(string token, string search, int pageIndex = 1)
         {
             using (HttpClient httpClient = new HttpClient())
-            {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}?auth={token}&method=search&term={search}"); //&width=1920&height=1080");
+            {   
+                string json = await httpClient.GetStringAsync($"{BaseUrl}?auth={token}&method=search&term={search}&page={pageIndex}");
 
                 dynamic obj = JObject.Parse(json);
 

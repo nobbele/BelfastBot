@@ -10,11 +10,11 @@ namespace SenkoSanBot.Modules.Fun
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("wallpaper"), Alias("wall")]
-        public async Task SearchWallpaperAsync([Summary("Word to search")] [Remainder]string name)
+        public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name)
         {
             Logger.LogInfo($"Searching for {name} on alphacoders");
 
-            ulong[] ids = await AlphaCodersApi.Client.GetWallpaperIdAsync(Config.Configuration.AlphaCodersApiToken ,name);
+            ulong[] ids = await AlphaCodersApi.Client.GetWallpaperIdAsync(Config.Configuration.AlphaCodersApiToken ,name, page);
             AlphaCodersApi.WallpaperResult[] resultCache = new AlphaCodersApi.WallpaperResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
@@ -39,7 +39,7 @@ namespace SenkoSanBot.Modules.Fun
             .AddField("Details",
             $"► Category: **{result.Category}**\n" +
             $"► Width: **{result.Width}** Height: **{result.Height}**\n" +
-            $"► File Size: **{result.FileSize / 1024/ 1024} MB** \n")
+            $"► File Size: **{((float)result.FileSize / 1024/ 1024).ToString("0.00")} MB** \n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();
