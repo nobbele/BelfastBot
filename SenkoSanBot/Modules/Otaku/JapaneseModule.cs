@@ -30,7 +30,7 @@ namespace SenkoSanBot.Modules.Otaku
         private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
         {
             string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
-            string url = searchWord.Replace(" ", "%20");
+            string url = searchWord;
 
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
                 .WithName(japanese);

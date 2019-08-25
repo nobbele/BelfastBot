@@ -85,7 +85,6 @@ namespace SenkoSanBot
 
                 Logger.LogInfo("Initializing services");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
-                await services.GetRequiredService<SenkoSanPersonalityMessageService>().InitializeAsync();
                 await services.GetRequiredService<ICommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
@@ -118,7 +117,6 @@ namespace SenkoSanBot
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton<SenkoSanPersonalityMessageService>()
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<ICommandHandlingService, CommandHandlingService>()

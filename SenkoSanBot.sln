@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiTests", "ApiTests", "{1A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{4D71602E-4759-4520-B80D-E3A633C3ED7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaCodersApi", "AlphaCodersApi\AlphaCodersApi.csproj", "{2F535BD5-10BD-4BF5-88BD-D48865D72768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaCodersApi", "AlphaCodersApi\AlphaCodersApi.csproj", "{2F535BD5-10BD-4BF5-88BD-D48865D72768}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeCharacterDatabaseApi", "AnimeCharacterDatabaseApi\AnimeCharacterDatabaseApi.csproj", "{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{2F535BD5-10BD-4BF5-88BD-D48865D72768}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F535BD5-10BD-4BF5-88BD-D48865D72768}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F535BD5-10BD-4BF5-88BD-D48865D72768}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +113,7 @@ Global
 		{AEC9FB47-22C3-4F09-85C9-589DD4805B31} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 		{B6D81A55-79C6-4C08-A1AA-2C3E95D3E40A} = {1AEEF7C4-5EDB-4861-B541-D5B4A854B190}
 		{2F535BD5-10BD-4BF5-88BD-D48865D72768} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
+		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DADD416-3B64-4BBE-9FE6-943BE0DE3B92}

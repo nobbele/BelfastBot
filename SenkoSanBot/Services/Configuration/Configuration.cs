@@ -32,6 +32,13 @@ namespace SenkoSanBot.Services.Configuration
         {
 
         };
+        [DataMember]
+        public Dictionary<int, string> Packs { get; internal set; } = new Dictionary<int, string>
+        {
+            {1, "Fate (Series)"},
+            {2, "Azur Lane"},
+            {3, "Honkai Impact 3rd"},
+        };
 
         public ExtensionDataObject ExtensionData { get; set; }
 
@@ -49,6 +56,7 @@ namespace SenkoSanBot.Services.Configuration
             BlacklistedWord = BlacklistedWord ?? config.BlacklistedWord;
             InviteLinkWhitelist = InviteLinkWhitelist ?? config.InviteLinkWhitelist;
             Tags = Tags ?? config.Tags;
+            Packs = Packs ?? config.Packs;
         }
     }
 }

@@ -35,6 +35,5 @@ namespace SenkoSanBot.Modules.Fun
 
             await ReplyAsync(embed: embed);
         }
-
     }
 }

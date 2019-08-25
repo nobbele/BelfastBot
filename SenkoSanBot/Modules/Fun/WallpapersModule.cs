@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Fun
 {
-    public class AlphaCodersModule : SenkoSanModuleBase
+    [Summary("Commands for getting wallpapers")]
+    public class WallpapersModule : SenkoSanModuleBase
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("wallpaper"), Alias("wall")]
+        [Summary("Gets wallpaper from alphacoders")]
         public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name)
         {
             Logger.LogInfo($"Searching for {name} on alphacoders");
 
-            ulong[] ids = await AlphaCodersApi.Client.GetWallpaperIdAsync(Config.Configuration.AlphaCodersApiToken ,name, page);
+            ulong[] ids = await AlphaCodersApi.Client.GetWallpaperIdAsync(Config.Configuration.AlphaCodersApiToken, name);
             AlphaCodersApi.WallpaperResult[] resultCache = new AlphaCodersApi.WallpaperResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {

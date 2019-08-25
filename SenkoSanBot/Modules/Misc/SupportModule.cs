@@ -7,22 +7,36 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Misc
 {
-    [Summary("Commands for supporting users")]
+    [Summary("Commands for guiding users")]
     public class SupportModule : SenkoSanModuleBase
     {
+        public string BaseUrlLmgtfy = "https://lmgtfy.com";
+
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
+        #region Tags
         [Command("tags")]
         [Summary("Shows list of available tags")]
         public async Task TagsAsync()
         {
             if (Config.Configuration.Tags.Count <= 0)
             {
-                await ReplyAsync("No tags found");
+                await ReplyAsync("> No tags found");
                 return;
             }
 
-            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, Config.Configuration.Tags.ToArray(), GetTagEmbed);
+            Embed embed = new EmbedBuilder()
+                .WithColor(0xb39df2)
+                .WithTitle($"List of available tags")
+                .AddField("Tags", $"{(Config.Configuration.Tags.Select(tag => $"► [**{tag.Key}** : **{tag.Value}**]").NewLineSeperatedString())}")
+                .WithFooter(footer => {
+                    footer
+                        .WithText($"Requested by {Context.User}")
+                        .WithIconUrl(Context.User.GetAvatarUrl());
+                })
+                .Build();
+
+            await ReplyAsync(embed: embed);
         }
 
         private Embed GetTagEmbed(KeyValuePair<string, string> data, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
@@ -37,7 +51,7 @@ namespace SenkoSanBot.Modules.Misc
         {
             if(!Config.Configuration.Tags.TryGetValue(tag, out string content))
             {
-                await ReplyAsync("Invalid tag");
+                await ReplyAsync("> Invalid tag");
                 return;
             }
             await ReplyAsync(content);
@@ -60,7 +74,7 @@ namespace SenkoSanBot.Modules.Misc
         {
             if (!Config.Configuration.Tags.TryGetValue(tag, out string content))
             {
-                await ReplyAsync("Invalid tag");
+                await ReplyAsync("> Invalid tag");
                 return;
             }
             Config.Configuration.Tags[tag] = value;
@@ -75,12 +89,51 @@ namespace SenkoSanBot.Modules.Misc
         {
             if (!Config.Configuration.Tags.TryGetValue(tag, out string content))
             {
-                await ReplyAsync("Invalid tag");
+                await ReplyAsync("> Invalid tag");
                 return;
             }
             Config.Configuration.Tags.Remove(tag);
             Config.WriteData();
             await ReplyAsync("> Removed Tag");
+        }
+        #endregion
+
+        [Command("lmgtfy"), Alias("lmg")]
+        [Summary("Creates lmgtfy url")]
+        public async Task LmgtfySearchAsync([Summary("0 = google\n" +
+            "1 = yahoo\n" +
+            "2 = bing\n" +
+            "3 = ask\n" +
+            "4 = aol.\n" +
+            "5 = duckduckgo")]int type = 0, [Remainder] string search = "")
+        {
+            string engine = null;
+            switch (type)
+            {
+                case 0:
+                    engine = "p=1&s=g&t=w";
+                    break;
+                case 1:
+                    engine = "p=1&s=y&t=w";
+                    break;
+                case 2:
+                    engine = "p=1&s=b&t=w";
+                    break;
+                case 3:
+                    engine = "p=1&s=k&t=w";
+                    break;
+                case 4:
+                    engine = "p=1&s=a&t=w";
+                    break;
+                case 5:
+                    engine = "p=1&s=d&t=w";
+                    break;
+            }
+
+            search = search.Replace(' ', '+');
+            string url = $"<{BaseUrlLmgtfy}/?q={search}&{engine}>";
+
+            await ReplyAsync(url);
         }
     }
 }
