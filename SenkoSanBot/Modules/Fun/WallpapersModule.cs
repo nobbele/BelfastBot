@@ -28,7 +28,7 @@ namespace SenkoSanBot.Modules.Fun
                     return GetWallpaperResultEmbed(result, index, footer);
                 }
             });
-        }
+        }   
 
         private Embed GetWallpaperResultEmbed(AlphaCodersApi.WallpaperResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2999EF)

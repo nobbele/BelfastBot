@@ -17,7 +17,6 @@ namespace SenkoSanBot.Modules.Osu
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public DiscordSocketClient IClient { get; set; }
 
-
         [Command("osuset")]
         [Summary("Set osu name")]
         public async Task SetUserAsync([Summary("Name to set")] string name = null)
@@ -121,7 +120,7 @@ namespace SenkoSanBot.Modules.Osu
             return name;
         }
 
-        [Command("osu"), Alias("prf")]
+        [Command("osu")]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
         {

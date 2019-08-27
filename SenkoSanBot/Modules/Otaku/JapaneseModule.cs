@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using Common;
+using Discord;
 using Discord.Commands;
 using JishoApi;
 using SenkoSanBot.Services.Pagination;
@@ -120,8 +121,8 @@ namespace SenkoSanBot.Modules.Otaku
             .AddField("Details",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Chapters: **{(result.Chapters != null ? result.Chapters.ToString() : "Unknown")} [Volumes: {(result.Volumes != null  ? result.Volumes.ToString() : "Unknown")}]** \n" +
-            $"► Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
+            $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())} [Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}]** \n" +
+            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty(result.Score?.ToString())}**\n" +
             $"► Author(s): **{(result.Authors.Length > 0 ? result.Authors.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
@@ -135,28 +136,17 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithUrl($"{result.AnimeUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
-            .WithDescription(result.Synopsis.ShortenText())
+            .WithDescription($"{result.Synopsis.ShortenText()}")
             .AddField("Details", 
             $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Episodes: **{(result.Episodes != null ? result.Episodes.ToString() : "Unknown")} [{result.Duration}]** \n" +
-            $"► Score: **{(result.Score != null ? result.Score.ToString() : "Unknown")}**\n" +
-            $"► Studio: **[{(result.Studio != null ? result.Studio : "Unknown")}]({result.StudioUrl})**\n" +
-            $"Broadcast Time: **[{(result.Broadcast != null ? result.Broadcast.ToString() : "Unknown")}]**\n" +
+            $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration}]** \n" +
+            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty(result.Score?.ToString())}**\n" +
+            $"► Studio: **[{"Unknown".IfTargetIsNullOrEmpty(result.Studio?.ToString())}]({result.StudioUrl})**\n" +
+            $"Broadcast Time: **[{"Unknown".IfTargetIsNullOrEmpty(result.Broadcast?.ToString())}]**\n" +
             $"**{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();
-    }
-
-    public static class StringExtentionMethods
-    {
-        public static string ShortenText(this string text)
-        {
-            if(text.Length > 256)
-                text = text?.Substring(0, 256) + "...";
-
-            return text;
-        }
     }
 }

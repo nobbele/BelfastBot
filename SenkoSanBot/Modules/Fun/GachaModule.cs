@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace SenkoSanBot.Modules.Fun
     [Summary("Commands for Gacha")]
     public class GachaModule : SenkoSanModuleBase
     {
+        public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("roll")]
@@ -21,24 +23,40 @@ namespace SenkoSanBot.Modules.Fun
                 return;
             }
 
+            DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
+
+            if (userData.Coin < Config.Configuration.GachaPrice)
+            {
+                await ReplyAsync("> Insufficient Coin Amount");
+                return;
+            }
+
             AnimeCharacterDatabaseApi.AnimeResult anime = await AnimeCharacterDatabaseApi.Client.SearchAnimeAsync(content);
             AnimeCharacterDatabaseApi.CharacterResult result = await AnimeCharacterDatabaseApi.Client.GetCharactersAsync(anime.Id);
+
+            userData.Coin -= Config.Configuration.GachaPrice;
+            userData.GachaRolls++;
+
+            //userData.GachaCards[result.Id] = result.Name;
+
+            Db.WriteData();
 
             Embed embed = new EmbedBuilder()
                 .WithColor(0xb39df2)
                 .WithAuthor(author => {
                     author
-                        .WithName($"You rolled {result.Name}! 🎉")
+                        .WithName($"Opened {anime.Name} Card Pack! 🎉")
                         .WithUrl($"https://www.animecharactersdatabase.com/characters.php?id={result.Id}");
                 })
                 .WithThumbnailUrl(anime.Image)
-                .AddField("Details", $"► From: **{anime.Name}**\n" +
-                $"► Name: **{result.Name}**\n" +
-                $"► Gender: **{result.Gender}**")
+                .AddField("Details", $"► Name: **{result.Name}**\n" +
+                $"► Gender: **{result.Gender}**\n" +
+                $"► From: **{anime.Name}**\n" +
+                $"{result.Name} has been added to you cards list!")
                 .WithImageUrl(result.ImageUrl)
                 .WithFooter(footer => {
                     footer
-                        .WithText($"Requested by {Context.User}")
+                        .WithText($"Spent {Config.Configuration.GachaPrice} coins from {Context.User}")
                         .WithIconUrl(Context.User.GetAvatarUrl());
                 })
                 .Build();
@@ -46,7 +64,7 @@ namespace SenkoSanBot.Modules.Fun
             await ReplyAsync(embed: embed);
         }
 
-        [Command("card packs"), Alias("cards")]
+        [Command("gacha packs")]
         [Summary("Shows list of available card packs")]
         public async Task CardPacksAsync()
         {

@@ -18,6 +18,8 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0}";
         [DataMember]
+        public int MaxWarnAmount { get; internal set; } = 3;
+        [DataMember]
         public string StatusMessage { get; internal set; } = "With My Tail";
         [DataMember]
         public UserStatus OnlineStatus = UserStatus.DoNotDisturb;
@@ -33,11 +35,14 @@ namespace SenkoSanBot.Services.Configuration
 
         };
         [DataMember]
+        public int GachaPrice { get; internal set; } = 20;
+        [DataMember]
         public Dictionary<int, string> Packs { get; internal set; } = new Dictionary<int, string>
         {
             {1, "Fate (Series)"},
             {2, "Azur Lane"},
             {3, "Honkai Impact 3rd"},
+            {4, "Pokemon (Series)"},
         };
 
         public ExtensionDataObject ExtensionData { get; set; }
@@ -50,6 +55,7 @@ namespace SenkoSanBot.Services.Configuration
             OsuApiToken = OsuApiToken ?? config.OsuApiToken;
             Prefix = Prefix ?? config.Prefix;
             WelcomeMessage = WelcomeMessage ?? config.WelcomeMessage;
+            MaxWarnAmount = MaxWarnAmount == 0 ? config.MaxWarnAmount : MaxWarnAmount;
             StatusMessage = StatusMessage ?? config.StatusMessage;
             // Assume no one that uses this bot has the log channel id be 0
             LogChannelID = LogChannelID == 0 ? config.LogChannelID : LogChannelID;
@@ -57,6 +63,7 @@ namespace SenkoSanBot.Services.Configuration
             InviteLinkWhitelist = InviteLinkWhitelist ?? config.InviteLinkWhitelist;
             Tags = Tags ?? config.Tags;
             Packs = Packs ?? config.Packs;
+            GachaPrice = GachaPrice == 0 ? config.GachaPrice : GachaPrice;
         }
     }
 }

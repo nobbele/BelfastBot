@@ -1,5 +1,7 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using SenkoSanBot.Services.Commands;
+using SenkoSanBot.Services.Database;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Modules.Misc
@@ -8,6 +10,7 @@ namespace SenkoSanBot.Modules.Misc
     public class OwnerModule : SenkoSanModuleBase
     {
         public SenkoSan Senko { get; set; }
+        public JsonDatabaseService Db { get; set; }
 
         [Command("stop")]
         [Summary("Stops senko-san")]
@@ -18,6 +21,20 @@ namespace SenkoSanBot.Modules.Misc
             await ReplyAsync("Stopping...");
 
             BotCommandLineCommands.Stop(Senko);
+        }
+
+        [Command("coin add")]
+        [Summary("Adds coin with given amount")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task AddCoinAsync([Summary("Amount to give")]int amount = 100, [Summary("Optional mention")]IUser target = null)
+        {
+            target = target ?? Context.Message.Author;
+
+            Logger.LogInfo($"Given {target.Username} {amount} Coins");
+
+            Db.GetUserEntry(0, target.Id).Coin += amount;
+            Db.WriteData();
+            await ReplyAsync($"> Given {target.Mention} {amount} Coins!");
         }
     }
 }

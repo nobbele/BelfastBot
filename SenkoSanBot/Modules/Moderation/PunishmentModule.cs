@@ -55,7 +55,7 @@ namespace SenkoSanBot.Modules.Moderation
 
                 if (user.Warns.Count == 2)
                     await KickUserAsync(target, reason);
-                else if (user.Warns.Count >= 3)
+                else if (user.Warns.Count >= Config.Configuration.MaxWarnAmount)
                     await BanUserAsync(target, reason);
             }
             else
