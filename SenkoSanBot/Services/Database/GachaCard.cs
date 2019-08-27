@@ -1,6 +1,6 @@
 ﻿namespace SenkoSanBot.Services.Database
 {
-    public struct GachaCard
+    public class GachaCard
     {
         public string Name;
         public ulong Id;

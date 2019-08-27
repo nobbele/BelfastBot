@@ -33,7 +33,7 @@ namespace SenkoSanBot.Modules.Profiles
                  $"__**Gacha Details**__\n" +
                  $"► Coins: **{userData.Coin}**\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
-                 $"► Card Amount: **{userData.Cards.Length}** \n" +
+                 $"► Card Amount: **{userData.Cards.Count}** \n" +
                  $"__**Server Status**__\n" +
                  $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n")
                  .WithFooter(footer => {
@@ -65,7 +65,7 @@ namespace SenkoSanBot.Modules.Profiles
                          .WithName($"Profile of {target.Username}")
                          .WithIconUrl($"{target.GetAvatarUrl()}");
                  })
-                 .AddField("Rolled Characters:", $"{(userData.Cards.Length > 0 ? userData.Cards.Select(card => $"► [{card.Amount}]**[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})**").NewLineSeperatedString() : "**None**")}")
+                 .AddField("Rolled Characters:", $"{(userData.Cards.Count > 0 ? userData.Cards.Select(card => $"► [{card.Amount}]**[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})**").NewLineSeperatedString() : "**None**")}")
                  .WithFooter(footer => {
                      footer
                          .WithText($"Requested by {Context.User}")

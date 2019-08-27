@@ -11,7 +11,7 @@ namespace SenkoSanBot.Services.Database
         public string OsuName { get; set; } = null;
         public int Coin { get; set; } = 100;
         public int GachaRolls { get; set; } = 0;
-        public GachaCard[] Cards { get; set; } = null;
+        public List<GachaCard> Cards { get; set; } = new List<GachaCard>();
 
         public static DatabaseUserEntry CreateNew(ulong userId) => new DatabaseUserEntry
         {

@@ -36,8 +36,12 @@ namespace SenkoSanBot.Modules.Fun
 
             userData.Coin -= Config.Configuration.GachaPrice;
             userData.GachaRolls++;
-
-            //userData.GachaCards[result.Id] = result.Name;
+            
+            GachaCard existingCard = userData.Cards.SingleOrDefault(card => card.Id == result.Id);
+            if (existingCard != null)
+                existingCard.Amount++;
+            else
+                userData.Cards.Add(new GachaCard { Name = result.Name, Id = result.Id, Amount = 1 });
 
             Db.WriteData();
 
