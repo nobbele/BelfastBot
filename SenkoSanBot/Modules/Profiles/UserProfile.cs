@@ -82,6 +82,7 @@ namespace SenkoSanBot.Modules.Profiles
         {
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
             GachaCard exits = userData.Cards[index];
+            //Also check amount
             if(exits != null)
             {
                 await ReplyAsync($"> Removed {exits.Name} and gained x coins"); //Fix
