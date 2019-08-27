@@ -65,7 +65,7 @@ namespace SenkoSanBot.Modules.Profiles
                          .WithName($"Profile of {target.Username}")
                          .WithIconUrl($"{target.GetAvatarUrl()}");
                  })
-                 .AddField("Rolled Characters:", $"{(userData.Cards.Count > 0 ? userData.Cards.Select(card => $"► [{card.Amount}]**[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})**").NewLineSeperatedString() : "**None**")}")
+                 .AddField("Rolled Characters:", $"{(userData.Cards.Count > 0 ? userData.Cards.Select(card => $"► [{userData.Cards.FindIndex(r => r.Id == card.Id)}] **[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})** (x{card.Amount})").NewLineSeperatedString() : "**None**")}")
                  .WithFooter(footer => {
                      footer
                          .WithText($"Requested by {Context.User}")
@@ -75,6 +75,22 @@ namespace SenkoSanBot.Modules.Profiles
                  .Build();
 
             await ReplyAsync(embed: embed);
+        }
+
+        [Command("card sell")]
+        public async Task SellCardAsync(int index)
+        {
+            DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
+            GachaCard exits = userData.Cards[index];
+            if(exits != null)
+            {
+                await ReplyAsync($"> Removed {exits.Name} and gained x coins"); //Fix
+                userData.Cards.Remove(userData.Cards[index]);
+                userData.Coin += Config.Configuration.GachaPrice / 2; //Change this
+                Db.WriteData();
+                return;
+            }
+            await ReplyAsync("> Couldn't find the specified card index");
         }
     }
 }
