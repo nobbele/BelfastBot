@@ -65,7 +65,7 @@ namespace SenkoSanBot
                 client.Log += LogMessageAsync;
                 client.UserJoined += async (SocketGuildUser user) => 
                 {
-                    await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention));
+                    await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention, user.Guild.Name));
                 };
                 client.Ready += async () =>
                 {

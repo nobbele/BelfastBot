@@ -16,7 +16,7 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public string Prefix { get; internal set; } = ".";
         [DataMember]
-        public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0}";
+        public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0} to {1}";
         [DataMember]
         public int MaxWarnAmount { get; internal set; } = 3;
         [DataMember]

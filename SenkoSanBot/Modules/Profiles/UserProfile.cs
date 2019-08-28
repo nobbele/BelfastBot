@@ -1,8 +1,9 @@
-﻿using Discord;
+﻿using Common;
+using Discord;
 using Discord.Commands;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -87,47 +88,23 @@ namespace SenkoSanBot.Modules.Profiles
                  .Build();
 
         [Command("card sell")]
-        public async Task SellCardAsync(int index)
+        public async Task SellCardAsync([Remainder]string cardName)
         {
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
-            GachaCard exits = userData.Cards[index];
-            //Also check amount
+            GachaCard exits = userData.Cards.SingleOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase));
             if(exits != null)
             {
-                await ReplyAsync($"> Removed {exits.Name} and gained x coins"); //Fix
-                userData.Cards.Remove(userData.Cards[index]);
-                userData.Coin += Config.Configuration.GachaPrice / 2; //Change this
+                int refundCoin = Config.Configuration.GachaPrice / 2;
+                await ReplyAsync($"> Removed **{exits.Name}** and gained **{refundCoin}** coins");
+                if (exits.Amount > 1)
+                    exits.Amount--;
+                else
+                    userData.Cards.Remove(exits);
+                userData.Coin += refundCoin;
                 Db.WriteData();
                 return;
             }
             await ReplyAsync("> Couldn't find the specified card index");
-        }
-    }
-    public static class StringExtensionMethods
-    {
-        /// <summary>
-        /// Assumes no string between 2 delimeters is longer than n
-        /// </summary>
-        public static string[] NCharLimitToClosestDelimeter(this string str, int n, string delim)
-        {
-            List<string> list = new List<string>(str.Length / n);
-
-            while (str.Length > n)
-            {
-                int lastIndexToClosestDelim = 0;
-                int indexToClosestDelim = 0;
-                while ((indexToClosestDelim = str.IndexOf(delim, indexToClosestDelim + delim.Length)) < n)
-                {
-                    lastIndexToClosestDelim = indexToClosestDelim;
-                }
-
-                list.Add(str.Substring(0, lastIndexToClosestDelim));
-                str = str.Remove(0, lastIndexToClosestDelim + delim.Length);
-            }
-
-            list.Add(str);
-
-            return list.ToArray();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace SenkoSanBot.Modules.Fun
             AnimeCharacterDatabaseApi.CharacterResult result = await AnimeCharacterDatabaseApi.Client.GetCharactersAsync(anime.Id);
 
             userData.Coin -= Config.Configuration.GachaPrice;
-            userData.GachaRolls++;
+            userData.GachaRolls++;  
             
             GachaCard existingCard = userData.Cards.SingleOrDefault(card => card.Id == result.Id);
             if (existingCard != null)
