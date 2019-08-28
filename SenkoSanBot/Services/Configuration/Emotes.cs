@@ -1,0 +1,18 @@
+﻿using Discord;
+
+namespace SenkoSanBot.Services.Configuration
+{
+    public class Emotes
+    {
+        public static readonly Emote OsuSH = Emote.Parse("<:osuSH:616340403003719717>");
+        public static readonly Emote OsuS = Emote.Parse("<:osuS:616340376910823454>");
+        public static readonly Emote OsuA = Emote.Parse("<:osuA:616340220786376710>");
+        public static readonly Emote OsuB = Emote.Parse("<:osuB:616340261114609694>");
+        public static readonly Emote OsuC = Emote.Parse("<:osuC:616340289212252172>");
+        public static readonly Emote OsuD = Emote.Parse("<:osuD:616340321449672828>");
+        public static readonly Emote OsuF = Emote.Parse("<:osuF:616340348918169607>");
+        public static readonly Emote OsuNote = Emote.Parse("<:osuNote:616343572039336111>");
+        public static readonly Emote SenkoShock = Emote.Parse("<:senkoShock:616343608861130762>");
+
+    }
+}

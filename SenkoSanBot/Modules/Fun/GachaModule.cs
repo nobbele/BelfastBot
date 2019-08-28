@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using System.Linq;
@@ -53,7 +54,7 @@ namespace SenkoSanBot.Modules.Fun
                         .WithUrl($"https://www.animecharactersdatabase.com/characters.php?id={result.Id}");
                 })
                 .WithThumbnailUrl(anime.Image)
-                .AddField("Details", $"► Name: **{result.Name}**\n" +
+                .AddField($"Details", $"► Name: **{result.Name}**\n" +
                 $"► Gender: **{result.Gender}**\n" +
                 $"► From: **{anime.Name}**\n" +
                 $"{result.Name} has been added to you cards list!")
