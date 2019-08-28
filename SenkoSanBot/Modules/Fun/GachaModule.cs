@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Commands;
-using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using System.Linq;
