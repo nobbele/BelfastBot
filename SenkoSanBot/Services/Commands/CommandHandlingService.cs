@@ -6,7 +6,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Logging;
-using System.Threading;
 
 namespace SenkoSanBot.Services.Commands
 {
@@ -58,8 +57,9 @@ namespace SenkoSanBot.Services.Commands
 
             if (!result.IsSuccess)
             {
-                await context.Channel.SendMessageAsync(result.ErrorReason);
-                m_logger.LogInfo($"Unknown command {result.ErrorReason}");
+                await context.Channel.SendMessageAsync($"{Emotes.SenkoShock}うや～！\n" +
+                    $"{result.ErrorReason} try **{m_config.Configuration.Prefix}help** for lists of commands");
+                m_logger.LogInfo($"Reason {result.ErrorReason}");
             }
             else
             {

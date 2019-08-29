@@ -4,6 +4,8 @@ namespace SenkoSanBot.Services.Configuration
 {
     public class Emotes
     {
+        public static readonly Emote OsuSSH = Emote.Parse("<:osuSSH:616666339729342515>");
+        public static readonly Emote OsuSS = Emote.Parse("<:osuSS:616665347122004121>");
         public static readonly Emote OsuSH = Emote.Parse("<:osuSH:616340403003719717>");
         public static readonly Emote OsuS = Emote.Parse("<:osuS:616340376910823454>");
         public static readonly Emote OsuA = Emote.Parse("<:osuA:616340220786376710>");
