@@ -38,7 +38,7 @@ namespace SenkoSanBot.Modules.Profiles
                  $"► Coins: **{userData.Coin}**\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
                  $"► Card Amount: **{userData.Cards.Count}** \n" +
-                 $"__**Server Status**__\n" +
+                 $"__**Status In Current Server**__\n" +
                  $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n")
                  .WithFooter(footer => {
                      footer
@@ -95,7 +95,7 @@ namespace SenkoSanBot.Modules.Profiles
             if(exits != null)
             {
                 int refundCoin = Config.Configuration.GachaPrice / 2;
-                await ReplyAsync($"> Removed **{exits.Name}** and gained **{refundCoin}** coins");
+                await ReplyAsync($"> Sold **{exits.Name}** for **{refundCoin}** coins");
                 if (exits.Amount > 1)
                     exits.Amount--;
                 else
