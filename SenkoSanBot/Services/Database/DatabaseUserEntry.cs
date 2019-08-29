@@ -7,7 +7,7 @@ namespace SenkoSanBot.Services.Database
         public ulong Id { get; set; } = 0;
         public List<Warn> Warns { get; set; } = new List<Warn>();
         public string OsuName { get; set; } = null;
-        public int Coin { get; set; } = 100;
+        public int Coins { get; set; } = 100;
         public int GachaRolls { get; set; } = 0;
         public List<GachaCard> Cards { get; set; } = new List<GachaCard>();
 

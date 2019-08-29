@@ -25,7 +25,7 @@ namespace SenkoSanBot.Modules.Fun
 
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
 
-            if (userData.Coin < Config.Configuration.GachaPrice)
+            if (userData.Coins < Config.Configuration.GachaPrice)
             {
                 await ReplyAsync("> Insufficient Coins");
                 return;
@@ -34,7 +34,7 @@ namespace SenkoSanBot.Modules.Fun
             AnimeCharacterDatabaseApi.AnimeResult anime = await AnimeCharacterDatabaseApi.Client.SearchAnimeAsync(content);
             AnimeCharacterDatabaseApi.CharacterResult result = await AnimeCharacterDatabaseApi.Client.GetCharactersAsync(anime.Id);
 
-            userData.Coin -= Config.Configuration.GachaPrice;
+            userData.Coins -= Config.Configuration.GachaPrice;
             userData.GachaRolls++;  
             
             GachaCard existingCard = userData.Cards.SingleOrDefault(card => card.Id == result.Id);

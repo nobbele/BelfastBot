@@ -35,7 +35,7 @@ namespace SenkoSanBot.Modules.Profiles
                  })
                  .AddField("Details:",
                  $"__**Gacha Details**__\n" +
-                 $"► Coins: **{userData.Coin}**\n" +
+                 $"► Coins: **{userData.Coins}**\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
                  $"► Card Amount: **{userData.Cards.Count}** \n" +
                  $"__**Status In Current Server**__\n" +
@@ -100,7 +100,7 @@ namespace SenkoSanBot.Modules.Profiles
                     exits.Amount--;
                 else
                     userData.Cards.Remove(exits);
-                userData.Coin += refundCoin;
+                userData.Coins += refundCoin;
                 Db.WriteData();
                 return;
             }

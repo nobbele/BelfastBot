@@ -32,7 +32,7 @@ namespace SenkoSanBot.Modules.Misc
 
             Logger.LogInfo($"Given {target.Username} {amount} Coins");
 
-            Db.GetUserEntry(0, target.Id).Coin += amount;
+            Db.GetUserEntry(0, target.Id).Coins += amount;
             Db.WriteData();
             await ReplyAsync($"> Given {target.Mention} {amount} Coins!");
         }
