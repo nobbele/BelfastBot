@@ -29,7 +29,7 @@ namespace SenkoSanBot.Services.Commands
         }
 
         public static readonly int KeyBufferSize = 64;
-        private char[] keyBuffer = new char[KeyBufferSize];
+        private readonly char[] keyBuffer = new char[KeyBufferSize];
         private int keyBufferPosition = 0;
 
         public async Task InitializeAsync()

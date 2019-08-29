@@ -7,6 +7,7 @@ using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using Discord.WebSocket;
 using System;
+using SenkoSanBot.Services.Configuration;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -26,7 +27,6 @@ namespace SenkoSanBot.Modules.Osu
             await ReplyAsync($"> Your osu name is now set to **{name}**");
         }
 
-        #region Mode Index
         private string GetNameForModeIndex(int mode)
         {
             switch (mode)
@@ -56,11 +56,35 @@ namespace SenkoSanBot.Modules.Osu
                 case 3:
                     return "mania";
             }
-            return "";
+            return "Unknown";
         }
-        #endregion
 
-        #region Embed
+        private IEmote GetEmoteForRank(string rank)
+        {
+            switch(rank)
+            {
+                case "SS":
+                    return Emotes.OsuSS;
+                case "SSH":
+                    return Emotes.OsuSSH;
+                case "S":
+                    return Emotes.OsuS;
+                case "SH":
+                    return Emotes.OsuSH;
+                case "A":
+                    return Emotes.OsuA;
+                case "B":
+                    return Emotes.OsuB;
+                case "C":
+                    return Emotes.OsuC;
+                case "D":
+                    return Emotes.OsuD;
+                case "F":
+                    return Emotes.OsuF;
+            }
+            return Emotes.SenkoShock;
+        }
+
         private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
             .WithAuthor(author => {
@@ -85,7 +109,7 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField("Details", $"s **Rank: {result.Rank.Replace("X", "SS")}\n► Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField($"{GetEmoteForRank(result.Rank)} Score", $"**\n► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
@@ -102,13 +126,12 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField("Details", $"**Rank: {result.Rank} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField($"{GetEmoteForRank(result.Rank)} Score", $"**► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .Build();
-        #endregion
 
         private string GetOsuUsername(IUser user)
         {
