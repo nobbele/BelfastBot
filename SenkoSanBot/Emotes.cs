@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace SenkoSanBot.Services.Configuration
+namespace SenkoSanBot
 {
     public class Emotes
     {

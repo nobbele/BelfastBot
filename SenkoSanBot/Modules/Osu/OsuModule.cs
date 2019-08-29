@@ -7,7 +7,6 @@ using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using Discord.WebSocket;
 using System;
-using SenkoSanBot.Services.Configuration;
 
 namespace SenkoSanBot.Modules.Osu
 {
