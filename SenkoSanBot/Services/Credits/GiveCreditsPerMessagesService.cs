@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord.Commands;
+using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Logging;
@@ -27,9 +28,15 @@ namespace SenkoSanBot.Services.Credits
 
         public async Task InitializeAsync()
         {
-            m_client.MessageReceived += async (SocketMessage message) =>
+            m_client.MessageReceived += async (SocketMessage msg) =>
             {
-                m_db.GetUserEntry(0, message.Author.Id).Coins++;
+                SocketUserMessage message = msg as SocketUserMessage;
+                int argPos = 0;
+                if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase)
+                    || message.HasMentionPrefix(m_client.CurrentUser, ref argPos)))
+                {
+                    m_db.GetUserEntry(0, message.Author.Id).Coins++;
+                }
 
                 await Task.CompletedTask;
             };
