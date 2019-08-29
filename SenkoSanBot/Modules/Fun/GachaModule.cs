@@ -27,7 +27,7 @@ namespace SenkoSanBot.Modules.Fun
 
             if (userData.Coin < Config.Configuration.GachaPrice)
             {
-                await ReplyAsync("> Insufficient Coin Amount");
+                await ReplyAsync("> Insufficient Coins");
                 return;
             }
 

@@ -27,7 +27,7 @@ namespace SenkoSanBot.Modules.Profiles
             DatabaseUserEntry userData = Db.GetUserEntry(0, target.Id);
 
             Embed embed = new EmbedBuilder()
-                 .WithColor(0x53DF1D)
+                 .WithColor(0xF5CD63)
                  .WithAuthor(author => {
                      author
                          .WithName($"Profile of {target.Username}")
