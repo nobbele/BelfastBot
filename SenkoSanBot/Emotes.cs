@@ -15,5 +15,7 @@ namespace SenkoSanBot
         public static readonly Emote OsuF = Emote.Parse("<:osuF:616340348918169607>");
         public static readonly Emote OsuNote = Emote.Parse("<:osuNote:616343572039336111>");
         public static readonly Emote SenkoShock = Emote.Parse("<:senkoShock:616343608861130762>");
+        public static readonly Emote SenkoThink = Emote.Parse("<:senkoThink:616713896165638155>");
+        public static readonly Emote DiscordCoin = Emote.Parse("<:discordCoin:616717275113848857>");
     }
 }

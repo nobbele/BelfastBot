@@ -31,7 +31,7 @@ namespace SenkoSanBot.Modules.Moderation
 
             if (target.IsBot)
             {
-                await ReplyAsync($"{Context.User.Mention} You cannot warn another bot");
+                await ReplyAsync($"{Context.User.Mention} You cannot warn a bot");
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace SenkoSanBot.Modules.Moderation
 
             if (target.IsBot)
             {
-                await ReplyAsync($"{Context.User.Mention} You cannot kick another bot");
+                await ReplyAsync($"{Context.User.Mention} You cannot kick a bot");
                 return;
             }
 
@@ -107,7 +107,7 @@ namespace SenkoSanBot.Modules.Moderation
 
             if (target.IsBot)
             {
-                await ReplyAsync($"{Context.User.Mention} You cannot ban another bot");
+                await ReplyAsync($"{Context.User.Mention} You cannot ban a bot");
                 return;
             }
 

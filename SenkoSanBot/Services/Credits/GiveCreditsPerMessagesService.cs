@@ -1,11 +1,10 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
-using SenkoSanBot.Services.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services.Credits
@@ -15,16 +14,13 @@ namespace SenkoSanBot.Services.Credits
         private readonly DiscordSocketClient m_client;
         private readonly IBotConfigurationService m_config;
         private readonly JsonDatabaseService m_db;
-        private readonly LoggingService m_logger;
 
-        public GiveCreditsPerMessagesService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db, LoggingService logger)
+        public GiveCreditsPerMessagesService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db)
         {
             m_client = client;
             m_config = config;
             m_db = db;
-            m_logger = logger;
         }
-
 
         public async Task InitializeAsync()
         {
@@ -32,12 +28,36 @@ namespace SenkoSanBot.Services.Credits
             {
                 SocketUserMessage message = msg as SocketUserMessage;
                 int argPos = 0;
-                if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase)
-                    || message.HasMentionPrefix(m_client.CurrentUser, ref argPos)))
+                if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase) 
+                || message.HasMentionPrefix(m_client.CurrentUser, ref argPos) 
+                || message.Author.IsBot))
                 {
-                    m_db.GetUserEntry(0, message.Author.Id).Coins++;
-                }
+                    DatabaseUserEntry userDB = m_db.GetUserEntry(0, message.Author.Id);
+                    IUser user = message.Author;
 
+                    userDB.Coins++;
+                    uint oldLevel = userDB.Level;
+                    userDB.Xp += (ulong)(message.ToString().ToCharArray().Count());
+                    uint newLevel = userDB.Level;
+
+                    if(oldLevel != newLevel)
+                    {
+                        int awardedCoins = (int)Math.Log(userDB.Level);
+                        userDB.Coins += awardedCoins;
+                        ISocketMessageChannel channel = message.Channel;
+                        Embed embed = new EmbedBuilder()
+                            .WithColor(0xFF1288)
+                            .WithThumbnailUrl(message.Author.GetAvatarUrl())
+                            .WithTitle($"{user.Username} Leveled Up!🔼")
+                            .AddField("Details",
+                            $"► Level: **{oldLevel}** => **{userDB.Level}**\n" +
+                            $"► Coins: **{userDB.Coins}**(**+{awardedCoins}**) {Emotes.DiscordCoin}")
+                            .Build();
+
+                        await channel.SendMessageAsync(embed: embed);
+                    }
+                }
+                m_db.WriteData();
                 await Task.CompletedTask;
             };
 

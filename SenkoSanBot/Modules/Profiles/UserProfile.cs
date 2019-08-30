@@ -14,6 +14,17 @@ namespace SenkoSanBot.Modules.Profiles
     {
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        private Embed GetUserGachaEmbed(IUser target, string gachaString, EmbedFooterBuilder footer) => new EmbedBuilder()
+                 .WithColor(0x53DF1D)
+                 .WithAuthor(author => {
+                     author
+                         .WithName($"Profile of {target.Username}")
+                         .WithIconUrl($"{target.GetAvatarUrl()}");
+                 })
+                 .AddField("Rolled Characters:", $"{gachaString}")
+                 .WithFooter(footer)
+                 .WithThumbnailUrl($"{target.GetAvatarUrl()}")
+                 .Build();
 
         [Command("profile"), Alias("prf")]
         [Summary("Shows details of an users profile")]
@@ -34,12 +45,14 @@ namespace SenkoSanBot.Modules.Profiles
                          .WithIconUrl($"{target.GetAvatarUrl()}");
                  })
                  .AddField("Details:",
-                 $"__**Gacha Details**__\n" +
-                 $"► Coins: **{userData.Coins}**\n" +
-                 $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
-                 $"► Card Amount: **{userData.Cards.Count}** \n" +
                  $"__**Status In Current Server**__\n" +
-                 $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n")
+                 $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n" +
+                 $"__**Profile**__\n" +
+                 $"► Level: **{userData.Level}** \n" +
+                 $"► Coins: **{userData.Coins}** {Emotes.DiscordCoin}\n" +
+                 $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
+                 $"► Card Amount: **{userData.Cards.Count}**\n" +
+                 $"► Favorite Card: **{(userData.FavoriteCard != null ? $"[{userData.FavoriteCard.Name}](https://www.animecharactersdatabase.com/characters.php?id={userData.FavoriteCard.Id})" : "None")}**")
                  .WithFooter(footer => {
                      footer
                          .WithText($"Requested by {Context.User}")
@@ -63,8 +76,11 @@ namespace SenkoSanBot.Modules.Profiles
             DatabaseUserEntry userData = Db.GetUserEntry(0, target.Id);
 
             string characterString = userData.Cards.Count > 0 
-                ? userData.Cards.Select(card => $"► **[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})** x{card.Amount}").NewLineSeperatedString()
+                ? userData.Cards.Select(card => $"► **[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})** [{card.Rarity}] x{card.Amount}").NewLineSeperatedString()
                 : "**None**";
+
+            if (userData.Cards.Count <= 0)
+                return;
 
             string[] strings = characterString.NCharLimitToClosestDelimeter(512, "\n");
 
@@ -75,36 +91,59 @@ namespace SenkoSanBot.Modules.Profiles
             );
         }
 
-        private Embed GetUserGachaEmbed(IUser target, string gachaString, EmbedFooterBuilder footer) => new EmbedBuilder()
-                 .WithColor(0x53DF1D)
-                 .WithAuthor(author => {
-                     author
-                         .WithName($"Profile of {target.Username}")
-                         .WithIconUrl($"{target.GetAvatarUrl()}");
-                 })
-                 .AddField("Rolled Characters:", $"{gachaString}")
-                 .WithFooter(footer)
-                 .WithThumbnailUrl($"{target.GetAvatarUrl()}")
-                 .Build();
-
-        [Command("card sell")]
-        public async Task SellCardAsync([Remainder]string cardName)
+        [Command("card favorite"), Alias("cfav")]
+        [Summary("Favorite one of the cards you own")]
+        public async Task FavoriteCardAsync([Summary("Card name to favorite")][Remainder]string cardName)
         {
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
             GachaCard exits = userData.Cards.SingleOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase));
+            if (exits != null)
+            {
+                userData.FavoriteCard = exits;
+                await ReplyAsync($"> Set **{exits.Name}** as favorite card");
+                Db.WriteData();
+                return;
+            }
+            await ReplyAsync("> Couldn't find the specified card with given name");
+        }
+
+        [Command("card sell"), Alias("csell")]
+        [Summary("Sell your cards")]
+        public async Task SellCardAsync([Summary("Card rarity to sell")]string rarity, [Summary("Card name to sell")][Remainder]string cardName)
+        {
+            DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
+            GachaCard exits = userData.Cards.FirstOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase) && string.Equals(card.Rarity.ToString(), rarity, StringComparison.OrdinalIgnoreCase));
             if(exits != null)
             {
-                int refundCoin = Config.Configuration.GachaPrice / 2;
-                await ReplyAsync($"> Sold **{exits.Name}** for **{refundCoin}** coins");
+                int refundCoin = GetPriceForCard(exits.Rarity);
+
+                await ReplyAsync($"> Sold **{exits.Name} [{exits.Rarity.ToString()}]** for **{refundCoin}** coins {Emotes.DiscordCoin}");
                 if (exits.Amount > 1)
                     exits.Amount--;
                 else
+                {
+                    if (userData.FavoriteCard == exits)
+                        userData.FavoriteCard = null;
                     userData.Cards.Remove(exits);
+                }
                 userData.Coins += refundCoin;
                 Db.WriteData();
                 return;
             }
-            await ReplyAsync("> Couldn't find the specified card index");
+            await ReplyAsync("> Couldn't find the specified card with given name");
+        }
+        private int GetPriceForCard(CardRarity rarity)
+        {
+            switch (rarity)
+            {
+                case CardRarity.Bronze:
+                    return Config.Configuration.BronzeCardPrice;
+                case CardRarity.Silver:
+                    return Config.Configuration.SilverCardPrice;
+                case CardRarity.Gold:
+                    return Config.Configuration.GoldCardPrice;
+            }
+            return 0;
         }
     }
 }

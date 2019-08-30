@@ -30,11 +30,14 @@ namespace SenkoSanBot.Modules.Misc
         {
             target = target ?? Context.Message.Author;
 
+            if (target.IsBot)
+                return;
+
             Logger.LogInfo($"Given {target.Username} {amount} Coins");
 
             Db.GetUserEntry(0, target.Id).Coins += amount;
             Db.WriteData();
-            await ReplyAsync($"> Given {target.Mention} {amount} Coins!");
+            await ReplyAsync($"> Given {target.Mention} {amount} Coins {Emotes.DiscordCoin}");
         }
     }
 }
