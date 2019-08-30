@@ -43,7 +43,14 @@ namespace SenkoSanBot.Services.Configuration
             {2, "Azur Lane"},
             {3, "Honkai Impact 3rd"},
             {4, "Pokemon (Series)"},
+            {5, "One Piece (Series)"},
         };
+        [DataMember]
+        public int GoldCardPrice { get; internal set; } = 200;
+        [DataMember]
+        public int SilverCardPrice { get; internal set; } = 50;
+        [DataMember]
+        public int BronzeCardPrice { get; internal set; } = 5;
 
         public ExtensionDataObject ExtensionData { get; set; }
 
@@ -64,6 +71,9 @@ namespace SenkoSanBot.Services.Configuration
             Tags = Tags ?? config.Tags;
             Packs = Packs ?? config.Packs;
             GachaPrice = GachaPrice == 0 ? config.GachaPrice : GachaPrice;
+            GoldCardPrice = GoldCardPrice == 0 ? config.GoldCardPrice : GoldCardPrice;
+            SilverCardPrice = SilverCardPrice == 0 ? config.SilverCardPrice : SilverCardPrice;
+            BronzeCardPrice = BronzeCardPrice == 0 ? config.BronzeCardPrice : BronzeCardPrice;
         }
     }
 }

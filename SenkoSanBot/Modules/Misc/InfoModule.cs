@@ -25,7 +25,7 @@ namespace SenkoSanBot.Modules.Misc
         {
             EmbedBuilder builder = new EmbedBuilder();
 
-            builder.Description = $"Do {Prefix}help [command] to get more information about a command";
+            builder.Description = $"Do {Prefix}help [command] to get more information about a command {Emotes.SenkoThink}";
             builder.WithColor(0xffae0d);
 
             foreach (ModuleInfo module in Command.Modules.GroupBy(x => x.Name).Select(y => y.First()))
@@ -53,7 +53,7 @@ namespace SenkoSanBot.Modules.Misc
             {
                 EmbedBuilder builder = new EmbedBuilder();
 
-                builder.Title = $"{commandInfo.Name} - {commandInfo.Summary ?? "No information about the command specified"}";
+                builder.Title = $"{commandInfo.Name} ({commandInfo.Aliases[1] ?? ""}) - {commandInfo.Summary ?? "No information about the command specified"}";
                 builder.WithColor(0xffae0d);
 
                 foreach (ParameterInfo parameter in commandInfo.Parameters)

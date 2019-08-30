@@ -37,7 +37,7 @@ namespace SenkoSanBot.Services.Database
 
         public DatabaseUserEntry GetUserEntry(ulong serverId, ulong id)
         {
-            List<DatabaseUserEntry> serverDb = Db.SingleOrDefault(server => server.Key == serverId).Value ?? Db.AddGet(new KeyValuePair<ulong, List<DatabaseUserEntry>>(serverId, new List<DatabaseUserEntry>())).Value;
+            List<DatabaseUserEntry> serverDb = Db.SingleOrDefault(server => server.Key == serverId).Value ?? Db.AddGet(new KeyValuePair<ulong, List<DatabaseUserEntry>>(serverId, new List<DatabaseUserEntry>())).Value;    
             return serverDb.SingleOrDefault(user => user.Id == id) ?? serverDb.AddGet(DatabaseUserEntry.CreateNew(id));
         }
 

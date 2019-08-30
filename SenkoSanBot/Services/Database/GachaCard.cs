@@ -5,5 +5,6 @@
         public string Name;
         public ulong Id;
         public int Amount;
+        public CardRarity Rarity;
     }
 }

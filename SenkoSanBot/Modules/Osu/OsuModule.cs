@@ -6,7 +6,6 @@ using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using Discord.WebSocket;
-using System;
 
 namespace SenkoSanBot.Modules.Osu
 {
@@ -108,7 +107,7 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField($"{GetEmoteForRank(result.Rank)} Score", $"**\n► Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
@@ -125,7 +124,7 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField($"{GetEmoteForRank(result.Rank)} Score", $"**► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
@@ -149,6 +148,10 @@ namespace SenkoSanBot.Modules.Osu
             string username = null;
 
             IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+
+            if (target.IsBot)
+                return;
+
             if (target != null)
                 username = GetOsuUsername(target);
             else if (!string.IsNullOrEmpty(target_name))
@@ -175,7 +178,6 @@ namespace SenkoSanBot.Modules.Osu
         [Summary("Get recent play")]
         public async Task GetRecentPlay([Summary("Name to search")] string target_name = "")
         {
-
             string username = null;
 
             IUser target = Context.Message.MentionedUsers.FirstOrDefault();
@@ -236,27 +238,6 @@ namespace SenkoSanBot.Modules.Osu
             UserBest[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
-        }
-    }
-
-    public static class TimeSpanExtensionMethods
-    {
-        public static string ToShortForm(this TimeSpan t)
-        {
-            string shortForm = "";
-            if (t.Hours > 0)
-            {
-                shortForm += string.Format("{0}h", t.Hours.ToString());
-            }
-            if (t.Minutes > 0)
-            {
-                shortForm += string.Format("{0}m", t.Minutes.ToString());
-            }
-            if (t.Seconds > 0)
-            {
-                shortForm += string.Format("{0}s", t.Seconds.ToString());
-            }
-            return shortForm;
         }
     }
 }

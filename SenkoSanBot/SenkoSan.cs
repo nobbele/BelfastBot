@@ -13,7 +13,6 @@ using SenkoSanBot.Services.Moderation;
 using System.Runtime.CompilerServices;
 using SenkoSanBot.Services.Pagination;
 using SenkoSanBot.Services.Credits;
-using SenkoSanBot.Services;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
