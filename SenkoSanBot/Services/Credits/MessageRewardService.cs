@@ -15,7 +15,7 @@ namespace SenkoSanBot.Services.Credits
         private readonly IBotConfigurationService m_config;
         private readonly JsonDatabaseService m_db;
 
-        public GiveCreditsPerMessagesService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db)
+        public MessageRewardService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db)
         {
             m_client = client;
             m_config = config;
@@ -29,35 +29,35 @@ namespace SenkoSanBot.Services.Credits
                 SocketUserMessage message = msg as SocketUserMessage;
                 int argPos = 0;
                 if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase) 
-                || message.HasMentionPrefix(m_client.CurrentUser, ref argPos) 
-                || message.Author.IsBot))
+                    || message.HasMentionPrefix(m_client.CurrentUser, ref argPos) 
+                    || message.Author.IsBot))
                 {
                     DatabaseUserEntry userDB = m_db.GetUserEntry(0, message.Author.Id);
                     IUser user = message.Author;
 
                     userDB.Coins++;
                     uint oldLevel = userDB.Level;
-                    userDB.Xp += (ulong)(message.ToString().ToCharArray().Count());
+                    userDB.Xp += (uint)Math.Pow(message.Content.Length / 10, 1.1);
                     uint newLevel = userDB.Level;
 
                     if(oldLevel != newLevel)
                     {
-                        int awardedCoins = (int)Math.Log(userDB.Level);
+                        int oldCoins = userDB.Coins;
+                        int awardedCoins = (int)Math.Pow(userDB.Level / 5, 2);
                         userDB.Coins += awardedCoins;
-                        ISocketMessageChannel channel = message.Channel;
+
                         Embed embed = new EmbedBuilder()
                             .WithColor(0xFF1288)
                             .WithThumbnailUrl(message.Author.GetAvatarUrl())
                             .WithTitle($"{user.Username} Leveled Up!🔼")
                             .AddField("Details",
                             $"► Level: **{oldLevel}** => **{userDB.Level}**\n" +
-                            $"► Coins: **{userDB.Coins}**(**+{awardedCoins}**) {Emotes.DiscordCoin}")
+                            $"► Coins: **{oldCoins}** {Emotes.DiscordCoin} => **{userDB.Coins}** {Emotes.DiscordCoin} (**+{awardedCoins}**{Emotes.DiscordCoin})")
                             .Build();
 
-                        await channel.SendMessageAsync(embed: embed);
+                        await message.Channel.SendMessageAsync(embed: embed);
                     }
                 }
-                m_db.WriteData();
                 await Task.CompletedTask;
             };
 
