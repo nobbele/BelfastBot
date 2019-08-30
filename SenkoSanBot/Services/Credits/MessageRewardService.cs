@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services.Credits
 {
-    public class GiveCreditsPerMessagesService
+    public class MessageRewardService
     {
         private readonly DiscordSocketClient m_client;
         private readonly IBotConfigurationService m_config;
         private readonly JsonDatabaseService m_db;
         private readonly LoggingService m_logger;
 
-        public GiveCreditsPerMessagesService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db, LoggingService logger)
+        public MessageRewardService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db, LoggingService logger)
         {
             m_client = client;
             m_config = config;

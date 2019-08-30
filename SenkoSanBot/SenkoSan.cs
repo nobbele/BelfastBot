@@ -90,7 +90,7 @@ namespace SenkoSanBot
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 await services.GetRequiredService<InviteLinkDetectorService>().InitializeAsync();
-                await services.GetRequiredService<GiveCreditsPerMessagesService>().InitializeAsync();
+                await services.GetRequiredService<MessageRewardService>().InitializeAsync();
                 Logger.LogInfo("Initializing command line");
                 await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
 
@@ -130,7 +130,7 @@ namespace SenkoSanBot
                 .AddSingleton<LoggingService>()
                 .AddSingleton<PaginatedMessageService>()
                 .AddSingleton<InviteLinkDetectorService>()
-                .AddSingleton<GiveCreditsPerMessagesService>()
+                .AddSingleton<MessageRewardService>()
                 .BuildServiceProvider();
     }
 }
