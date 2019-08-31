@@ -6,12 +6,14 @@ namespace SenkoSanBot.Modules.Gacha
     {
         public static CardRarity ToPercent(this CardRarity cardRarity, double rarity)
         {
-            if (rarity >= 0.30 && rarity <= 1)
+            if (rarity >= 0.6)
                 return CardRarity.Bronze;
-            if (rarity >= 0.10 && rarity <= 0.29)
+            else if (rarity >= 0.15)
                 return CardRarity.Silver;
-            if (rarity >= 0 && rarity <= 0.09)
+            else if (rarity >= 0.01)
                 return CardRarity.Gold;
+            else
+                return CardRarity.Mystic;
 
             throw new Exception("No such rarity");
         }

@@ -111,7 +111,9 @@ namespace SenkoSanBot.Modules.Gacha
                 case CardRarity.Silver:
                     return new Color(0xC0C0C0);
                 case CardRarity.Gold:
-                    return new Color(0Xffd700);
+                    return new Color(0xffd700);
+                case CardRarity.Mystic:
+                    return new Color(0xde6585);
             }
             return new Color(0x000000);
         }

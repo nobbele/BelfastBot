@@ -44,11 +44,14 @@ namespace SenkoSanBot.Services.Configuration
             {3, "Honkai Impact 3rd"},
             {4, "Pokemon (Series)"},
             {5, "One Piece (Series)"},
+            {6, "Touhou Project"},
         };
         [DataMember]
-        public int GoldCardPrice { get; internal set; } = 200;
+        public int MysticCardPrice { get; internal set; } = 200;
         [DataMember]
-        public int SilverCardPrice { get; internal set; } = 50;
+        public int GoldCardPrice { get; internal set; } = 50;
+        [DataMember]
+        public int SilverCardPrice { get; internal set; } = 30;
         [DataMember]
         public int BronzeCardPrice { get; internal set; } = 5;
 

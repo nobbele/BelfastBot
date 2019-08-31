@@ -7,7 +7,7 @@ namespace SenkoSanBot.Services.Database
     {
         public ulong Id { get; set; } = 0;
         public ulong Xp { get; set; } = 0;
-        public uint Level => (uint)Math.Sqrt(Xp / 50);
+        public uint Level => (uint)Math.Log(Xp + 80, 1.1) - 45;
         public List<Warn> Warns { get; set; } = new List<Warn>();
         public string OsuName { get; set; } = null;
         public int Coins { get; set; } = 100;

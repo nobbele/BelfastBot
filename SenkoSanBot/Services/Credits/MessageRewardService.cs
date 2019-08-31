@@ -4,7 +4,6 @@ using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Database;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SenkoSanBot.Services.Credits
@@ -37,13 +36,13 @@ namespace SenkoSanBot.Services.Credits
 
                     userDB.Coins++;
                     uint oldLevel = userDB.Level;
-                    userDB.Xp += (uint)Math.Pow(message.Content.Length / 10, 1.1);
+                    userDB.Xp += (uint)Math.Log(message.Content.Length + 1);
                     uint newLevel = userDB.Level;
 
                     if(oldLevel != newLevel)
                     {
                         int oldCoins = userDB.Coins;
-                        int awardedCoins = (int)Math.Pow(userDB.Level / 5, 2);
+                        int awardedCoins = (int)Math.Pow(userDB.Level / 5, 5);
                         userDB.Coins += awardedCoins;
 
                         Embed embed = new EmbedBuilder()
@@ -52,7 +51,7 @@ namespace SenkoSanBot.Services.Credits
                             .WithTitle($"{user.Username} Leveled Up!🔼")
                             .AddField("Details",
                             $"► Level: **{oldLevel}** => **{userDB.Level}**\n" +
-                            $"► Coins: **{oldCoins}** {Emotes.DiscordCoin} => **{userDB.Coins}** {Emotes.DiscordCoin} (**+{awardedCoins}**{Emotes.DiscordCoin})")
+                            $"► Coins: **{oldCoins}** => **{userDB.Coins}** {Emotes.DiscordCoin} (**+{awardedCoins}**{Emotes.DiscordCoin})")
                             .Build();
 
                         await message.Channel.SendMessageAsync(embed: embed);

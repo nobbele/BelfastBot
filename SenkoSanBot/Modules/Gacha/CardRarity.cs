@@ -2,5 +2,6 @@
 {
     Bronze,
     Silver,
-    Gold
+    Gold,
+    Mystic
 }

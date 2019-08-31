@@ -48,7 +48,7 @@ namespace SenkoSanBot.Modules.Profiles
                  $"__**Status In Current Server**__\n" +
                  $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n" +
                  $"__**Profile**__\n" +
-                 $"► Level: **{userData.Level}** \n" +
+                 $"► Level: **{userData.Level}** [**{userData.Xp}**] \n" +
                  $"► Coins: **{userData.Coins}** {Emotes.DiscordCoin}\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
                  $"► Card Amount: **{userData.Cards.Count}**\n" +
