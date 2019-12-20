@@ -13,6 +13,7 @@ using SenkoSanBot.Services.Moderation;
 using System.Runtime.CompilerServices;
 using SenkoSanBot.Services.Pagination;
 using SenkoSanBot.Services.Credits;
+using SenkoSanBot.Services.Giveaway;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
@@ -41,8 +42,6 @@ namespace SenkoSanBot
                     Instance.Logger.LogCritical(e.ToString());
                 }
             }
-            Console.Write("\nPress any key to exit");
-            Console.ReadKey();
         }
 
         public bool Stopped { get; private set; } = false;
@@ -90,9 +89,18 @@ namespace SenkoSanBot
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 await services.GetRequiredService<InviteLinkDetectorService>().InitializeAsync();
                 await services.GetRequiredService<MessageRewardService>().InitializeAsync();
-                Logger.LogInfo("Initializing command line");
-                await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
+                await services.GetRequiredService<GiveawayService>().InitializeAsync();
 
+                if(Environment.UserInteractive && !Console.IsInputRedirected) 
+                {
+                    Logger.LogInfo("Initializing command line");
+                    await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
+                }
+                else
+                {
+                    Logger.LogInfo("Not initializing command line, non-interactive environment");
+                    await Task.Delay(-1);
+                }
             }
         }
 
@@ -130,6 +138,7 @@ namespace SenkoSanBot
                 .AddSingleton<PaginatedMessageService>()
                 .AddSingleton<InviteLinkDetectorService>()
                 .AddSingleton<MessageRewardService>()
+                .AddSingleton<GiveawayService>()
                 .BuildServiceProvider();
     }
 }

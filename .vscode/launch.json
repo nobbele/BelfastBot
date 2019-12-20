@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SenkoSanBot (Debug)",
+            "type":"coreclr",
+            "request": "launch",
+            "program": "dotnet",
+            "args": [
+                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1/SenkoSanBot.dll"
+            ],
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1/",
+            "preLaunchTask": "Build SenkoSanBot (Debug)",
+            "linux": {
+                "env": {
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "logging": {
+                "moduleLoad": false
+            }
+        },
+        {
+            "name": "SenkoSanBot (Release)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "dotnet",
+            "args": [
+                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1/SenkoSanBot.dll"
+            ],
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1/",
+            "preLaunchTask": "Build SenkoSanBot (Release)",
+            "linux": {
+                "env": {
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "logging": {
+                "moduleLoad": false,
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        }
+    ],
+}
