@@ -3,6 +3,6 @@
 # Make sure process has had time to quit
 sleep 5
 
-find . -type f ! -name 'update-old.sh' -delete
+find . -maxdepth 1 -not \( -name 'update-old.sh' -o -name '*.json' \)
 
 cp $1/* .
