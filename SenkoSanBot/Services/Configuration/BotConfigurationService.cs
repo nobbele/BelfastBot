@@ -41,6 +41,7 @@ namespace SenkoSanBot.Services.Configuration
                     if (Configuration == null)
                         throw new Exception("Configuration is null");
                     m_logger.LogInfo("Done reading configuration");
+                    WriteData();
                     return WithFailure(false);
                 } catch (Exception e)
                 {

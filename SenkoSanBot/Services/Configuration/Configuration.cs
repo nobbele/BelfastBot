@@ -54,6 +54,10 @@ namespace SenkoSanBot.Services.Configuration
         public int SilverCardPrice { get; internal set; } = 30;
         [DataMember]
         public int BronzeCardPrice { get; internal set; } = 5;
+        [DataMember]
+        public string UpdatePath { get; internal set; } = "/tmp/senko";
+        [DataMember]
+        public string SourceCodeGit { get; internal set; } = "https://github.com/nobbele/SenkoSanBot.git";
 
         public ExtensionDataObject ExtensionData { get; set; }
 
@@ -77,6 +81,7 @@ namespace SenkoSanBot.Services.Configuration
             GoldCardPrice = GoldCardPrice == 0 ? config.GoldCardPrice : GoldCardPrice;
             SilverCardPrice = SilverCardPrice == 0 ? config.SilverCardPrice : SilverCardPrice;
             BronzeCardPrice = BronzeCardPrice == 0 ? config.BronzeCardPrice : BronzeCardPrice;
+            UpdatePath = UpdatePath ?? config.UpdatePath;
         }
     }
 }

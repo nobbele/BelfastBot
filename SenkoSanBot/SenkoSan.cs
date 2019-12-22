@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.WebSocket;
@@ -45,10 +46,12 @@ namespace SenkoSanBot
         }
 
         public bool Stopped { get; private set; } = false;
-        public void Stop()
+        public void Stop(bool force = false)
         {
             Logger.LogInfo("Stopping");
             Stopped = true;
+            if(force)
+                Process.GetCurrentProcess().Kill();
         }
 
         public async Task MainAsync(IServiceProvider services)
