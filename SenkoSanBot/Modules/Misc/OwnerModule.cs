@@ -110,7 +110,7 @@ namespace SenkoSanBot.Modules.Misc
                 }
             }.StartAsync();
             
-            await ReplyAsync("Leaving for bash now, bye");
+            await ReplyAsync("Leaving for bash now, please start bot again when update-status file contains 'DONE'");
             new Process()
             {
                 StartInfo = new ProcessStartInfo
