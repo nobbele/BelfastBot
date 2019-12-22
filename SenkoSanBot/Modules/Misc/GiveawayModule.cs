@@ -56,6 +56,7 @@ namespace SenkoSanBot.Modules.Misc
             ServerEntry server = DatabaseService.GetServerEntry(Context.Guild.Id);
             await message.AddReactionAsync(new Emoji(server.GiveawayReactionEmote));
             server.Giveaways.Add(entry);
+            DatabaseService.WriteData();
             GiveawayService.AddGiveaway(entry, Context.Guild.Id);
         }
         [Command("giveaway emoji")]

@@ -1,11 +1,13 @@
 ﻿using Common;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SenkoSanBot.Modules.Profiles
 {
@@ -14,6 +16,7 @@ namespace SenkoSanBot.Modules.Profiles
     {
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
+
         private Embed GetUserGachaEmbed(IUser target, string gachaString, EmbedFooterBuilder footer) => new EmbedBuilder()
                  .WithColor(0x53DF1D)
                  .WithAuthor(author => {
@@ -26,6 +29,17 @@ namespace SenkoSanBot.Modules.Profiles
                  .WithThumbnailUrl($"{target.GetAvatarUrl()}")
                  .Build();
 
+        private Embed GetLeaderBoardPageEmbed(SocketGuild guild, string lbString, EmbedFooterBuilder footer) => new EmbedBuilder()
+                 .WithColor(0x53DF1D)
+                 .WithAuthor(author => {
+                     author
+                         .WithName($"Leaderboard of {guild.Name}");
+                 })
+                 .AddField("Leaderboard:", $"{lbString}")
+                 .WithFooter(footer)
+                 .WithThumbnailUrl($"{guild.IconUrl}")
+                 .Build();
+
         [Command("profile"), Alias("prf")]
         [Summary("Shows details of an users profile")]
         public async Task CheckProfileAsync([Summary("(optional) The user profile to get")] IUser target = null)
@@ -36,6 +50,7 @@ namespace SenkoSanBot.Modules.Profiles
                 return;
 
             DatabaseUserEntry userData = Db.GetUserEntry(0, target.Id);
+            DatabaseUserEntry serverUserData = Db.GetUserEntry(Context.Guild.Id, target.Id);
 
             Embed embed = new EmbedBuilder()
                  .WithColor(0xF5CD63)
@@ -46,9 +61,9 @@ namespace SenkoSanBot.Modules.Profiles
                  })
                  .AddField("Details:",
                  $"__**Status In Current Server**__\n" +
-                 $"► Warn Amount: **{userData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n" +
+                 $"► Warn Amount: **{serverUserData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n" +
                  $"__**Profile**__\n" +
-                 $"► Level: **{userData.Level}** [**{userData.Xp}**] \n" +
+                 $"► Level: **{serverUserData.Level}** [**{serverUserData.Xp}**] \n" +
                  $"► Coins: **{userData.Coins}** {Emotes.DiscordCoin}\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
                  $"► Card Amount: **{userData.Cards.Count}**\n" +
@@ -62,6 +77,24 @@ namespace SenkoSanBot.Modules.Profiles
                  .Build();
 
             await ReplyAsync(embed: embed);
+        }
+
+        [Command("leaderboard")]
+        [Summary("Shows server leaderboard")]
+        public async Task LeaderboardAsync() 
+        {
+            ServerEntry server = Db.GetServerEntry(Context.Guild.Id);
+            IEnumerable<DatabaseUserEntry> sortedUser = server.Users.OrderBy(user => user.Xp);
+
+            string lbString = sortedUser.Select(user => $"{user.Id} - lvl {user.Level}({user.Xp xp})").NewLineSeperatedString();
+
+            string[] strings = lbString.NCharLimitToClosestDelimeter(512, "\n");
+
+            await PaginatedMessageService.SendPaginatedDataMessageAsync(
+                Context.Channel,
+                strings,
+                (result, index, footer) => GetLeaderBoardPageEmbed(Context.Guild, result, footer)
+            );
         }
 
         [Command("cards")]
