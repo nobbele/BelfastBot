@@ -97,6 +97,18 @@ namespace SenkoSanBot.Modules.Misc
             if(File.Exists("update-old.sh"))
                 File.Delete("update-old.sh");
             File.Move("update.sh", "update-old.sh");
+
+            await ReplyAsync("Fixing update script permissions");
+            await new Process()
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "/usr/bin/chmod",
+                    Arguments = $"+x ./update-old.sh",
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                }
+            }.StartAsync();
             
             await ReplyAsync("Leaving for bash now, bye");
             new Process()
