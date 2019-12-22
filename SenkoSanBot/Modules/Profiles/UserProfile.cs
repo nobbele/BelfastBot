@@ -86,7 +86,7 @@ namespace SenkoSanBot.Modules.Profiles
             ServerEntry server = Db.GetServerEntry(Context.Guild.Id);
             IEnumerable<DatabaseUserEntry> sortedUser = server.Users.OrderBy(user => user.Xp);
 
-            string lbString = sortedUser.Select(user => $"{user.Id} - lvl {user.Level}({user.Xp xp})").NewLineSeperatedString();
+            string lbString = sortedUser.Select(user => $"{user.Id} - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
 
             string[] strings = lbString.NCharLimitToClosestDelimeter(512, "\n");
 
