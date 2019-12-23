@@ -1,17 +1,20 @@
 ﻿using Discord;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System;
 
 namespace SenkoSanBot.Services.Configuration
 {
+    public class SensitiveAttribute : Attribute {}
+
     [DataContract(Name = "Configuration", Namespace = "")]
     public class BotConfiguration : IExtensibleDataObject
     {
-        [DataMember]
+        [Sensitive, DataMember]
         public string Token { get; internal set; } = "YOUR TOKEN";
-        [DataMember]
+        [Sensitive, DataMember]
         public string OsuApiToken { get; internal set; } = "YOUR TOKEN";
-        [DataMember]
+        [Sensitive, DataMember]
         public string AlphaCodersApiToken { get; internal set; } = "YOUR TOKEN";
         [DataMember]
         public string Prefix { get; internal set; } = ".";
