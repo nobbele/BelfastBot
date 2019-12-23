@@ -84,9 +84,9 @@ namespace SenkoSanBot.Modules.Profiles
         public async Task LeaderboardAsync() 
         {
             ServerEntry server = Db.GetServerEntry(Context.Guild.Id);
-            IEnumerable<DatabaseUserEntry> sortedUser = server.Users.OrderBy(user => user.Xp);
+            IEnumerable<DatabaseUserEntry> sortedUser = server.Users.OrderByDescending(user => user.Xp);
 
-            string lbString = sortedUser.Select(user => $"{user.Id} - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
+            string lbString = sortedUser.Select(user => $"`{Context.Guild.GetUser(user.Id)}` - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
 
             string[] strings = lbString.NCharLimitToClosestDelimeter(512, "\n");
 
