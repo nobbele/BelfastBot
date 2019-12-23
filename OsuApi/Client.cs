@@ -73,6 +73,9 @@ namespace OsuApi
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
+                if(string.IsNullOrEmpty(json))
+                    return new Beatmap();
+
                 dynamic obj = JObject.Parse(json);
 
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
