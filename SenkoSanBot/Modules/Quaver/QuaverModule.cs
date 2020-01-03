@@ -93,7 +93,7 @@ namespace SenkoSanBot.Modules.Quaver
                 .AddField("Map", $"**{map.Artist} - {map.Title} [{map.DifficultyName}]**")
                 .AddField("Accuracy", $"{recent.Accuracy.ToString("0.00")}%", true)
                 .AddField("Performance Rating", recent.PerformanceRating.ToString("0.00"), true)
-                .WithThumbnailUrl(user.AvatarUrl)
+                .WithThumbnailUrl($"https://quaver.blob.core.windows.net/banners/{map.Id}_banner.jpg")
                 .Build()
             );
         }
