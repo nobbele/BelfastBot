@@ -18,7 +18,7 @@ namespace SenkoSanBot.Modules.Osu
 
         [Command("osuset")]
         [Summary("Set osu name")]
-        public async Task SetUserAsync([Summary("Name to set")] string name = null)
+        public async Task SetUserAsync([Summary("Name to set")] string name)
         {
             Db.GetUserEntry(0, Context.User.Id).OsuName = name;
             Db.WriteData();

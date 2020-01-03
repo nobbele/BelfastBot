@@ -21,6 +21,7 @@
     <ProjectReference Include="..\NekosLifeApi\NekosLifeApi.csproj" />
     <ProjectReference Include="..\OsuApi\OsuApi.csproj" />
     <ProjectReference Include="..\SafeBooruApi\SafeBooruApi.csproj" />
+    <ProjectReference Include="..\QuaverApi\QuaverApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

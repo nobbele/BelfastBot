@@ -14,6 +14,7 @@ namespace SenkoSanBot.Services.Database
         public int GachaRolls { get; set; } = 0;
         public List<GachaCard> Cards { get; set; } = new List<GachaCard>();
         public GachaCard FavoriteCard { get; set; } = null;
+        public uint? QuaverId { get; set; } = null;
 
         public static DatabaseUserEntry CreateNew(ulong userId) => new DatabaseUserEntry
         {
