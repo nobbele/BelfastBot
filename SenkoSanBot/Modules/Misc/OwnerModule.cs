@@ -116,7 +116,7 @@ namespace SenkoSanBot.Modules.Misc
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "/usr/bin/nohup",
-                    Arguments = $"./update-old.sh \"{binaryPath}\" &",
+                    Arguments = $"sh update-old.sh \"{binaryPath}\" &",
                     UseShellExecute = false,
                     CreateNoWindow = true,
                 }
