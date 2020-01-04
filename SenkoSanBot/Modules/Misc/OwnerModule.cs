@@ -58,7 +58,7 @@ namespace SenkoSanBot.Modules.Misc
             }.StartAsync();
         }
 
-        [Command("update")]
+        /*[Command("update")]
         [Summary("Updates senko-san")]
         [RequireOwner]
         public async Task UpdateAsync() 
@@ -123,7 +123,7 @@ namespace SenkoSanBot.Modules.Misc
             }.Start();
             await ReplyAsync("Stopping...");
             Senko.Stop(true);
-        }
+        }*/
     }
 }
 
