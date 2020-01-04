@@ -56,7 +56,7 @@ namespace SenkoSanBot.Services.Credits
 
                         m_db.WriteData();
 
-                        await message.Channel.SendMessageAsync(embed: embed);
+                        //await message.Channel.SendMessageAsync(embed: embed);
                     }
                 }
                 await Task.CompletedTask;
