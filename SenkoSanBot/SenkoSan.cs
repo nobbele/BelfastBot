@@ -21,6 +21,8 @@ namespace SenkoSanBot
 {
     public class SenkoSan
     {
+        public const string Version = "1.0";
+
         public LoggingService Logger { get; private set; }
         public static SenkoSan Instance;
 
