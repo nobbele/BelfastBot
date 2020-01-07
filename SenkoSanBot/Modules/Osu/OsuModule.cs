@@ -109,7 +109,7 @@ namespace SenkoSanBot.Modules.Osu
             })
             .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
-            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Lenght.ToShortForm()}**" +
+            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Length.ToShortForm()}**" +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
