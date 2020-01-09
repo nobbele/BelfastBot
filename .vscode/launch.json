@@ -7,9 +7,9 @@
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1/SenkoSanBot.dll"
+                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.2/SenkoSanBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1/",
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.2/",
             "preLaunchTask": "Build SenkoSanBot (Debug)",
             "linux": {
                 "env": {
@@ -26,9 +26,9 @@
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1/SenkoSanBot.dll"
+                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.2/SenkoSanBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1/",
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.2/",
             "preLaunchTask": "Build SenkoSanBot (Release)",
             "linux": {
                 "env": {

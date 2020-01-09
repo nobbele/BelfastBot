@@ -26,9 +26,10 @@ namespace SenkoSanBot.Services.Configuration
         {
             if (!File.Exists(ConfigurationFilePath))
             {
-                m_logger.LogCritical("Configuration not found");
+                m_logger.LogCritical("Configuration not found, creating one");
                 Configuration = new BotConfiguration();
-                return false;
+                WriteData();
+                return WithFailure(false);
             }
             else
             {
