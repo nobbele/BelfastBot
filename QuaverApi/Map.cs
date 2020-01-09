@@ -7,5 +7,6 @@ namespace QuaverApi
         public string DifficultyName;
         public string Artist;
         public string Creator;
+        public float DifficultyRating;
     }
 }

@@ -28,6 +28,28 @@ namespace SenkoSanBot.Modules.Quaver
             .WithFooter(footer)
             .Build();
 
+        private Embed GetRecentEmbed(User user, Map map, Recent recent) => new EmbedBuilder()
+            .WithColor(0xE664A0)
+            .WithAuthor(author => {
+                author
+                    .WithName($"{user.Username}'s Recent 4K Play")
+                    .WithUrl($"https://quavergame.com/profile/{user.Id}")
+                    .WithIconUrl(user.AvatarUrl);
+            })
+            .AddField("Map", $"**{map.Artist} - {map.Title} [{map.DifficultyName}] ({map.DifficultyRating})**")
+            .AddField("Accuracy", $"{recent.Accuracy.ToString("0.00")}%", true)
+            .AddField("Performance Rating", recent.PerformanceRating.ToString("0.00"), true)
+            .WithThumbnailUrl($"https://quaver.blob.core.windows.net/banners/{map.Id}_banner.jpg")
+            .Build();
+
+        [Command("quaver set")]
+        [Summary("Sets the user name for quaver commands")]
+        public async Task SetUserAsync([Summary("Name to set")] string name)
+        {
+            uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await Client.GetUserIdByNameAsync(name)).Value;
+            await ReplyAsync($"Set user id to {id}");
+        }
+
         [Command("quaver user")]
         [Summary("Get info about user")]
         public async Task GetUserAsync([Summary("Name to get info about")] string name = null)
@@ -82,20 +104,7 @@ namespace SenkoSanBot.Modules.Quaver
             Map map = recent.Map;
             User user = await Client.GetUserAsync(userId);
 
-            await ReplyAsync(embed: new EmbedBuilder()
-                .WithColor(0xE664A0)
-                .WithAuthor(author => {
-                    author
-                        .WithName($"{user.Username}'s Recent 4K Play")
-                        .WithUrl($"https://quavergame.com/profile/{user.Id}")
-                        .WithIconUrl(user.AvatarUrl);
-                })
-                .AddField("Map", $"**{map.Artist} - {map.Title} [{map.DifficultyName}]**")
-                .AddField("Accuracy", $"{recent.Accuracy.ToString("0.00")}%", true)
-                .AddField("Performance Rating", recent.PerformanceRating.ToString("0.00"), true)
-                .WithThumbnailUrl($"https://quaver.blob.core.windows.net/banners/{map.Id}_banner.jpg")
-                .Build()
-            );
+            await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
 
         [Command("quaver recent 7k")]
@@ -124,20 +133,7 @@ namespace SenkoSanBot.Modules.Quaver
             Map map = recent.Map;
             User user = await Client.GetUserAsync(userId);
 
-            await ReplyAsync(embed: new EmbedBuilder()
-                .WithColor(0xE664A0)
-                .WithAuthor(author => {
-                    author
-                        .WithName($"{user.Username}'s Recent 7K Play")
-                        .WithUrl($"https://quavergame.com/profile/{user.Id}")
-                        .WithIconUrl(user.AvatarUrl);
-                })
-                .AddField("Map", $"**{map.Artist} - {map.Title} [{map.DifficultyName}]**")
-                .AddField("Accuracy", $"{recent.Accuracy.ToString("0.00")}%", true)
-                .AddField("Performance Rating", recent.PerformanceRating.ToString("0.00"), true)
-                .WithThumbnailUrl($"https://quaver.blob.core.windows.net/banners/{map.Id}_banner.jpg")
-                .Build()
-            );
+            await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
     }
 }

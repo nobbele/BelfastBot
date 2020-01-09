@@ -81,15 +81,38 @@ namespace QuaverApi
                     PerformanceRating = score.performance_rating.ToObject<float>(),
                     Accuracy = score.accuracy.ToObject<float>(),
                 };
-                recent.Map = new Map
+                /*recent.Map = new Map
                 {
                     Id = map.id.ToObject<uint>(),
                     Artist = map.artist.ToObject<string>(),
                     Title = map.title.ToObject<string>(),
                     DifficultyName = map.difficulty_name.ToObject<string>(),
                     Creator = map.creator_username.ToObject<string>(),
-                };
+                };*/
+                recent.Map = await GetMapAsync(map.id.ToObject<uint>());
                 return recent;
+            }
+        }
+
+        public static async Task<Map> GetMapAsync(uint id)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/maps/{id}");
+
+                dynamic obj = JObject.Parse(json).ToObject<dynamic>();
+
+                dynamic map = obj.map;
+
+                return new Map
+                {
+                    Id = map.id.ToObject<uint>(),
+                    Artist = map.artist.ToObject<string>(),
+                    Title = map.title.ToObject<string>(),
+                    DifficultyName = map.difficulty_name.ToObject<string>(),
+                    Creator = map.creator_username.ToObject<string>(),
+                    DifficultyRating = map.difficulty_rating.ToObject<float>(),
+                };
             }
         }
     }
