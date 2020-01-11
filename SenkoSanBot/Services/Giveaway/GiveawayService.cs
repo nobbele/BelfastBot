@@ -1,5 +1,4 @@
 using SenkoSanBot.Services.Database;
-using System.Timers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;

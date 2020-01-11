@@ -78,7 +78,7 @@ namespace SenkoSanBot.Modules.Quaver
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, keys, GetUserEmbed);
         }
 
-        [Command("quaver recent 4k")]
+        [Command("quaver recent 4k"), Alias("qr4k")]
         [Summary("Get recent 4k play info by user")]
         public async Task GetRecent4KAsync([Summary("User to get recent play from")] string name = null)
         {
@@ -107,7 +107,7 @@ namespace SenkoSanBot.Modules.Quaver
             await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
 
-        [Command("quaver recent 7k")]
+        [Command("quaver recent 7k"), Alias("qr7k")]
         [Summary("Get recent 7k play info by user")]
         public async Task GetRecent7KAsync([Summary("User to get recent play from")] string name = null)
         {
