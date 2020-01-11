@@ -5,6 +5,7 @@ using JishoApi;
 using SenkoSanBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SenkoSanBot.Modules.Otaku
 {
@@ -34,7 +35,6 @@ namespace SenkoSanBot.Modules.Otaku
         private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
         {
             string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
-            string url = searchWord;
 
             EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
                 .WithName(japanese);
@@ -63,7 +63,7 @@ namespace SenkoSanBot.Modules.Otaku
                 .WithAuthor(author => {
                     author
                         .WithName($"Results For {searchWord}")
-                        .WithUrl($"https://jisho.org/search/{url}")
+                        .WithUrl($"https://jisho.org/search/{HttpUtility.UrlEncode(searchWord)}")
                         .WithIconUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png");
                 })
                 .AddField(fieldBuilder)
