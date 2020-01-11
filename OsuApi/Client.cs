@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace OsuApi
 {
@@ -14,7 +15,7 @@ namespace OsuApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user")}?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
 
@@ -40,7 +41,7 @@ namespace OsuApi
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
                 dynamic obj = JArray.Parse(json);
 
@@ -67,11 +68,15 @@ namespace OsuApi
 
         public static async Task<Beatmap> GetBeatmapAsync(string token, ulong id, int mode)
         {
+            Console.WriteLine($"Getting beatmap {id} in mode {mode}");
             using (HttpClient httpClient = new HttpClient())
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_beatmaps")}?b={id}&k={token}&m={mode}");
 
                 json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
+
+                if(string.IsNullOrEmpty(json))
+                    return new Beatmap();
 
                 dynamic obj = JObject.Parse(json);
 
@@ -86,7 +91,7 @@ namespace OsuApi
                     SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
                     StarRating = jsonResult.difficultyrating.ToObject<float>(),
                     Bpm = jsonResult.bpm.ToObject<int>(),
-                    Lenght = TimeSpan.FromSeconds((int)jsonResult.total_length.ToObject<int>()),
+                    Length = TimeSpan.FromSeconds((int)jsonResult.total_length.ToObject<int>())
                 };
             }
         }
@@ -97,7 +102,7 @@ namespace OsuApi
 
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={user}&k={token}&m={mode}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
                 dynamic obj = JArray.Parse(json);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.WebSocket;
@@ -13,12 +14,15 @@ using SenkoSanBot.Services.Moderation;
 using System.Runtime.CompilerServices;
 using SenkoSanBot.Services.Pagination;
 using SenkoSanBot.Services.Credits;
+using SenkoSanBot.Services.Giveaway;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
 {
     public class SenkoSan
     {
+        public const string Version = "1.0";
+
         public LoggingService Logger { get; private set; }
         public static SenkoSan Instance;
 
@@ -41,15 +45,15 @@ namespace SenkoSanBot
                     Instance.Logger.LogCritical(e.ToString());
                 }
             }
-            Console.Write("\nPress any key to exit");
-            Console.ReadKey();
         }
 
         public bool Stopped { get; private set; } = false;
-        public void Stop()
+        public void Stop(bool force = false)
         {
             Logger.LogInfo("Stopping");
             Stopped = true;
+            if(force)
+                Process.GetCurrentProcess().Kill();
         }
 
         public async Task MainAsync(IServiceProvider services)
@@ -83,16 +87,25 @@ namespace SenkoSanBot
                 //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
                 //await client.SetStatusAsync(config.Configuration.OnlineStatus);
 
-                Logger.LogInfo("Initializing services");
+                Logger.LogInfo("Initializing services!");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
                 await services.GetRequiredService<ICommandHandlingService>().InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 await services.GetRequiredService<InviteLinkDetectorService>().InitializeAsync();
                 await services.GetRequiredService<MessageRewardService>().InitializeAsync();
-                Logger.LogInfo("Initializing command line");
-                await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
+                await services.GetRequiredService<GiveawayService>().InitializeAsync();
 
+                if(Environment.UserInteractive && !Console.IsInputRedirected) 
+                {
+                    Logger.LogInfo("Initializing command line");
+                    await services.GetRequiredService<CommandLineHandlingService>().InitializeAsync();
+                }
+                else
+                {
+                    Logger.LogInfo("Not initializing command line, non-interactive environment");
+                    await Task.Delay(-1);
+                }
             }
         }
 
@@ -130,6 +143,7 @@ namespace SenkoSanBot
                 .AddSingleton<PaginatedMessageService>()
                 .AddSingleton<InviteLinkDetectorService>()
                 .AddSingleton<MessageRewardService>()
+                .AddSingleton<GiveawayService>()
                 .BuildServiceProvider();
     }
 }

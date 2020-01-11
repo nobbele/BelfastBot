@@ -9,7 +9,7 @@ namespace OsuApi
         public ulong SetId;
         public float StarRating;
         public int Bpm;
-        public TimeSpan Lenght;
+        public TimeSpan Length;
         public string CreatorName;
         public ulong CreatorId;
     }

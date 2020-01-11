@@ -10,7 +10,7 @@ namespace SenkoSanBot.Services.Database
     public class JsonDatabaseService
     {
         public static readonly string DbFilePath = $"db.json";
-        public Dictionary<ulong, List<DatabaseUserEntry>> Db { get; private set; }
+        public Dictionary<ulong, ServerEntry> Db { get; private set; }
 
         private readonly object writeLock = new object();
 
@@ -29,7 +29,9 @@ namespace SenkoSanBot.Services.Database
                 if (!File.Exists(DbFilePath))
                     File.Create(DbFilePath).Dispose();
                 string json = File.ReadAllText(DbFilePath);
-                Db = string.IsNullOrEmpty(json) ? new Dictionary<ulong, List<DatabaseUserEntry>>() : JsonConvert.DeserializeObject<Dictionary<ulong, List<DatabaseUserEntry>>>(json);
+                Db = string.IsNullOrEmpty(json) 
+                    ? new Dictionary<ulong, ServerEntry>() 
+                    : JsonConvert.DeserializeObject<Dictionary<ulong, ServerEntry>>(json);
             }
             m_logger.LogInfo("done reading database from file");
             await Task.CompletedTask;
@@ -37,8 +39,14 @@ namespace SenkoSanBot.Services.Database
 
         public DatabaseUserEntry GetUserEntry(ulong serverId, ulong id)
         {
-            List<DatabaseUserEntry> serverDb = Db.SingleOrDefault(server => server.Key == serverId).Value ?? Db.AddGet(new KeyValuePair<ulong, List<DatabaseUserEntry>>(serverId, new List<DatabaseUserEntry>())).Value;    
-            return serverDb.SingleOrDefault(user => user.Id == id) ?? serverDb.AddGet(DatabaseUserEntry.CreateNew(id));
+            ServerEntry serverDb = GetServerEntry(serverId);
+            return serverDb.Users.SingleOrDefault(user => user.Id == id) ?? serverDb.Users.AddGet(DatabaseUserEntry.CreateNew(id));
+        }
+
+        public ServerEntry GetServerEntry(ulong serverId) 
+        {
+            return Db.SingleOrDefault(server => server.Key == serverId).Value 
+                ?? Db.AddGet(new KeyValuePair<ulong, ServerEntry>(serverId, new ServerEntry() { Id = serverId })).Value;
         }
 
         public void WriteData()

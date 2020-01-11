@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+            "label": "Build SenkoSanBot (Debug)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "SenkoSanBot",
+                "--no-restore",
+                "/p:Configuration=Debug",
+                "/p:GenerateFullPaths=true",
+            ],
+            "group": "build",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build SenkoSanBot (Release)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "SenkoSanBot",
+                "--no-restore",
+                "/p:Configuration=Release",
+                "/p:GenerateFullPaths=true",
+            ],
+            "group": "build",
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

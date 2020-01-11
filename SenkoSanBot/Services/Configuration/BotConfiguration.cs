@@ -1,17 +1,20 @@
 ﻿using Discord;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System;
 
 namespace SenkoSanBot.Services.Configuration
 {
+    public class SensitiveAttribute : Attribute {}
+
     [DataContract(Name = "Configuration", Namespace = "")]
     public class BotConfiguration : IExtensibleDataObject
     {
-        [DataMember]
+        [Sensitive, DataMember]
         public string Token { get; internal set; } = "YOUR TOKEN";
-        [DataMember]
+        [Sensitive, DataMember]
         public string OsuApiToken { get; internal set; } = "YOUR TOKEN";
-        [DataMember]
+        [Sensitive, DataMember]
         public string AlphaCodersApiToken { get; internal set; } = "YOUR TOKEN";
         [DataMember]
         public string Prefix { get; internal set; } = ".";
@@ -54,6 +57,10 @@ namespace SenkoSanBot.Services.Configuration
         public int SilverCardPrice { get; internal set; } = 30;
         [DataMember]
         public int BronzeCardPrice { get; internal set; } = 5;
+        [DataMember]
+        public string UpdatePath { get; internal set; } = "/tmp/senko";
+        [DataMember]
+        public string SourceCodeGit { get; internal set; } = "https://github.com/nobbele/SenkoSanBot.git";
 
         public ExtensionDataObject ExtensionData { get; set; }
 
@@ -77,6 +84,7 @@ namespace SenkoSanBot.Services.Configuration
             GoldCardPrice = GoldCardPrice == 0 ? config.GoldCardPrice : GoldCardPrice;
             SilverCardPrice = SilverCardPrice == 0 ? config.SilverCardPrice : SilverCardPrice;
             BronzeCardPrice = BronzeCardPrice == 0 ? config.BronzeCardPrice : BronzeCardPrice;
+            UpdatePath = UpdatePath ?? config.UpdatePath;
         }
     }
 }

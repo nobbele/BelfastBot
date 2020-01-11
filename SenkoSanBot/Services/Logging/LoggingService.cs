@@ -23,26 +23,31 @@ namespace SenkoSanBot.Services.Logging
         /// <returns></returns>
         public async Task InitializeAsync()
         {
-            var _ = Task.Factory.StartNew(async () =>
+            // No writing while initializing
+            lock(writeLock)
             {
-                while (true)
+                var _ = Task.Factory.StartNew(async () =>
                 {
-                    try
+                    while (true)
                     {
-                        WriteBuffer();
-                    }
-                    catch (Exception e)
-                    {
-                        LogCritical(e);
-                    }
+                        try
+                        {
+                            WriteBuffer();
+                        }
+                        catch (Exception e)
+                        {
+                            LogCritical(e);
+                        }
 
-                    if (tokenSource.Token.IsCancellationRequested)
-                        break;
-                    await Task.Delay(logFileWriteInterval, tokenSource.Token);
-                }
-            }, tokenSource.Token);
+                        if (tokenSource.Token.IsCancellationRequested)
+                            break;
+                        await Task.Delay(logFileWriteInterval, tokenSource.Token);
+                    }
+                }, tokenSource.Token);
 
-            Directory.CreateDirectory(Path.GetDirectoryName(LogFilePath));
+                Directory.CreateDirectory(Path.GetDirectoryName(LogFilePath));
+                File.Create(LogFilePath).Close();
+            }
 
             await Task.CompletedTask;
         }

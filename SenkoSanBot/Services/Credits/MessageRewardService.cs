@@ -31,7 +31,7 @@ namespace SenkoSanBot.Services.Credits
                     || message.HasMentionPrefix(m_client.CurrentUser, ref argPos) 
                     || message.Author.IsBot))
                 {
-                    DatabaseUserEntry userDB = m_db.GetUserEntry(0, message.Author.Id);
+                    DatabaseUserEntry userDB = m_db.GetUserEntry((message.Channel as SocketGuildChannel).Guild.Id, message.Author.Id);
                     IUser user = message.Author;
 
                     userDB.Coins++;
@@ -54,7 +54,9 @@ namespace SenkoSanBot.Services.Credits
                             $"► Coins: **{oldCoins}** => **{userDB.Coins}** {Emotes.DiscordCoin} (**+{awardedCoins}**{Emotes.DiscordCoin})")
                             .Build();
 
-                        await message.Channel.SendMessageAsync(embed: embed);
+                        m_db.WriteData();
+
+                        //await message.Channel.SendMessageAsync(embed: embed);
                     }
                 }
                 await Task.CompletedTask;
