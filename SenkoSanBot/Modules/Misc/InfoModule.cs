@@ -79,7 +79,7 @@ namespace SenkoSanBot.Modules.Misc
                 .AddField("Version", SenkoSan.Version)
                 .AddField("Developers", "**Nobbele & JayDuck**", true)
                 .WithFooter("09/07-2019")
-                .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/571686869163704320/Shinaosu.png")
+                .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/629383238917292042/29692031.png")
                 .Build();
 
             await ReplyAsync(embed: embed);

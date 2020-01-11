@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaCodersApi", "AlphaCodersApi\AlphaCodersApi.csproj", "{2F535BD5-10BD-4BF5-88BD-D48865D72768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeCharacterDatabaseApi", "AnimeCharacterDatabaseApi\AnimeCharacterDatabaseApi.csproj", "{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimeCharacterDatabaseApi", "AnimeCharacterDatabaseApi\AnimeCharacterDatabaseApi.csproj", "{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuaverApi", "QuaverApi\QuaverApi.csproj", "{485428A5-CCAA-447E-BF89-84F956FACB23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,10 @@ Global
 		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{485428A5-CCAA-447E-BF89-84F956FACB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{485428A5-CCAA-447E-BF89-84F956FACB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{485428A5-CCAA-447E-BF89-84F956FACB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{485428A5-CCAA-447E-BF89-84F956FACB23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
