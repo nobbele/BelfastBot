@@ -149,7 +149,7 @@ namespace SenkoSanBot.Modules.Osu
 
             IUser target = Context.Message.MentionedUsers.FirstOrDefault();
 
-            if (target.IsBot)
+            if (target != null && target.IsBot)
                 return;
 
             if (target != null)
