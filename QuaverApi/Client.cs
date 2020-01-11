@@ -3,6 +3,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace QuaverApi
 {
@@ -14,7 +15,7 @@ namespace QuaverApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}/users/search/{name}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}/users/search/{HttpUtility.UrlEncode(name)}");
 
                 dynamic obj = JObject.Parse(json).ToObject<dynamic>();
 

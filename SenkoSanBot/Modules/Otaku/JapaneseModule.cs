@@ -21,11 +21,14 @@ namespace SenkoSanBot.Modules.Otaku
 
             JishoApi.SearchResult[] results = await JishoApi.Client.GetWordAsync(searchWord);
 
-            await PaginatedMessageService.SendPaginatedDataMessageAsync(
-                Context.Channel, 
-                results, 
-                (result, index, footer) => GenerateEmbedFor(result, searchWord, footer)
-            );
+            if(results.Length > 0)
+                await PaginatedMessageService.SendPaginatedDataMessageAsync(
+                    Context.Channel, 
+                    results, 
+                    (result, index, footer) => GenerateEmbedFor(result, searchWord, footer)
+                );
+            else
+                await ReplyAsync("No result found");
         }
 
         private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace JishoApi
 {
@@ -14,7 +15,7 @@ namespace JishoApi
         {
             using (HttpClient httpClient = new HttpClient())
             {
-                string json = await httpClient.GetStringAsync($"{BaseUrl}?keyword={word}");
+                string json = await httpClient.GetStringAsync($"{BaseUrl}?keyword={HttpUtility.UrlEncode(word)}");
 
                 dynamic obj = JObject.Parse(json);
 
