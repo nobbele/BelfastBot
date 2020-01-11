@@ -42,7 +42,7 @@ namespace SenkoSanBot.Services.Credits
                     if(oldLevel != newLevel)
                     {
                         int oldCoins = userDB.Coins;
-                        int awardedCoins = (int)Math.Pow(userDB.Level / 5, 5);
+                        int awardedCoins = (int)Math.Pow(userDB.Level / 2f, 4f);
                         userDB.Coins += awardedCoins;
 
                         Embed embed = new EmbedBuilder()
