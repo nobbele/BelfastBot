@@ -204,7 +204,10 @@ namespace SenkoSanBot.Modules.Osu
 
             PlayResult[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
-            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
+            if(validResults.Length > 0)
+                await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
+            else
+                await ReplyAsync($"No recent plays found for {username}");
         }
 
         [Command("osu best"), Alias("bs")]
@@ -237,7 +240,10 @@ namespace SenkoSanBot.Modules.Osu
 
             UserBest[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
 
-            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
+            if(validResults.Length > 0)
+                await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
+            else
+                await ReplyAsync($"No best plays found for {username}");
         }
     }
 }

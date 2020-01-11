@@ -121,6 +121,9 @@ namespace SenkoSanBot.Services.Pagination
                 return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
             }
 
+            if(pageData.Length <= 0)
+                throw new ArgumentException("Passed zero length array");
+
             IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
@@ -140,6 +143,9 @@ namespace SenkoSanBot.Services.Pagination
             {
                 return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
             }
+
+            if(pageData.Length <= 0)
+                throw new ArgumentException("Passed zero length array");
 
             IUserMessage message = await channel.SendMessageAsync(embed: await GetEmbedTask(0));
 
