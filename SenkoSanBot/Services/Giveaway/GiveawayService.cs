@@ -53,7 +53,7 @@ namespace SenkoSanBot.Services.Giveaway
             SocketTextChannel channel = guild.GetTextChannel(entry.ChannelId);
             IUserMessage message = await channel.GetMessageAsync(entry.ReactionMessageId) as IUserMessage;
 
-            IAsyncEnumerable<IReadOnlyCollection<IUser>> asyncparticipants = message.GetReactionUsersAsync(new Emoji(server.GiveawayReactionEmote),int.MaxValue);
+            var asyncparticipants = message.GetReactionUsersAsync(new Emoji(server.GiveawayReactionEmote),int.MaxValue);
             IEnumerable<IUser> users = await asyncparticipants.FlattenAsync();
 
             List<IUser> participants = users.Where(user => user.Id != m_client.CurrentUser.Id).ToList();
