@@ -44,6 +44,7 @@ namespace SenkoSanBot.Modules.Profiles
         [Summary("Shows details of an users profile")]
         public async Task CheckProfileAsync([Summary("(optional) The user profile to get")] IUser target = null)
         {
+
             target = target ?? Context.Message.Author;
 
             if (target.IsBot)
@@ -169,9 +170,9 @@ namespace SenkoSanBot.Modules.Profiles
         {
             switch (rarity)
             {
-                case CardRarity.C:
+                case CardRarity.Common:
                     return Config.Configuration.BronzeCardPrice;
-                case CardRarity.R:
+                case CardRarity.Rare:
                     return Config.Configuration.SilverCardPrice;
                 case CardRarity.SR:
                     return Config.Configuration.GoldCardPrice;
