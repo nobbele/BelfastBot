@@ -1,7 +1,7 @@
 ﻿public enum CardRarity
 {
-    Bronze,
-    Silver,
-    Gold,
-    Mystic
+    Common,
+    Rare,
+    SR,
+    SSR
 }

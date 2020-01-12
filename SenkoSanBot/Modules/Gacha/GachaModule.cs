@@ -106,13 +106,13 @@ namespace SenkoSanBot.Modules.Gacha
         {
             switch (rarity)
             {
-                case CardRarity.Bronze:
+                case CardRarity.C:
                     return new Color(0xCD7f32);
-                case CardRarity.Silver:
+                case CardRarity.R:
                     return new Color(0xC0C0C0);
-                case CardRarity.Gold:
+                case CardRarity.SR:
                     return new Color(0xffd700);
-                case CardRarity.Mystic:
+                case CardRarity.SSR:
                     return new Color(0xde6585);
             }
             return new Color(0x000000);
