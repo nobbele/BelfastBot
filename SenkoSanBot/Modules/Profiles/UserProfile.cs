@@ -44,14 +44,19 @@ namespace SenkoSanBot.Modules.Profiles
         [Summary("Shows details of an users profile")]
         public async Task CheckProfileAsync([Summary("(optional) The user profile to get")] IUser target = null)
         {
-
             target = target ?? Context.Message.Author;
 
             if (target.IsBot)
                 return;
 
             DatabaseUserEntry userData = Db.GetUserEntry(0, target.Id);
-            DatabaseUserEntry serverUserData = Db.GetUserEntry(Context.Guild.Id, target.Id);
+
+            string warns = "NaN";
+            if (Context.Guild != null)
+            {
+                DatabaseUserEntry serverUserData = Db.GetUserEntry(Context.Guild.Id, target.Id);
+                warns = serverUserData.Warns.Count.ToString();
+            }
 
             Embed embed = new EmbedBuilder()
                  .WithColor(0xF5CD63)
@@ -62,9 +67,9 @@ namespace SenkoSanBot.Modules.Profiles
                  })
                  .AddField("Details:",
                  $"__**Status In Current Server**__\n" +
-                 $"► Warn Amount: **{serverUserData.Warns.Count}**/{Config.Configuration.MaxWarnAmount}\n" +
+                 $"► Warn Amount: **{warns}**/{Config.Configuration.MaxWarnAmount}\n" +
                  $"__**Profile**__\n" +
-                 $"► Level: **{serverUserData.Level}** [**{serverUserData.Xp}**] \n" +
+                 $"► Level: **{userData.Level}** [**{userData.Xp}**] \n" +
                  $"► Coins: **{userData.Coins}** {Emotes.DiscordCoin}\n" +
                  $"► Gacha Rolls: **{userData.GachaRolls}**\n" +
                  $"► Card Amount: **{userData.Cards.Count}**\n" +

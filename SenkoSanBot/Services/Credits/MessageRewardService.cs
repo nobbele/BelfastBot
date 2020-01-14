@@ -31,7 +31,8 @@ namespace SenkoSanBot.Services.Credits
                     || message.HasMentionPrefix(m_client.CurrentUser, ref argPos) 
                     || message.Author.IsBot))
                 {
-                    DatabaseUserEntry userDB = m_db.GetUserEntry((message.Channel as SocketGuildChannel).Guild.Id, message.Author.Id);
+                    //DatabaseUserEntry userDB = m_db.GetUserEntry((message.Channel as SocketGuildChannel).Guild.Id, message.Author.Id);
+                    DatabaseUserEntry userDB = m_db.GetUserEntry(0, message.Author.Id);
                     IUser user = message.Author;
 
                     userDB.Coins++;
