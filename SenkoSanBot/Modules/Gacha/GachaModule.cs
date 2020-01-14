@@ -15,8 +15,8 @@ namespace SenkoSanBot.Modules.Gacha
         public PaginatedMessageService PaginatedMessageService { get; set; }
         private Random m_random;
 
-        [Command("roll")]
-        [Summary("Rolls random character from a card pack")]
+        [Command("open")]
+        [Summary("Opens random character from a card pack")]
         public async Task GetGacha([Summary("Card pack index")][Remainder]int cardPack = 1)
         {
             if (!Config.Configuration.Packs.TryGetValue(cardPack, out string content))
@@ -78,7 +78,7 @@ namespace SenkoSanBot.Modules.Gacha
             await ReplyAsync(embed: embed);
         }
 
-        [Command("gacha packs")]
+        [Command("gacha packs"), Alias("gap")]
         [Summary("Shows list of available card packs")]
         public async Task CardPacksAsync()
         {

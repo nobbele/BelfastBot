@@ -10,7 +10,7 @@ namespace SenkoSanBot.Modules.Fun
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
-        [Command("wallpaper"), Alias("wall")]
+        [Command("wallpaper")]
         [Summary("Gets wallpaper from alphacoders")]
         public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name)
         {

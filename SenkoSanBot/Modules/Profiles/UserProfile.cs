@@ -171,11 +171,11 @@ namespace SenkoSanBot.Modules.Profiles
             switch (rarity)
             {
                 case CardRarity.Common:
-                    return Config.Configuration.BronzeCardPrice;
+                    return Config.Configuration.CommonCardPrice;
                 case CardRarity.Rare:
-                    return Config.Configuration.SilverCardPrice;
+                    return Config.Configuration.RareCardPrice;
                 case CardRarity.SR:
-                    return Config.Configuration.GoldCardPrice;
+                    return Config.Configuration.SRCardPrice;
             }
             return 0;
         }

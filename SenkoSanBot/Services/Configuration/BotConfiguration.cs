@@ -50,13 +50,13 @@ namespace SenkoSanBot.Services.Configuration
             {6, "Touhou Project"},
         };
         [DataMember]
-        public int MysticCardPrice { get; internal set; } = 200;
+        public int SSRCardPrice { get; internal set; } = 200;
         [DataMember]
-        public int GoldCardPrice { get; internal set; } = 50;
+        public int SRCardPrice { get; internal set; } = 50;
         [DataMember]
-        public int SilverCardPrice { get; internal set; } = 30;
+        public int RareCardPrice { get; internal set; } = 30;
         [DataMember]
-        public int BronzeCardPrice { get; internal set; } = 5;
+        public int CommonCardPrice { get; internal set; } = 5;
         [DataMember]
         public string UpdatePath { get; internal set; } = "/tmp/senko";
         [DataMember]
@@ -81,9 +81,9 @@ namespace SenkoSanBot.Services.Configuration
             Tags = Tags ?? config.Tags;
             Packs = Packs ?? config.Packs;
             GachaPrice = GachaPrice == 0 ? config.GachaPrice : GachaPrice;
-            GoldCardPrice = GoldCardPrice == 0 ? config.GoldCardPrice : GoldCardPrice;
-            SilverCardPrice = SilverCardPrice == 0 ? config.SilverCardPrice : SilverCardPrice;
-            BronzeCardPrice = BronzeCardPrice == 0 ? config.BronzeCardPrice : BronzeCardPrice;
+            SRCardPrice = SRCardPrice == 0 ? config.SRCardPrice : SRCardPrice;
+            RareCardPrice = RareCardPrice == 0 ? config.RareCardPrice : RareCardPrice;
+            CommonCardPrice = CommonCardPrice == 0 ? config.CommonCardPrice : CommonCardPrice;
             UpdatePath = UpdatePath ?? config.UpdatePath;
         }
     }
