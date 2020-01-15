@@ -7,13 +7,13 @@
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.2/SenkoSanBot.dll"
+                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0/SenkoSanBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.2/",
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0/",
             "preLaunchTask": "Build SenkoSanBot (Debug)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp2.1:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -26,13 +26,13 @@
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.2/SenkoSanBot.dll"
+                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0/SenkoSanBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.2/",
+            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0/",
             "preLaunchTask": "Build SenkoSanBot (Release)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp2.1:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
