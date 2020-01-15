@@ -148,7 +148,7 @@ namespace SenkoSanBot.Modules.Profiles
 
         [Command("card sell"), Alias("csell")]
         [Summary("Sell your cards")]
-        public async Task SellCardAsync([Summary("Card rarity to sell")]string rarity, [Summary("Card name to sell")][Remainder]string cardName)
+        public async Task SellCardAsync([Summary("Card rarity to sell")] string rarity, [Summary("Card name to sell")] [Remainder] string cardName)
         {
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
             GachaCard exits = userData.Cards.FirstOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase) && string.Equals(card.Rarity.ToString(), rarity, StringComparison.OrdinalIgnoreCase));
@@ -180,7 +180,9 @@ namespace SenkoSanBot.Modules.Profiles
                 case CardRarity.Rare:
                     return Config.Configuration.RareCardPrice;
                 case CardRarity.SR:
-                    return Config.Configuration.SRCardPrice;
+                    return Config.Configuration.SRCardPrice;                
+                case CardRarity.SSR:
+                    return Config.Configuration.SSRCardPrice;
             }
             return 0;
         }
