@@ -41,7 +41,7 @@ namespace SenkoSanBot.Services.Giveaway
         }
 
         public void AddGiveaway(GiveawayEntry entry, ulong serverId) 
-            => m_scheduler.Add(entry.End, o => ExecuteGiveaway(entry, serverId));
+            => m_scheduler.Add(entry.End, new Func<Task>(() => ExecuteGiveaway(entry, serverId)));
 
         public async Task ExecuteGiveaway(GiveawayEntry entry, ulong serverId) 
         {
