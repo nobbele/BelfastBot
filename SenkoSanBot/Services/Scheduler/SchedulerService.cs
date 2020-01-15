@@ -7,7 +7,7 @@ namespace SenkoSanBot.Services.Scheduler
 {
     public class SchedulerService
     {
-        private Dictionary<Guid, DateTime> schedules;
+        private Dictionary<Guid, DateTime> schedules = new Dictionary<Guid, DateTime>();
 
         public void Add<T>(DateTime time, T func)
         {
