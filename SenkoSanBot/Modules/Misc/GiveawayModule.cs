@@ -16,7 +16,7 @@ namespace SenkoSanBot.Modules.Misc
 
         [Command("giveaway create")]
         [Summary("Create a giveaway")]
-        public async Task CreateAsync([Summary("Time giveaway will last(ex. 2 days)")] string time, [Summary("What to give away")] string content, uint count = 1) 
+        public async Task CreateGiveawayAsync([Summary("Time giveaway will last(ex. 2 days)")] string time, [Summary("What to give away")] string content, uint count = 1) 
         {
             DateTime end = DateTime.Now;
             string[] split = time.Split(' ');
@@ -59,9 +59,9 @@ namespace SenkoSanBot.Modules.Misc
             DatabaseService.WriteData();
             GiveawayService.AddGiveaway(entry, Context.Guild.Id);
         }
-        [Command("giveaway emoji")]
+        [Command("giveaway setemoji")]
         [Summary("Sets giveaway emoji")]
-        public async Task SetEmoji([Summary("Emoji to use")] string emote) 
+        public async Task SetEmojiAsync([Summary("Emoji to use")] string emote) 
         {
             DatabaseService.GetServerEntry(Context.Guild.Id).GiveawayReactionEmote = emote;
             DatabaseService.WriteData();

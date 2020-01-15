@@ -15,13 +15,14 @@ using System.Runtime.CompilerServices;
 using SenkoSanBot.Services.Pagination;
 using SenkoSanBot.Services.Credits;
 using SenkoSanBot.Services.Giveaway;
+using SenkoSanBot.Services.Scheduler;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
 {
     public class SenkoSan
     {
-        public const string Version = "1.0";
+        public const string Version = "1.1";
 
         public LoggingService Logger { get; private set; }
         public static SenkoSan Instance;
@@ -140,6 +141,7 @@ namespace SenkoSanBot
                 .AddSingleton<JsonDatabaseService>()
                 .AddSingleton<WordBlacklistService>()
                 .AddSingleton<LoggingService>()
+                .AddSingleton<SchedulerService>()
                 .AddSingleton<PaginatedMessageService>()
                 .AddSingleton<InviteLinkDetectorService>()
                 .AddSingleton<MessageRewardService>()

@@ -6,6 +6,7 @@ using System.Linq;
 using Discord;
 using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
+using SenkoSanBot.Services.Scheduler;
 
 namespace SenkoSanBot.Services.Giveaway
 {
@@ -13,15 +14,17 @@ namespace SenkoSanBot.Services.Giveaway
     {
         private JsonDatabaseService m_db;
         private DiscordSocketClient m_client;
+        private SchedulerService m_scheduler;
         private readonly IBotConfigurationService m_config;
 
         private Random m_random = new Random();
 
-        public GiveawayService(JsonDatabaseService db, DiscordSocketClient client, IBotConfigurationService config) 
+        public GiveawayService(JsonDatabaseService db, DiscordSocketClient client, IBotConfigurationService config, SchedulerService scheduler) 
         {
             m_db = db;
             m_client = client;
             m_config = config;
+            m_scheduler = scheduler;
         }
 
         public async Task InitializeAsync()
@@ -38,12 +41,7 @@ namespace SenkoSanBot.Services.Giveaway
         }
 
         public void AddGiveaway(GiveawayEntry entry, ulong serverId) 
-        {
-            TimeSpan delay = entry.End - DateTime.Now;
-            if(delay.TotalMilliseconds < 0)
-                return;
-            Task.Delay(delay).ContinueWith(task => ExecuteGiveaway(entry, serverId));
-        }
+            => m_scheduler.Add(entry.End, o => ExecuteGiveaway(entry, serverId));
 
         public async Task ExecuteGiveaway(GiveawayEntry entry, ulong serverId) 
         {
@@ -59,15 +57,22 @@ namespace SenkoSanBot.Services.Giveaway
 
             List<IUser> winners = new List<IUser>();
 
-            for(int i = 0; i < entry.Count; i++) {
-                IUser winner;
-                do {
-                    winner = participants[m_random.Next(0, participants.Count)];
-                } while(winners.Contains(winner) && entry.Count < participants.Count);
-                winners.Add(winner);
+            if(participants.Count <= 0)
+            {
+                await channel.SendMessageAsync($"No one participated for {entry.Content}");
             }
-            
-            await channel.SendMessageAsync($"Giveaway ended with {string.Join(' ', winners.Select(winner => winner.Mention))} winning!");
+            else
+            {
+                for(int i = 0; i < entry.Count; i++) {
+                    IUser winner;
+                    do {
+                        winner = participants[m_random.Next(0, participants.Count)];
+                    } while(winners.Contains(winner) && entry.Count < participants.Count);
+                    winners.Add(winner);
+                }
+                
+                await channel.SendMessageAsync($"{string.Join(' ', winners.Select(winner => winner.Mention))} won {entry.Content}!");
+            }
         }
     }
 }
