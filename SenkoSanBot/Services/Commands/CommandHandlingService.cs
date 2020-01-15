@@ -50,16 +50,24 @@ namespace SenkoSanBot.Services.Commands
 
             var context = new SocketCommandContext(m_client, message);
 
-            IResult result = await m_command.ExecuteAsync(
+            Task<IResult> task = m_command.ExecuteAsync(
                 context: context,
                 argPos: argPos,
                 services: m_services);
 
-            if (!result.IsSuccess)
+            IResult? result = null;
+
+            if((await Task.WhenAny(task, Task.Delay(TimeSpan.FromSeconds(10)))) == task)
+                result = task.Result;
+
+            if(result == null)
+            {
+                await context.Channel.SendMessageAsync($"Command timed out");
+            }
+            else if (!result.IsSuccess)
             {
                 await context.Channel.SendMessageAsync($"{Emotes.SenkoShock}うや～！\n" +
                     $"{result.ErrorReason} try **{m_config.Configuration.Prefix}help** for lists of commands");
-                m_logger.LogInfo($"Reason {result.ErrorReason}");
             }
             else
             {
