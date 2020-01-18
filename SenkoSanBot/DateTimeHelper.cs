@@ -13,6 +13,11 @@ namespace SenkoSanBot
             string scale = split[1];
             switch(scale) 
             {
+                case "second":
+                case "seconds": 
+                {
+                    time = time.AddSeconds(value);
+                } break;
                 case "minute":
                 case "minutes": 
                 {

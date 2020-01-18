@@ -7,6 +7,7 @@ using Discord;
 using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Scheduler;
+using Newtonsoft.Json;
 
 namespace SenkoSanBot.Services.Giveaway
 {
@@ -40,8 +41,30 @@ namespace SenkoSanBot.Services.Giveaway
             await Task.CompletedTask;
         }
 
+        private struct GiveawaySchedulerData
+        {
+            public GiveawayEntry entry;
+            public ulong serverId;
+
+            public GiveawaySchedulerData(GiveawayEntry entry, ulong serverId)
+            {
+                this.entry = entry;
+                this.serverId = serverId;
+            }
+        }
+
         public void AddGiveaway(GiveawayEntry entry, ulong serverId) 
-            => m_scheduler.Add(entry.End, new Func<Task>(() => ExecuteGiveaway(entry, serverId)));
+        {
+            GiveawaySchedulerData data = new GiveawaySchedulerData(entry, serverId);
+            string json = JsonConvert.SerializeObject(data);
+            m_scheduler.Add<GiveawayService>(entry.End, nameof(GiveawaySchedulerCallback), json);
+        }
+
+        public void GiveawaySchedulerCallback(string data)
+        {
+            GiveawaySchedulerData schedulerData = JsonConvert.DeserializeObject<GiveawaySchedulerData>(data);
+            _ = ExecuteGiveaway(schedulerData.entry, schedulerData.serverId);
+        }
 
         public async Task ExecuteGiveaway(GiveawayEntry entry, ulong serverId) 
         {
