@@ -35,9 +35,9 @@ namespace SenkoSanBot.Services.Scheduler
             OnDone(guid);
         }
 
-        private void OnDone(Func<Task> func, Guid guid)
+        private async Task OnDone(Func<Task> func, Guid guid)
         {
-            func?.Invoke();
+            await func?.Invoke();
             OnDone(guid);
         }
     }
