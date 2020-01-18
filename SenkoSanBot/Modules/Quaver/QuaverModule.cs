@@ -14,7 +14,7 @@ namespace SenkoSanBot.Modules.Quaver
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
         private Embed GetUserEmbed((User user, KeyInfo key) data, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-            .WithColor(0xE664A0)
+            .WithColor(0x43EBFB)
             .WithAuthor(author => {
                 author
                     .WithName($"{data.user.Username}'s Quaver {data.key.KeyCount}K Info")
@@ -28,13 +28,13 @@ namespace SenkoSanBot.Modules.Quaver
             $"► Play Count: **{data.key.PlayCount}**\n" +
             $"__**Ranking**__\n" +
             $"► Global Rank: **{data.key.GlobalRanking}**\n" +
-            $"► Country Ranking: **{data.key.CountryRanking} [{data.user.Country}]**")
+            $"► Country Rank: **{data.key.CountryRanking} [{data.user.Country}]**")
             .WithThumbnailUrl(data.user.AvatarUrl)
             .WithFooter(footer)
             .Build();
 
         private Embed GetRecentEmbed(User user, Map map, Recent recent) => new EmbedBuilder()
-            .WithColor(0xE664A0)
+            .WithColor(0x43EBFB)
             .WithAuthor(author => {
                 author
                     .WithName($"{user.Username}'s Recent 4K Play")
@@ -83,7 +83,7 @@ namespace SenkoSanBot.Modules.Quaver
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, keys, GetUserEmbed);
         }
 
-        [Command("quaver recent 4k"), Alias("qr4k")]
+        [Command("quaverrecent 4k"), Alias("qr4k")]
         [Summary("Get recent 4k play info by user")]
         public async Task GetRecent4KAsync([Summary("User to get recent play from")] string name = null)
         {
@@ -112,7 +112,7 @@ namespace SenkoSanBot.Modules.Quaver
             await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
 
-        [Command("quaver recent 7k"), Alias("qr7k")]
+        [Command("quaverrecent 7k"), Alias("qr7k")]
         [Summary("Get recent 7k play info by user")]
         public async Task GetRecent7KAsync([Summary("User to get recent play from")] string name = null)
         {

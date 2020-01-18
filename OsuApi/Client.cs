@@ -65,6 +65,9 @@ namespace OsuApi
                     Score = jsonResult.score.ToObject<ulong>(),
                     Combo = jsonResult.maxcombo.ToObject<int>(),
                     Rank = jsonResult.rank.ToObject<string>(),
+                    Count50 = jsonResult.count50.ToObject<uint>(),
+                    Count100 = jsonResult.count100.ToObject<uint>(),
+                    Count300 = jsonResult.count300.ToObject<uint>(),
                 };
             }
         }
@@ -124,9 +127,12 @@ namespace OsuApi
                     PlayerData = userDataTask.Result,
                     BeatmapData = beatmapDataTask.Result,
                     Score = jsonResult.score.ToObject<ulong>(),
-                    Combo = jsonResult.maxcombo.ToObject<int>(),
+                    Combo = jsonResult.maxcombo.ToObject<uint>(),
                     Rank = jsonResult.rank.ToObject<string>(),
                     PP = jsonResult.pp.ToObject<float>(),
+                    Count50 = jsonResult.count50.ToObject<uint>(),
+                    Count100 = jsonResult.count100.ToObject<uint>(),
+                    Count300 = jsonResult.count300.ToObject<uint>(),
                 };
             }
         }
