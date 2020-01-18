@@ -18,32 +18,9 @@ namespace SenkoSanBot.Modules.Misc
         [Summary("Create a giveaway")]
         public async Task CreateGiveawayAsync([Summary("Time giveaway will last(ex. 2 days)")] string time, [Summary("What to give away")] string content, uint count = 1) 
         {
-            DateTime end = DateTime.Now;
-            string[] split = time.Split(' ');
-            int value = int.Parse(split[0]);
-            string scale = split[1];
-            switch(scale) 
-            {
-                case "minute":
-                case "minutes": 
-                {
-                    end = end.AddMinutes(value);
-                } break;
-                case "hour":
-                case "hours": 
-                {
-                    end = end.AddHours(value);
-                } break;
-                case "day":
-                case "days": 
-                {
-                    end = end.AddDays(value);
-                } break;
-                default: {
-                    await ReplyAsync($"Invalid scale {scale}");
-                    return;
-                }
-            }
+            if(!DateTimeHelper.TryParseRelative(time, out DateTime end))
+                await ReplyAsync("Couldn't parse time");
+            
             IUserMessage message = await ReplyAsync($"Giving away {content}");
             GiveawayEntry entry = new GiveawayEntry
             {
