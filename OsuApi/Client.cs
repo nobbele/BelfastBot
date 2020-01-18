@@ -32,6 +32,9 @@ namespace OsuApi
                     Level = jsonResult.level.ToObject<float?>() ?? (float)0,
                     PlayCount = jsonResult.playcount.ToObject<ulong?>() ?? (ulong)0,
                     Accuracy = jsonResult.accuracy.ToObject<float?>() ?? (float)0,
+                    GlobalRanking = jsonResult.pp_rank.ToObject<ulong?>() ?? (ulong)0,
+                    CountryRanking = jsonResult.pp_country_rank.ToObject<ulong?>() ?? (ulong)0,
+                    Country = jsonResult.country.ToObject<string>(),
                 };
             }
         }

@@ -1,11 +1,9 @@
-using Discord.Commands;
+﻿using Discord.Commands;
 using System.Threading.Tasks;
 using QuaverApi;
 using Discord;
-using System.Linq;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Pagination;
-using Discord.WebSocket;
 
 namespace SenkoSanBot.Modules.Quaver
 {
@@ -21,9 +19,16 @@ namespace SenkoSanBot.Modules.Quaver
                 author
                     .WithName($"{data.user.Username}'s Quaver {data.key.KeyCount}K Info")
                     .WithUrl($"https://quavergame.com/profile/{data.user.Id}")
-                    .WithIconUrl(data.user.AvatarUrl);
+                    .WithIconUrl($"https://quavergame.com/static/flags/4x3/{data.user.Country}.png");
             })
-            .AddField("Performance Rating", data.key.PerformanceRating.ToString("0.00"), true)
+            .AddField("Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Accuracy: **{data.key.Accuracy.ToString("0.00")}**\n" +
+            $"► Performance: **{data.key.PerformanceRating.ToString("0.00")}**\n" +
+            $"► Play Count: **{data.key.PlayCount}**\n" +
+            $"__**Ranking**__\n" +
+            $"► Global Rank: **{data.key.GlobalRanking}**\n" +
+            $"► Country Ranking: **{data.key.CountryRanking} [{data.user.Country}]**")
             .WithThumbnailUrl(data.user.AvatarUrl)
             .WithFooter(footer)
             .Build();
@@ -50,9 +55,9 @@ namespace SenkoSanBot.Modules.Quaver
             await ReplyAsync($"Set user id to {id}");
         }
 
-        [Command("quaver user")]
+        [Command("quaver")]
         [Summary("Get info about user")]
-        public async Task GetUserAsync([Summary("Name to get info about")] string name = null)
+        public async Task GetUserAsync([Summary("Name to get info about")] [Remainder] string name = null)
         {
             uint? id = null;
             if(string.IsNullOrEmpty(name))

@@ -89,12 +89,17 @@ namespace SenkoSanBot.Modules.Osu
                 author
                     .WithName($"{user.UserName}'s osu!{GetNameForModeIndex(user.Mode)} Data")
                     .WithUrl($"https://osu.ppy.sh/users/{user.UserId}/{GetLinkSuffixForModeIndex(user.Mode)}")
-                    .WithIconUrl($"https://a.ppy.sh/{user.UserId}");
+                    .WithIconUrl($"https://osu.ppy.sh/images/flags/{user.Country}.png");
             })
-            .AddField("Accuracy", user.Accuracy.ToString("0.00"), true)
-            .AddField("PP", user.PP.ToString("0.00"), true)
-            .AddField("Play Count", user.PlayCount, true)
-            .AddField("Level", user.Level.ToString("0"), true)
+            .AddField("Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Accuracy: **{user.Accuracy.ToString("0.00")}**\n" +
+            $"► PP: **{user.PP.ToString("0.00")}**\n" +
+            $"► Play Count: **{user.PlayCount}**\n" +
+            $"► Level: **{user.Level.ToString("0")}**\n" +
+            $"__**Ranking**__\n" +
+            $"► Global Rank: **{user.GlobalRanking}**\n" +
+            $"► Country Ranking: **{user.CountryRanking} [{user.Country}]**")
             .WithThumbnailUrl($"https://a.ppy.sh/{user.UserId}")
             .WithFooter(footer)
             .Build();
@@ -124,7 +129,7 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
+            .AddField($"Details ▼", $"**Rank: {GetEmoteForRank(result.Rank)} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
             .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
             $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
             $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
@@ -143,7 +148,7 @@ namespace SenkoSanBot.Modules.Osu
 
         [Command("osu")]
         [Summary("Get std profile details from an user")]
-        public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
+        public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")
         {
             string username = null;
 
