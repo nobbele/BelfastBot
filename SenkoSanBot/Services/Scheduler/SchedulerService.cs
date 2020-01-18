@@ -6,50 +6,82 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Commands;
 using System.Linq;
+using SenkoSanBot.Services.Database;
 
 #nullable enable
 
 namespace SenkoSanBot.Services.Scheduler
 {
-    public class SchedulerService
+    public struct ScheduleCallData
     {
-        private struct ScheduleCallData
+        public string Type;
+        public string Function;
+        public string Data;
+
+        public ScheduleCallData(string type, string function, string data)
         {
-            public string Type;
-            public string Function;
-            public string Data;
-
-            public ScheduleCallData(string type, string function, string data)
-            {
-                Type = type;
-                Function = function;
-                Data = data;
-            }
+            Type = type;
+            Function = function;
+            Data = data;
         }
+    }
+    public class SchedulerEntry
+    {
+        public ScheduleCallData CallData;
+        public DateTime Time;
 
-        private Dictionary<Guid, DateTime> schedules = new Dictionary<Guid, DateTime>();
-
+        public SchedulerEntry(ScheduleCallData callData, DateTime time)
+        {
+            CallData = callData;
+            Time = time;
+        }
+    }
+    public class SchedulerService : IDisposable
+    {
         private IServiceProvider _serviceProvider;
         private CommandService _commandService;
+        private JsonDatabaseService _database;
 
         public SchedulerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _commandService = _serviceProvider.GetRequiredService<CommandService>();
+            _database = _serviceProvider.GetRequiredService<JsonDatabaseService>();
+        }
+
+        public void Initialize()
+        {
+            IEnumerable<SchedulerEntry> dbSchedules = _database.Db.Schedules.Values;
+            SchedulerEntry[] missedSchedules = dbSchedules.Where(entry => entry.Time <= DateTime.Now).ToArray();
+            SchedulerEntry[] futureSchedules = dbSchedules.Where(entry => entry.Time > DateTime.Now).ToArray();
+            _database.Db.Schedules.Clear();
+            foreach(SchedulerEntry entry in missedSchedules)
+                OnDone(entry.CallData, null);
+            foreach(SchedulerEntry entry in futureSchedules)
+                Add(entry.Time, entry.CallData, false);
+            _database.WriteData();
         }
 
         public void Add<T>(DateTime time, string func, string data)
+        {
+            string typeName = typeof(T).FullName!;
+            ScheduleCallData callData = new ScheduleCallData(typeName, func, data);
+            Add(time, callData);
+        }
+
+        public void Add(DateTime time, ScheduleCallData callData, bool writeData = true)
         {
             Guid guid = Guid.NewGuid();
             TimeSpan delay = time - DateTime.Now;
             if(delay.TotalMilliseconds < 0)
                 return;
-            string typeName = typeof(T).FullName!;
-            Task.Delay(delay).ContinueWith(task => OnDone(new ScheduleCallData(typeName, func, data), guid));
-            schedules.Add(guid, time);
+            Task.Delay(delay).ContinueWith(task => OnDone(callData, guid));
+            _database.Db.Schedules.Add(guid, new SchedulerEntry(callData, time));
+            if(writeData)
+                _database.WriteData();
         }
 
-        private void OnDone(ScheduleCallData data, Guid guid)
+        private void OnDone(ScheduleCallData data, Guid? guid)
         {
             Type? type = Type.GetType(data.Type);
             if(type == null)
@@ -61,7 +93,15 @@ namespace SenkoSanBot.Services.Scheduler
             if(obj == null)
                 throw new Exception($"Couldn't create {type} from services");
             method.Invoke(obj, new object?[] { data.Data });
-            schedules.Remove(guid);
+            if(guid != null)
+            {
+                Guid id = guid.Value;
+                if(_database.Db.Schedules.ContainsKey(id))
+                {
+                    _database.Db.Schedules.Remove(id);
+                    _database.WriteData();
+                }
+            }
         }
 
         private object CreateObject(Type type)
@@ -100,6 +140,11 @@ namespace SenkoSanBot.Services.Scheduler
             if (service != null)
                 return service;
             throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 }

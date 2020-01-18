@@ -7,6 +7,8 @@ using Discord.WebSocket;
 using SenkoSanBot.Services.Configuration;
 using SenkoSanBot.Services.Logging;
 
+#nullable enable
+
 namespace SenkoSanBot.Services.Commands
 {
     public class CommandHandlingService : ICommandHandlingService
@@ -45,7 +47,7 @@ namespace SenkoSanBot.Services.Commands
 
             if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase) ||
                 message.HasMentionPrefix(m_client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
+                message!.Author.IsBot)
                 return;
 
             var context = new SocketCommandContext(m_client, message);

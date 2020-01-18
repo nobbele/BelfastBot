@@ -95,7 +95,7 @@ namespace SenkoSanBot
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 await services.GetRequiredService<InviteLinkDetectorService>().InitializeAsync();
                 await services.GetRequiredService<MessageRewardService>().InitializeAsync();
-                await services.GetRequiredService<GiveawayService>().InitializeAsync();
+                services.GetRequiredService<SchedulerService>().Initialize();
 
                 if(Environment.UserInteractive && !Console.IsInputRedirected) 
                 {

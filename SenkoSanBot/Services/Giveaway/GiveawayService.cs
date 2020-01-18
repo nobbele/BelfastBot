@@ -28,19 +28,6 @@ namespace SenkoSanBot.Services.Giveaway
             m_scheduler = scheduler;
         }
 
-        public async Task InitializeAsync()
-        {
-            foreach(ServerEntry server in m_db.Db.Values)
-            {
-                foreach(GiveawayEntry entry in server.Giveaways) 
-                {
-                    AddGiveaway(entry, server.Id);
-                }
-            }
-
-            await Task.CompletedTask;
-        }
-
         private struct GiveawaySchedulerData
         {
             public GiveawayEntry entry;
@@ -96,6 +83,8 @@ namespace SenkoSanBot.Services.Giveaway
                 
                 await channel.SendMessageAsync($"{string.Join(' ', winners.Select(winner => winner.Mention))} won {entry.Content}!");
             }
+
+            
         }
     }
 }

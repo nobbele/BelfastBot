@@ -10,7 +10,7 @@ namespace SenkoSanBot.Services.Database
     public class JsonDatabaseService
     {
         public static readonly string DbFilePath = $"db.json";
-        public Dictionary<ulong, ServerEntry> Db { get; private set; }
+        public Database Db { get; private set; }
 
         private readonly object writeLock = new object();
 
@@ -23,17 +23,18 @@ namespace SenkoSanBot.Services.Database
 
         public async Task InitializeAsync()
         {
-            m_logger.LogInfo("Reader database from file");
+            m_logger.LogInfo("Reading database from file");
             lock (writeLock)
             {
                 if (!File.Exists(DbFilePath))
                     File.Create(DbFilePath).Dispose();
                 string json = File.ReadAllText(DbFilePath);
                 Db = string.IsNullOrEmpty(json) 
-                    ? new Dictionary<ulong, ServerEntry>() 
-                    : JsonConvert.DeserializeObject<Dictionary<ulong, ServerEntry>>(json);
+                    ? new Database() 
+                    : JsonConvert.DeserializeObject<Database>(json);
             }
             m_logger.LogInfo("done reading database from file");
+            WriteData();
             await Task.CompletedTask;
         }
 
@@ -45,8 +46,8 @@ namespace SenkoSanBot.Services.Database
 
         public ServerEntry GetServerEntry(ulong serverId) 
         {
-            return Db.SingleOrDefault(server => server.Key == serverId).Value 
-                ?? Db.AddGet(new KeyValuePair<ulong, ServerEntry>(serverId, new ServerEntry() { Id = serverId })).Value;
+            return Db.Servers.SingleOrDefault(server => server.Key == serverId).Value 
+                ?? Db.Servers.AddGet(new KeyValuePair<ulong, ServerEntry>(serverId, new ServerEntry() { Id = serverId })).Value;
         }
 
         public void WriteData()
