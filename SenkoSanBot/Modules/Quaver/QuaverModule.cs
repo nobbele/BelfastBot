@@ -95,16 +95,12 @@ namespace SenkoSanBot.Modules.Quaver
         public async Task GetRecent4KAsync([Summary("User to get recent play from")] string name = null)
         {
             uint? id = null;
-            if(string.IsNullOrEmpty(name))
-            {
+            if (string.IsNullOrEmpty(name))
                 id = Db.GetUserEntry(0, Context.User.Id).QuaverId;
-            }
             else
-            {
                 id = await Client.GetUserIdByNameAsync(name);
-            }
 
-            if(id == null)
+            if (id == null)
             {
                 await ReplyAsync("Couldn't find any user, please set one or specify in arguments");
                 return;
@@ -124,16 +120,12 @@ namespace SenkoSanBot.Modules.Quaver
         public async Task GetRecent7KAsync([Summary("User to get recent play from")] string name = null)
         {
             uint? id = null;
-            if(string.IsNullOrEmpty(name))
-            {
+            if (string.IsNullOrEmpty(name))
                 id = Db.GetUserEntry(0, Context.User.Id).QuaverId;
-            }
             else
-            {
                 id = await Client.GetUserIdByNameAsync(name);
-            }
 
-            if(id == null)
+            if (id == null)
             {
                 await ReplyAsync("Couldn't find any user, please set one or specify in arguments");
                 return;
