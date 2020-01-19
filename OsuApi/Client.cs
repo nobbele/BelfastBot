@@ -68,9 +68,39 @@ namespace OsuApi
                     Score = jsonResult.score.ToObject<ulong>(),
                     Combo = jsonResult.maxcombo.ToObject<int>(),
                     Rank = jsonResult.rank.ToObject<string>(),
-                    Count50 = jsonResult.count50.ToObject<uint>(),
-                    Count100 = jsonResult.count100.ToObject<uint>(),
-                    Count300 = jsonResult.count300.ToObject<uint>(),
+                    Accuracy = mode switch
+                    {
+                        0 => new OsuStdAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                        },
+                        1 => new OsuTaikoAccuracy()
+                        {
+                            CountBad = jsonResult.countmiss.ToObject<uint>(),
+                            CountGood = jsonResult.count100.ToObject<uint>(),
+                            CountGreat = jsonResult.count300.ToObject<uint>(),
+                        },
+                        2 => new OsuCtbAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
+                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
+                        },
+                        3 => new OsuManiaAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
+                            CountGeki = jsonResult.countgeki.ToObject<uint>(),
+                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
+                        },
+                        _ => null,
+                    },
                 };
             }
         }
@@ -133,9 +163,39 @@ namespace OsuApi
                     Combo = jsonResult.maxcombo.ToObject<uint>(),
                     Rank = jsonResult.rank.ToObject<string>(),
                     PP = jsonResult.pp.ToObject<float>(),
-                    Count50 = jsonResult.count50.ToObject<uint>(),
-                    Count100 = jsonResult.count100.ToObject<uint>(),
-                    Count300 = jsonResult.count300.ToObject<uint>(),
+                    Accuracy = mode switch
+                    {
+                        0 => new OsuStdAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                        },
+                        1 => new OsuTaikoAccuracy()
+                        {
+                            CountBad = jsonResult.countmiss.ToObject<uint>(),
+                            CountGood = jsonResult.count100.ToObject<uint>(),
+                            CountGreat = jsonResult.count300.ToObject<uint>(),
+                        },
+                        2 => new OsuCtbAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
+                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
+                        },
+                        3 => new OsuManiaAccuracy()
+                        {
+                            Count50 = jsonResult.count50.ToObject<uint>(),
+                            Count100 = jsonResult.count100.ToObject<uint>(),
+                            Count300 = jsonResult.count300.ToObject<uint>(),
+                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
+                            CountGeki = jsonResult.countgeki.ToObject<uint>(),
+                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
+                        },
+                        _ => null,
+                    },
                 };
             }
         }

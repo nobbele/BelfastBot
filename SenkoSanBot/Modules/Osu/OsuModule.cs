@@ -115,7 +115,7 @@ namespace SenkoSanBot.Modules.Osu
             .AddField($"Details ▼", $"" +
             $"__**Main Details**__\n" +
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
-            $"► Accuracy: **{result.Accuracy*100:F2}%**\n" +
+            $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
             $"__**Beatmap**__\n" +
@@ -140,7 +140,7 @@ namespace SenkoSanBot.Modules.Osu
             $"__**Main Details**__\n" +
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
             $"► PP: **{result.PP:F2}**\n" +
-            $"► Accuracy: **{result.Accuracy*100:F2}%**\n" +
+            $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
             $"__**Beatmap**__\n" +
