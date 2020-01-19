@@ -2,6 +2,7 @@
 
 namespace OsuApi
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class UserProfile
     {
         public uint Mode;
