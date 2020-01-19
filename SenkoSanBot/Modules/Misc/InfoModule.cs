@@ -25,7 +25,8 @@ namespace SenkoSanBot.Modules.Misc
         {
             EmbedBuilder builder = new EmbedBuilder();
 
-            builder.Description = $"Do {Prefix}help [command] to get more information about a command {Emotes.SenkoThink}";
+            builder.Description = $"Do {Prefix}help [command] to get more information about a command";
+            builder.WithThumbnailUrl(Emotes.SenkoThink.Url);
             builder.WithColor(0xffae0d);
 
             int i = 0;
