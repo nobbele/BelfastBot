@@ -23,9 +23,9 @@ namespace SenkoSanBot.Modules.Quaver
             })
             .AddField("Details ▼", $"" +
             $"__**Main Details**__\n" +
-            $"► Accuracy: **{data.key.Accuracy.ToString("0.00")}**\n" +
-            $"► Performance: **{data.key.PerformanceRating.ToString("0.00")}**\n" +
-            $"► Play Count: **{data.key.PlayCount}**\n" +
+            $"► Accuracy: **{data.key.Stats.Accuracy.ToString("0.00")}**\n" +
+            $"► Performance: **{data.key.Stats.PerformanceRating.ToString("0.00")}**\n" +
+            $"► Play Count: **{data.key.Stats.PlayCount}**\n" +
             $"__**Ranking**__\n" +
             $"► Global Rank: **{data.key.GlobalRanking}**\n" +
             $"► Country Rank: **{data.key.CountryRanking} [{data.user.Country}]**")
@@ -59,6 +59,7 @@ namespace SenkoSanBot.Modules.Quaver
         public async Task SetUserAsync([Summary("Name to set")] string name)
         {
             uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await Client.GetUserIdByNameAsync(name)).Value;
+            Db.WriteData();
             await ReplyAsync($"Set user id to {id}");
         }
 

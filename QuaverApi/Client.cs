@@ -15,14 +15,14 @@ namespace QuaverApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}/users/search/{HttpUtility.UrlEncode(name)}");
 
-                dynamic obj = JObject.Parse(json).ToObject<dynamic>();
+                JObject obj = JObject.Parse(json);
 
-                dynamic[] users = obj.users.ToObject<dynamic[]>();
+                JArray users = obj["users"] as JArray;
 
-                if(users.Length <= 0)
+                if(users.Count <= 0)
                     return null;
 
-                return users[0].id.ToObject<uint>();
+                return users[0]["id"].ToObject<uint>();
             }
         }
 
@@ -32,36 +32,18 @@ namespace QuaverApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}/users/full/{id}");
 
-                dynamic obj = JObject.Parse(json).ToObject<dynamic>();
-                dynamic user = obj.user;
-                dynamic userInfo = user.info;
+                JObject obj = JObject.Parse(json);
+                JToken user = obj["user"];
+                JToken userInfo = user["info"];
 
-                User userData = new User
-                {
-                    Id = userInfo.id.ToObject<uint>(),
-                    SteamId = userInfo.steam_id.ToObject<string>(),
-                    Username = userInfo.username.ToObject<string>(),
-                    Country = userInfo.country.ToObject<string>(),
-                    AvatarUrl = userInfo.avatar_url.ToObject<string>(),
-                };
-                userData.FourKeys = new KeyInfo
-                {
-                    KeyCount = 4,
-                    PerformanceRating = user.keys4.stats.overall_performance_rating.ToObject<float>(),
-                    Accuracy = user.keys4.stats.overall_accuracy.ToObject<float>(),
-                    PlayCount = user.keys4.stats.play_count.ToObject<uint>(),
-                    GlobalRanking = user.keys4.globalRank.ToObject<ulong?>() ?? (ulong)0,
-                    CountryRanking = user.keys4.countryRank.ToObject<ulong?>() ?? (ulong)0,
-                };
-                userData.SevenKeys = new KeyInfo
-                {
-                    KeyCount = 7,
-                    PerformanceRating = user.keys7.stats.overall_performance_rating.ToObject<float>(),
-                    Accuracy = user.keys7.stats.overall_accuracy.ToObject<float>(),
-                    PlayCount = user.keys7.stats.play_count.ToObject<uint>(),
-                    GlobalRanking = user.keys7.globalRank.ToObject<ulong?>() ?? (ulong)0,
-                    CountryRanking = user.keys7.countryRank.ToObject<ulong?>() ?? (ulong)0,
-                };
+                User userData = userInfo.ToObject<User>();
+
+                userData.FourKeys = user["keys4"].ToObject<KeyInfo>();
+                userData.FourKeys.KeyCount = 4;
+
+                userData.SevenKeys = user["keys7"].ToObject<KeyInfo>();
+                userData.SevenKeys.KeyCount = 7;
+
                 return userData;
             }
         }
@@ -72,34 +54,19 @@ namespace QuaverApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}/users/scores/recent?id={id}&mode={mode}");
 
-                dynamic obj = JObject.Parse(json).ToObject<dynamic>();
+                JObject obj = JObject.Parse(json);
 
-                dynamic[] scores = obj.scores.ToObject<dynamic[]>();
+                JArray scores = obj["scores"] as JArray;
 
-                if(scores.Length <= 0)
+                if(scores.Count <= 0)
                     return null;
 
-                dynamic score = scores[0];
-                dynamic map = score.map;
+                JToken score = scores[0];
 
-                Recent recent = new Recent
-                {
-                    Id = score.id.ToObject<uint>(),
-                    PerformanceRating = score.performance_rating.ToObject<float>(),
-                    Accuracy = score.accuracy.ToObject<float>(),
-                    Combo = score.max_combo.ToObject<uint>(),
-                    Score = score.total_score.ToObject<ulong>(),
-                    Grade = score.grade.ToObject<string>(),
-                };
-                /*recent.Map = new Map
-                {
-                    Id = map.id.ToObject<uint>(),
-                    Artist = map.artist.ToObject<string>(),
-                    Title = map.title.ToObject<string>(),
-                    DifficultyName = map.difficulty_name.ToObject<string>(),
-                    Creator = map.creator_username.ToObject<string>(),
-                };*/
-                recent.Map = await GetMapAsync(map.id.ToObject<uint>());
+                Recent recent = score.ToObject<Recent>();
+
+                recent.Map = await GetMapAsync(score["map"]["id"].ToObject<uint>());
+
                 return recent;
             }
         }
@@ -110,20 +77,9 @@ namespace QuaverApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl}/maps/{id}");
 
-                dynamic obj = JObject.Parse(json).ToObject<dynamic>();
+                JObject obj = JObject.Parse(json);
 
-                dynamic map = obj.map;
-
-                return new Map
-                {
-                    Id = map.id.ToObject<uint>(),
-                    Artist = map.artist.ToObject<string>(),
-                    Title = map.title.ToObject<string>(),
-                    DifficultyName = map.difficulty_name.ToObject<string>(),
-                    Creator = map.creator_username.ToObject<string>(),
-                    DifficultyRating = map.difficulty_rating.ToObject<float>(),
-                    MapSetId = map.mapset_id.ToObject<uint>(),
-                };
+                return obj["map"].ToObject<Map>();
             }
         }
     }
