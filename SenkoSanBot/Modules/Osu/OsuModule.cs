@@ -93,7 +93,7 @@ namespace SenkoSanBot.Modules.Osu
             })
             .AddField("Details ▼", $"" +
             $"__**Main Details**__\n" +
-            $"► Accuracy: **{user.Accuracy:F2}**\n" +
+            $"► Accuracy: **{user.Accuracy:F2}%**\n" +
             $"► PP: **{user.PP:F2}**\n" +
             $"► Play Count: **{user.PlayCount}**\n" +
             $"► Level: **{user.Level:F0}**\n" +
