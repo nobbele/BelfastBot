@@ -20,10 +20,4 @@
     <ProjectReference Include="..\QuaverApi\QuaverApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="..\update.sh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content> 
-  </ItemGroup>
-
 </Project>
