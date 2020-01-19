@@ -54,7 +54,7 @@ namespace SenkoSanBot.Modules.Quaver
             .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
             .Build();
 
-        [Command("quaver set")]
+        [Command("quaverset")]
         [Summary("Sets the user name for quaver commands")]
         public async Task SetUserAsync([Summary("Name to set")] string name)
         {

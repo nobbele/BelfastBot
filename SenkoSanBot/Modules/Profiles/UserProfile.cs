@@ -86,7 +86,7 @@ namespace SenkoSanBot.Modules.Profiles
             await ReplyAsync(embed: embed);
         }
 
-        [Command("leaderboard")]
+        [Command("leaderboard"), Alias("lb")]
         [Summary("Shows server leaderboard")]
         [RequireGuild]
         public async Task LeaderboardAsync() 
@@ -132,7 +132,7 @@ namespace SenkoSanBot.Modules.Profiles
             );
         }
 
-        [Command("card favorite"), Alias("cfav")]
+        [Command("cardfavorite"), Alias("cfav")]
         [Summary("Favorite one of the cards you own")]
         public async Task FavoriteCardAsync([Summary("Card name to favorite")][Remainder]string cardName)
         {
@@ -148,7 +148,7 @@ namespace SenkoSanBot.Modules.Profiles
             await ReplyAsync("> Couldn't find the specified card with given name");
         }
 
-        [Command("card sell"), Alias("csell")]
+        [Command("cardsell"), Alias("csell")]
         [Summary("Sell your cards")]
         public async Task SellCardAsync([Summary("Card rarity to sell")] string rarity, [Summary("Card name to sell")] [Remainder] string cardName)
         {

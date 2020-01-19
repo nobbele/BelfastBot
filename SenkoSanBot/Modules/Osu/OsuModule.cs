@@ -16,15 +16,6 @@ namespace SenkoSanBot.Modules.Osu
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public DiscordSocketClient IClient { get; set; }
 
-        [Command("osuset")]
-        [Summary("Set osu name")]
-        public async Task SetUserAsync([Summary("Name to set")] string name)
-        {
-            Db.GetUserEntry(0, Context.User.Id).OsuName = name;
-            Db.WriteData();
-            await ReplyAsync($"> Your osu name is now set to **{name}**");
-        }
-
         private string GetNameForModeIndex(uint mode)
         {
             switch (mode)
@@ -159,6 +150,15 @@ namespace SenkoSanBot.Modules.Osu
                 return null;
             }
             return name;
+        }
+
+        [Command("osuset")]
+        [Summary("Set osu name")]
+        public async Task SetUserAsync([Summary("Name to set")] string name)
+        {
+            Db.GetUserEntry(0, Context.User.Id).OsuName = name;
+            Db.WriteData();
+            await ReplyAsync($"> Your osu name is now set to **{name}**");
         }
 
         [Command("osu")]

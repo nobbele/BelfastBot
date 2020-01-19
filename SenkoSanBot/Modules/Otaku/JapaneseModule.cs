@@ -73,7 +73,7 @@ namespace SenkoSanBot.Modules.Otaku
         }
 
         //Mal Module
-        [Command("mal anime"), Alias("mala")]
+        [Command("malanime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
         public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
@@ -93,7 +93,7 @@ namespace SenkoSanBot.Modules.Otaku
             });
         }
 
-        [Command("mal manga"), Alias("malm")]
+        [Command("malmanga"), Alias("malm")]
         public async Task SearchMangaAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");

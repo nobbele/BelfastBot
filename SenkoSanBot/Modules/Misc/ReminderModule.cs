@@ -31,7 +31,7 @@ namespace SenkoSanBot.Modules.Misc
             }
         }
 
-        [Command("remind me")]
+        [Command("remindme")]
         [RequireGuild] // For now it cant be run in dm
         public async Task AddReminder(string time, string content)
         {
