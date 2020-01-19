@@ -16,6 +16,7 @@ using SenkoSanBot.Services.Pagination;
 using SenkoSanBot.Services.Credits;
 using SenkoSanBot.Services.Giveaway;
 using SenkoSanBot.Services.Scheduler;
+using System.Threading;
 
 [assembly: InternalsVisibleTo("SenkoSanBotTests")]
 namespace SenkoSanBot
@@ -48,11 +49,14 @@ namespace SenkoSanBot
             }
         }
 
+        CancellationTokenSource tokenSource = new CancellationTokenSource();
+
         public bool Stopped { get; private set; } = false;
         public void Stop(bool force = false)
         {
             Logger.LogInfo("Stopping");
             Stopped = true;
+            tokenSource.Cancel();
             if(force)
                 Process.GetCurrentProcess().Kill();
         }
@@ -105,7 +109,14 @@ namespace SenkoSanBot
                 else
                 {
                     Logger.LogInfo("Not initializing command line, non-interactive environment");
-                    await Task.Delay(-1);
+                    try
+                    {
+                        await Task.Delay(-1, tokenSource.Token);
+                    }
+                    catch(TaskCanceledException)
+                    {
+                        // do nothing
+                    }
                 }
             }
         }
