@@ -1,10 +1,11 @@
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Giveaway;
+using Discord.WebSocket;
 
 namespace SenkoSanBot.Modules.Misc
 {
@@ -20,8 +21,28 @@ namespace SenkoSanBot.Modules.Misc
         {
             if(!DateTimeHelper.TryParseRelative(time, out DateTime end))
                 await ReplyAsync("Couldn't parse time");
-            
-            IUserMessage message = await ReplyAsync($"Giving away {content}");
+
+
+            Embed embed = new EmbedBuilder()
+                 .WithColor(0xF5CD63)
+                 .WithAuthor(author => {
+                     author
+                         .WithName($"{Context.Message.Author.Username} has started a giveaway!")
+                         .WithIconUrl($"{Context.Message.Author.GetAvatarUrl()}");
+                 })
+                 .AddField("Details ▼",
+                 $"► Prize: __**{content}**__\n" +
+                 $"► Time Limit: **{end.Date}** \n" +
+                 $"**React with 🥳 to enter the giveaway!**")
+                 .WithFooter(footer => {
+                     footer
+                         .WithText($"Requested by {Context.User}")
+                         .WithIconUrl(Context.User.GetAvatarUrl());
+                 })
+                 .Build();
+
+            IUserMessage message = await ReplyAsync(embed: embed);
+
             GiveawayEntry entry = new GiveawayEntry
             {
                 End = end,

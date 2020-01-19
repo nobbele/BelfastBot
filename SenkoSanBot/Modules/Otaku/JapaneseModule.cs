@@ -49,7 +49,7 @@ namespace SenkoSanBot.Modules.Otaku
 
                 string infoDisplay = $"({info})".NothingIfCheckNullOrEmpty(info);
 
-                value += $"{i}. {meaning} {infoDisplay}\n";
+                value += $"{i}. **{meaning} {infoDisplay}**\n";
 
                 i++;
             }
@@ -75,7 +75,7 @@ namespace SenkoSanBot.Modules.Otaku
         //Mal Module
         [Command("mal anime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name)
+        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -94,7 +94,7 @@ namespace SenkoSanBot.Modules.Otaku
         }
 
         [Command("mal manga"), Alias("malm")]
-        public async Task SearchMangaAsync([Summary("Title to search")] [Remainder]string name)
+        public async Task SearchMangaAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -120,12 +120,14 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithUrl($"{result.MangaUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
-            .WithDescription(result.Synopsis.ShortenText())
-            .AddField("Details",
+            .WithDescription($"" +
+            $"__**Description:**__\n" +
+            $"{result.Synopsis.ShortenText()}")
+            .AddField("Details ▼",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
             $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())} [Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}]** \n" +
-            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty(result.Score?.ToString())}**\n" +
+            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}☆")}**\n" +
             $"► Author(s): **{(result.Authors.Length > 0 ? result.Authors.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
@@ -139,12 +141,14 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithUrl($"{result.AnimeUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
-            .WithDescription($"{result.Synopsis.ShortenText()}")
-            .AddField("Details", 
+            .WithDescription($"" +
+            $"__**Description:**__\n" +
+            $"{result.Synopsis.ShortenText()}")
+            .AddField("Details ▼", 
             $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
             $"► Status: **{result.Status}**\n" +
             $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration}]** \n" +
-            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty(result.Score?.ToString())}**\n" +
+            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}☆")}**\n" +
             $"► Studio: **[{"Unknown".IfTargetIsNullOrEmpty(result.Studio?.ToString())}]({result.StudioUrl})**\n" +
             $"Broadcast Time: **[{"Unknown".IfTargetIsNullOrEmpty(result.Broadcast?.ToString())}]**\n" +
             $"**{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}**\n")

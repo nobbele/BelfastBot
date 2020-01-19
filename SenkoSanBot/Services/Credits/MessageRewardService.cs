@@ -48,8 +48,13 @@ namespace SenkoSanBot.Services.Credits
 
                         Embed embed = new EmbedBuilder()
                             .WithColor(0xFF1288)
-                            .WithThumbnailUrl(message.Author.GetAvatarUrl())
-                            .WithTitle($"{user.Username} Leveled Up!🔼")
+                            .WithThumbnailUrl(Emotes.SenkoHappy.Url)
+                            .WithAuthor(author => {
+                                author
+                                    .WithName($"Profile of {message.Author.Username}")
+                                    .WithIconUrl($"{message.Author.GetAvatarUrl()}");
+                            })
+                            .WithTitle($"{user.Username} Leveled Up! ▲")
                             .AddField("Details",
                             $"► Level: **{oldLevel}** => **{userDB.Level}**\n" +
                             $"► Coins: **{oldCoins}** => **{userDB.Coins}** {Emotes.DiscordCoin} (**+{awardedCoins}**{Emotes.DiscordCoin})")

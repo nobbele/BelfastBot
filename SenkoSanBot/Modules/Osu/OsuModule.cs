@@ -89,12 +89,17 @@ namespace SenkoSanBot.Modules.Osu
                 author
                     .WithName($"{user.UserName}'s osu!{GetNameForModeIndex(user.Mode)} Data")
                     .WithUrl($"https://osu.ppy.sh/users/{user.UserId}/{GetLinkSuffixForModeIndex(user.Mode)}")
-                    .WithIconUrl($"https://a.ppy.sh/{user.UserId}");
+                    .WithIconUrl($"https://osu.ppy.sh/images/flags/{user.Country}.png");
             })
-            .AddField("Accuracy", user.Accuracy.ToString("0.00"), true)
-            .AddField("PP", user.PP.ToString("0.00"), true)
-            .AddField("Play Count", user.PlayCount, true)
-            .AddField("Level", user.Level.ToString("0"), true)
+            .AddField("Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Accuracy: **{user.Accuracy:F2}%**\n" +
+            $"► PP: **{user.PP:F2}**\n" +
+            $"► Play Count: **{user.PlayCount}**\n" +
+            $"► Level: **{user.Level:F0}**\n" +
+            $"__**Ranking**__\n" +
+            $"► Global Rank: **{user.GlobalRanking}**\n" +
+            $"► Country Rank: **{user.CountryRanking} [{user.Country}]**")
             .WithThumbnailUrl($"https://a.ppy.sh/{user.UserId}")
             .WithFooter(footer)
             .Build();
@@ -107,10 +112,17 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► Score: {result.Score} | Combo: {result.Combo}**")
-            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
-            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** Length: **{result.BeatmapData.Length.ToShortForm()}**" +
-            $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
+            .AddField($"Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
+            $"► Accuracy: **{result.Accuracy*100:F2}%**\n" +
+            $"► Score: **{result.Score}**\n" +
+            $"► Combo: **{result.Combo}**\n" +
+            $"__**Beatmap**__\n" +
+            $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
+            $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
+            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
+            $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
             .Build();
@@ -124,10 +136,18 @@ namespace SenkoSanBot.Modules.Osu
                     .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
                     .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
             })
-            .AddField($"Details", $"**Rank: {GetEmoteForRank(result.Rank)} ► PP: {result.PP.ToString("0.00")} | Score: {result.Score} | Combo: {result.Combo}**")
-            .AddField("Beatmap", $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id}) " +
-            $"[{result.BeatmapData.StarRating.ToString("0.00")}☆] {result.BeatmapData.Bpm} Bpm** " +
-            $"\n **Made By: [{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
+            .AddField($"Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
+            $"► PP: **{result.PP:F2}**\n" +
+            $"► Accuracy: **{result.Accuracy*100:F2}%**\n" +
+            $"► Score: **{result.Score}**\n" +
+            $"► Combo: **{result.Combo}**\n" +
+            $"__**Beatmap**__\n" +
+            $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
+            $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
+            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
+            $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .Build();
 
@@ -143,7 +163,7 @@ namespace SenkoSanBot.Modules.Osu
 
         [Command("osu")]
         [Summary("Get std profile details from an user")]
-        public async Task OsuGetUserAsync([Summary("Name to search")] string target_name = "")
+        public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")
         {
             string username = null;
 
@@ -179,9 +199,9 @@ namespace SenkoSanBot.Modules.Osu
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
 
-        [Command("osu recent"), Alias("rs")]
+        [Command("osurecent"), Alias("rs")]
         [Summary("Get recent play")]
-        public async Task GetRecentPlay([Summary("Name to search")] string target_name = "")
+        public async Task GetRecentPlay([Summary("Name to search")] [Remainder] string target_name = "")
         {
             string username = null;
 
@@ -215,7 +235,7 @@ namespace SenkoSanBot.Modules.Osu
                 await ReplyAsync($"No recent plays found for {username}");
         }
 
-        [Command("osu best"), Alias("bs")]
+        [Command("osubest"), Alias("bs")]
         [Summary("Get recent play")]
         public async Task GetBestPlays([Summary("Name to search")] string target_name = "")
         {

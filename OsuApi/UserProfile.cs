@@ -9,5 +9,8 @@
         public float Level;
         public ulong PlayCount;
         public float Accuracy;
+        public ulong GlobalRanking;
+        public ulong CountryRanking;
+        public string Country;
     }
 }

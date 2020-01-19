@@ -1,4 +1,4 @@
-using Discord.Commands;
+﻿using Discord.Commands;
 using System.Threading.Tasks;
 using System;
 using SenkoSanBot.Modules;
@@ -40,7 +40,7 @@ namespace SenkoSanBot.Modules.Misc
 
             m_scheduler.Add<ReminderModule>(end, nameof(ReminderSchedulerCallback), data);
 
-            await ReplyAsync($"I will remind you about **{content}** at {end.ToUniversalTime()} UTC");
+            await ReplyAsync($"> I will remind you about **{content}** at {end.ToUniversalTime()} UTC");
         }
 
         public void ReminderSchedulerCallback(string data)
@@ -48,7 +48,7 @@ namespace SenkoSanBot.Modules.Misc
             ReminderSchedulerData schedulerData = JsonConvert.DeserializeObject<ReminderSchedulerData>(data);
             SocketGuild server = m_client.GetGuild(schedulerData.serverId);
             SocketTextChannel channel = server.GetTextChannel(schedulerData.channelId);
-            _ = channel.SendMessageAsync($"{schedulerData.userMention}, I am here to remind you about **{schedulerData.content}**");
+            _ = channel.SendMessageAsync($"うやん～ {schedulerData.userMention}, I am here to remind you about **{schedulerData.content}**");
         }
     }
 }

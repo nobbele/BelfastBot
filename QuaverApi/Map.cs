@@ -8,5 +8,6 @@ namespace QuaverApi
         public string Artist;
         public string Creator;
         public float DifficultyRating;
+        public uint MapSetId;
     }
 }

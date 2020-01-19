@@ -38,10 +38,10 @@ namespace SenkoSanBot.Modules.Fun
                     .WithUrl($"{result.PageUrl}")
                     .WithIconUrl(result.ImageThumbUrl);
             })
-            .AddField("Details",
+            .AddField("Details ▼",
             $"► Category: **{result.Category}**\n" +
             $"► Width: **{result.Width}** Height: **{result.Height}**\n" +
-            $"► File Size: **{((float)result.FileSize / 1024/ 1024).ToString("0.00")} MB** \n")
+            $"► File Size: **{((float)result.FileSize / 1024/ 1024):F2} MB** \n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();

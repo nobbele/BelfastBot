@@ -1,5 +1,3 @@
-using Common;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -50,11 +48,19 @@ namespace QuaverApi
                 {
                     KeyCount = 4,
                     PerformanceRating = user.keys4.stats.overall_performance_rating.ToObject<float>(),
+                    Accuracy = user.keys4.stats.overall_accuracy.ToObject<float>(),
+                    PlayCount = user.keys4.stats.play_count.ToObject<uint>(),
+                    GlobalRanking = user.keys4.globalRank.ToObject<ulong?>() ?? (ulong)0,
+                    CountryRanking = user.keys4.countryRank.ToObject<ulong?>() ?? (ulong)0,
                 };
                 userData.SevenKeys = new KeyInfo
                 {
                     KeyCount = 7,
                     PerformanceRating = user.keys7.stats.overall_performance_rating.ToObject<float>(),
+                    Accuracy = user.keys7.stats.overall_accuracy.ToObject<float>(),
+                    PlayCount = user.keys7.stats.play_count.ToObject<uint>(),
+                    GlobalRanking = user.keys7.globalRank.ToObject<ulong?>() ?? (ulong)0,
+                    CountryRanking = user.keys7.countryRank.ToObject<ulong?>() ?? (ulong)0,
                 };
                 return userData;
             }
@@ -81,6 +87,9 @@ namespace QuaverApi
                     Id = score.id.ToObject<uint>(),
                     PerformanceRating = score.performance_rating.ToObject<float>(),
                     Accuracy = score.accuracy.ToObject<float>(),
+                    Combo = score.max_combo.ToObject<uint>(),
+                    Score = score.total_score.ToObject<ulong>(),
+                    Grade = score.grade.ToObject<string>(),
                 };
                 /*recent.Map = new Map
                 {
@@ -113,6 +122,7 @@ namespace QuaverApi
                     DifficultyName = map.difficulty_name.ToObject<string>(),
                     Creator = map.creator_username.ToObject<string>(),
                     DifficultyRating = map.difficulty_rating.ToObject<float>(),
+                    MapSetId = map.mapset_id.ToObject<uint>(),
                 };
             }
         }
