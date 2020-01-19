@@ -40,8 +40,16 @@ namespace SenkoSanBot.Modules.Misc
                 .Where(p => p.IsDefined(typeof(DataMemberAttribute), false));
             PropertyInfo prop = props.Single(p => p.Name == name);
             string old = prop.GetValue(Config.Configuration).ToString();
-            prop.SetValue(Config.Configuration, Convert.ChangeType(value, prop.PropertyType));
+            prop.SetValue(Config.Configuration, ConvertType(value, prop.PropertyType));
             await ReplyAsync($"`{name} => {old} -> {value}`");
+        }
+
+        public object ConvertType(object value, Type type)
+        {
+            if (type.IsEnum)
+            return Enum.Parse(type, value.ToString());
+
+            return Convert.ChangeType(value, type);
         }
 
         [Command("configwrite")]
