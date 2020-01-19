@@ -15,7 +15,7 @@ namespace SenkoSanBot.Modules.Misc
     [Summary("Commands for configurations")]
     public class ConfigurationModule : SenkoSanModuleBase
     {
-        [Command("config show")]
+        [Command("configshow")]
         [Summary("Show configurations")]
         public async Task ShowConfigAsync()
         {
@@ -31,7 +31,7 @@ namespace SenkoSanBot.Modules.Misc
             await ReplyAsync(sb.ToString());
         }
 
-        [Command("config set")]
+        [Command("configset")]
         [Summary("Set configuration values")]
         [RequireOwner]
         public async Task SetConfigAsync(string name, [Remainder] string value)
@@ -44,7 +44,7 @@ namespace SenkoSanBot.Modules.Misc
             await ReplyAsync($"`{name} => {old} -> {value}`");
         }
 
-        [Command("config write")]
+        [Command("configwrite")]
         [Summary("Write configuration values")]
         [RequireOwner]
         public async Task WriteConfigAsync()
