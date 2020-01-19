@@ -96,6 +96,12 @@ namespace SenkoSanBot.Modules.Profiles
 
             string lbString = sortedUser.Select(user => $"`{Context.Guild.GetUser(user.Id)}` - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
 
+            if(string.IsNullOrEmpty(lbString))
+            {
+                await ReplyAsync("Empty leaderboard");
+                return;
+            }
+
             string[] strings = lbString.NCharLimitToClosestDelimeter(512, "\n");
 
             await PaginatedMessageService.SendPaginatedDataMessageAsync(
