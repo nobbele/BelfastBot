@@ -1,6 +1,6 @@
 ﻿namespace OsuApi
 {
-    public struct UserProfile
+    public class UserProfile
     {
         public ulong UserId;
         public string UserName;

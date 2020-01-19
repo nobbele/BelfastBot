@@ -17,9 +17,12 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
+                JArray arr = JArray.Parse(json);
 
-                dynamic obj = JObject.Parse(json);
+                if(arr.Count <= 0)
+                    return null;
+
+                dynamic obj = arr[0];
 
                 dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
 

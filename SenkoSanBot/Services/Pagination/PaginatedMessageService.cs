@@ -118,7 +118,7 @@ namespace SenkoSanBot.Services.Pagination
         {
             Embed GetEmbed(int i)
             {
-                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
+                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Length}"));
             }
 
             if(pageData.Length <= 0)
@@ -128,7 +128,7 @@ namespace SenkoSanBot.Services.Pagination
 
             await message.AddReactionsAsync(ReactionEmotes);
 
-            AddCallback(message.Id, pageData.Count(), async (IUserMessage msg, int i) =>
+            AddCallback(message.Id, pageData.Length, async (IUserMessage msg, int i) =>
             {
                 await msg.ModifyAsync((MessageProperties properties) =>
                 {
@@ -141,7 +141,7 @@ namespace SenkoSanBot.Services.Pagination
         {
              Task<Embed> GetEmbedTask(int i)
             {
-                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Count()}"));
+                return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Length}"));
             }
 
             if(pageData.Length <= 0)
@@ -151,7 +151,7 @@ namespace SenkoSanBot.Services.Pagination
 
             await message.AddReactionsAsync(ReactionEmotes);
 
-            AddCallback(message.Id, pageData.Count(), async (IUserMessage msg, int i) =>
+            AddCallback(message.Id, pageData.Length, async (IUserMessage msg, int i) =>
             {
                 Embed embed = await GetEmbedTask(i);
                 await msg.ModifyAsync((MessageProperties properties) =>

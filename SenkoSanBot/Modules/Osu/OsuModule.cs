@@ -171,7 +171,12 @@ namespace SenkoSanBot.Modules.Osu
             var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, i));
             UserProfile[] results = await Task.WhenAll(taskList);
 
-            await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
+            results = results.Where(res => res != null).ToArray();
+
+            if(results.Length <= 0)
+                await ReplyAsync($"No user **{username}** found");
+            else
+                await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
 
         [Command("osu recent"), Alias("rs")]
