@@ -41,10 +41,17 @@ namespace SenkoSanBot.Modules.Quaver
                     .WithUrl($"https://quavergame.com/profile/{user.Id}")
                     .WithIconUrl(user.AvatarUrl);
             })
-            .AddField("Map", $"**{map.Artist} - {map.Title} [{map.DifficultyName}] ({map.DifficultyRating})**")
-            .AddField("Accuracy", $"{recent.Accuracy.ToString("0.00")}%", true)
-            .AddField("Performance Rating", recent.PerformanceRating.ToString("0.00"), true)
-            .WithThumbnailUrl($"https://quaver.blob.core.windows.net/banners/{map.Id}_banner.jpg")
+            .AddField("Details ▼", $"" +
+            $"__**Main Details**__\n" +
+            $"► Performance: **{recent.PerformanceRating:F2}**\n" +
+            $"► Grade: **{recent.Grade}**\n" +
+            $"► Accuracy: **{recent.Accuracy:F2}**\n" +
+            $"► Combo: **{recent.Combo}**\n" +
+            $"__**Map**__\n" +
+            $"**[{map.Title}](https://quavergame.com/mapsets/map/{map.Id})**\n" +
+            $"► **{map.DifficultyName} [{map.DifficultyRating:F2}☆]**\n" +
+            $"► Made By: **[{map.Creator}]**")
+            .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
             .Build();
 
         [Command("quaver set")]

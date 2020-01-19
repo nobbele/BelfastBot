@@ -87,6 +87,9 @@ namespace QuaverApi
                     Id = score.id.ToObject<uint>(),
                     PerformanceRating = score.performance_rating.ToObject<float>(),
                     Accuracy = score.accuracy.ToObject<float>(),
+                    Combo = score.max_combo.ToObject<uint>(),
+                    Score = score.total_score.ToObject<ulong>(),
+                    Grade = score.grade.ToObject<string>(),
                 };
                 /*recent.Map = new Map
                 {
@@ -119,6 +122,7 @@ namespace QuaverApi
                     DifficultyName = map.difficulty_name.ToObject<string>(),
                     Creator = map.creator_username.ToObject<string>(),
                     DifficultyRating = map.difficulty_rating.ToObject<float>(),
+                    MapSetId = map.mapset_id.ToObject<uint>(),
                 };
             }
         }

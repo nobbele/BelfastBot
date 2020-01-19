@@ -121,7 +121,7 @@ namespace SenkoSanBot.Modules.Osu
             $"__**Beatmap**__\n" +
             $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
             $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
-            $"► Lenght {result.BeatmapData.Length.ToShortForm()}" +
+            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
             $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
@@ -146,7 +146,7 @@ namespace SenkoSanBot.Modules.Osu
             $"__**Beatmap**__\n" +
             $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
             $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
-            $"► Lenght {result.BeatmapData.Length.ToShortForm()}" +
+            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
             $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .Build();
