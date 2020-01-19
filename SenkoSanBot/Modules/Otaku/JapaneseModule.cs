@@ -49,7 +49,7 @@ namespace SenkoSanBot.Modules.Otaku
 
                 string infoDisplay = $"({info})".NothingIfCheckNullOrEmpty(info);
 
-                value += $"{i}. {meaning} {infoDisplay}\n";
+                value += $"{i}. **{meaning} {infoDisplay}**\n";
 
                 i++;
             }
@@ -120,8 +120,9 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithUrl($"{result.MangaUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
-            .WithDescription(result.Synopsis.ShortenText())
-            .AddField("Details",
+            .WithDescription($"__**Description:**__\n" +
+                $"{result.Synopsis.ShortenText()}")
+            .AddField("Details ▼",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
             $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())} [Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}]** \n" +
@@ -139,8 +140,9 @@ namespace SenkoSanBot.Modules.Otaku
                     .WithUrl($"{result.AnimeUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
-            .WithDescription($"{result.Synopsis.ShortenText()}")
-            .AddField("Details", 
+            .WithDescription($"__**Description:**__\n" +
+                $"{result.Synopsis.ShortenText()}")
+            .AddField("Details ▼", 
             $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
             $"► Status: **{result.Status}**\n" +
             $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration}]** \n" +
