@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SenkoSanBot.Modules.Preconditions;
 using SenkoSanBot.Services.Database;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace SenkoSanBot.Modules.Moderation
         [Summary("Warns people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireGuild]
         public async Task WarnAsync([Summary("User that will be warned")] SocketGuildUser target, 
                                [Summary("Reason for warning the user")] [Remainder] string reason = "No reason specified")
         {
@@ -67,6 +69,7 @@ namespace SenkoSanBot.Modules.Moderation
         [Command("kick")]
         [Summary("Kicks people who don't behave properly")]
         [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireGuild]
         public async Task KickUserAsync([Summary("The user who will be kicked")] SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Kicking {target}");
@@ -101,6 +104,7 @@ namespace SenkoSanBot.Modules.Moderation
         [Command("ban")]
         [Summary("Bans people who don't behave properly")]
         [RequireUserPermission(GuildPermission.BanMembers)]
+        [RequireGuild]
         public async Task BanUserAsync([Summary("The user who will be banned")] SocketGuildUser target, [Remainder] string reason = "No reason specified")
         {
             Logger.LogInfo($"Banning {target}");
@@ -134,6 +138,7 @@ namespace SenkoSanBot.Modules.Moderation
 
         [Command("warnings"), Alias("warns")]
         [Summary("Show warnings that a user has")]
+        [RequireGuild]
         public async Task WarningsAsync([Summary("User who's warnings will be displayed")] SocketGuildUser target = null)
         {
             Logger.LogInfo($"Showing {target}'s warnings)");
@@ -175,6 +180,7 @@ namespace SenkoSanBot.Modules.Moderation
         [Command("deletewarn"), Alias("delwarn")]
         [Summary("Deletes a specific warning from a user")]
         [RequireUserPermission(GuildPermission.KickMembers)]
+        [RequireGuild]
         public async Task DeleteWarningAsync([Summary("User who's warning will be deleted")] SocketGuildUser target, int index)
         {
             Logger.LogInfo($"Deleting warning number {index} from {target}");

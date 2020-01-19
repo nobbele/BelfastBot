@@ -5,6 +5,7 @@ using SenkoSanBot.Modules;
 using SenkoSanBot.Services.Scheduler;
 using Newtonsoft.Json;
 using Discord.WebSocket;
+using SenkoSanBot.Modules.Preconditions;
 
 namespace SenkoSanBot.Modules.Misc
 {
@@ -31,6 +32,7 @@ namespace SenkoSanBot.Modules.Misc
         }
 
         [Command("remind me")]
+        [RequireGuild] // For now it cant be run in dm
         public async Task AddReminder(string time, string content)
         {
             if(!DateTimeHelper.TryParseRelative(time, out DateTime end))

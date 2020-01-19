@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using SenkoSanBot.Modules.Preconditions;
 using SenkoSanBot.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace SenkoSanBot.Modules.Moderation
         [Summary("Deletes messages with a given amount")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
         [RequireBotPermission(GuildPermission.ManageMessages)]
+        [RequireGuild]
         public async Task PurgeModule([Summary("Amount of messages to purge")] int amount = 1)
         {
             Logger.LogInfo($"Purge request of {amount} messages from {Context.Channel} sent by {Context.User}");

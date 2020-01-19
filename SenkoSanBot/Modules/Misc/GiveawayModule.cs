@@ -6,6 +6,7 @@ using System;
 using SenkoSanBot.Services.Database;
 using SenkoSanBot.Services.Giveaway;
 using Discord.WebSocket;
+using SenkoSanBot.Modules.Preconditions;
 
 namespace SenkoSanBot.Modules.Misc
 {
@@ -17,6 +18,7 @@ namespace SenkoSanBot.Modules.Misc
 
         [Command("giveaway create")]
         [Summary("Create a giveaway")]
+        [RequireGuild]
         public async Task CreateGiveawayAsync([Summary("Time giveaway will last(ex. 2 days)")] string time, [Summary("What to give away")] string content, uint count = 1) 
         {
             if(!DateTimeHelper.TryParseRelative(time, out DateTime end))
@@ -57,6 +59,7 @@ namespace SenkoSanBot.Modules.Misc
         }
         [Command("giveaway setemoji")]
         [Summary("Sets giveaway emoji")]
+        [RequireGuild]
         public async Task SetEmojiAsync([Summary("Emoji to use")] string emote) 
         {
             DatabaseService.GetServerEntry(Context.Guild.Id).GiveawayReactionEmote = emote;

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SenkoSanBot.Modules.Preconditions;
 
 namespace SenkoSanBot.Modules.Profiles
 {
@@ -87,6 +88,7 @@ namespace SenkoSanBot.Modules.Profiles
 
         [Command("leaderboard")]
         [Summary("Shows server leaderboard")]
+        [RequireGuild]
         public async Task LeaderboardAsync() 
         {
             ServerEntry server = Db.GetServerEntry(Context.Guild.Id);
