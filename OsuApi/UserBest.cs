@@ -1,13 +1,20 @@
-﻿namespace OsuApi
+﻿using Newtonsoft.Json;
+
+namespace OsuApi
 {
-    public struct UserBest
+    public class UserBest
     {
         public UserProfile PlayerData;
         public Beatmap BeatmapData;
-        public string Rank;
-        public ulong Score;
-        public uint Combo;
-        public float PP;
         public OsuAccuracy Accuracy;
+
+        [JsonProperty("rank")]
+        public string Rank;
+        [JsonProperty("score")]
+        public ulong Score;
+        [JsonProperty("maxcombo")]
+        public uint Combo;
+        [JsonProperty("pp")]
+        public float PP;
     }
 }

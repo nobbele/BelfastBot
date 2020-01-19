@@ -25,7 +25,7 @@ namespace SenkoSanBot.Modules.Osu
             await ReplyAsync($"> Your osu name is now set to **{name}**");
         }
 
-        private string GetNameForModeIndex(int mode)
+        private string GetNameForModeIndex(uint mode)
         {
             switch (mode)
             {
@@ -41,7 +41,7 @@ namespace SenkoSanBot.Modules.Osu
             return "Unknown";
         }
 
-        private string GetLinkSuffixForModeIndex(int mode)
+        private string GetLinkSuffixForModeIndex(uint mode)
         {
             switch (mode)
             {
@@ -188,7 +188,7 @@ namespace SenkoSanBot.Modules.Osu
             Logger.LogInfo($"Searching for user {username} on Osu");
 
             const int modeCount = 4;
-            var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, i));
+            var taskList = Enumerable.Range(0, modeCount).Select(i => Client.GetUserAsync(Config.Configuration.OsuApiToken, username, (uint)i));
             UserProfile[] results = await Task.WhenAll(taskList);
 
             results = results.Where(res => res != null).ToArray();
@@ -223,11 +223,11 @@ namespace SenkoSanBot.Modules.Osu
 
             const int modeCount = 4;
             Task<PlayResult>[] taskList = new Task<PlayResult>[modeCount];
-            for(int i = 0; i < modeCount; i++)
+            for(uint i = 0; i < modeCount; i++)
                 taskList[i] = Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i);
             PlayResult[] results = await Task.WhenAll(taskList);
 
-            PlayResult[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
+            PlayResult[] validResults = results.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray();
 
             if(validResults.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
@@ -259,7 +259,7 @@ namespace SenkoSanBot.Modules.Osu
 
             const int modeCount = 4;
             Task<UserBest>[] taskList = new Task<UserBest>[modeCount];
-            for (int i = 0; i < modeCount; i++)
+            for (uint i = 0; i < modeCount; i++)
                 taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i);
             UserBest[] results = await Task.WhenAll(taskList);
 

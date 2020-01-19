@@ -1,4 +1,5 @@
 ﻿using Common;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
@@ -11,7 +12,7 @@ namespace OsuApi
     {
         public static readonly Uri BaseUrl = new Uri("https://osu.ppy.sh/api");
 
-        public static async Task<UserProfile> GetUserAsync(string token, string user, int mode)
+        public static async Task<UserProfile> GetUserAsync(string token, string user, uint mode)
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -22,26 +23,12 @@ namespace OsuApi
                 if(arr.Count <= 0)
                     return null;
 
-                dynamic obj = arr[0];
-
-                dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
-
-                return new UserProfile
-                {
-                    UserId = jsonResult.user_id.ToObject<ulong>(),
-                    UserName = jsonResult.username.ToObject<string>(),
-                    Mode = mode,
-                    PP = jsonResult.pp_raw.ToObject<float?>() ?? (float)0,
-                    Level = jsonResult.level.ToObject<float?>() ?? (float)0,
-                    PlayCount = jsonResult.playcount.ToObject<ulong?>() ?? (ulong)0,
-                    Accuracy = jsonResult.accuracy.ToObject<float?>() ?? (float)0,
-                    GlobalRanking = jsonResult.pp_rank.ToObject<ulong?>() ?? (ulong)0,
-                    CountryRanking = jsonResult.pp_country_rank.ToObject<ulong?>() ?? (ulong)0,
-                    Country = jsonResult.country.ToObject<string>(),
-                };
+                UserProfile profile = arr[0].ToObject<UserProfile>();
+                profile.Mode = mode;
+                return profile;
             }
         }
-        public static async Task<PlayResult> GetUserRecentAsync(string token, string user, int mode)
+        public static async Task<PlayResult> GetUserRecentAsync(string token, string user, uint mode)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -49,93 +36,45 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                dynamic obj = JArray.Parse(json);
+                JArray arr = JArray.Parse(json);
 
-                dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
+                if (arr.Count <= 0)
+                    return null;
 
-                if (jsonResults.Length <= 0)
-                    return new PlayResult();
-                dynamic jsonResult = jsonResults[0];
+                JToken jsonResult = arr[0];
 
-                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode);
+                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
+
+                PlayResult result = jsonResult.ToObject<PlayResult>();
+
+                result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
 
                 await Task.WhenAll(userDataTask, beatmapDataTask);
 
-                return new PlayResult
-                {
-                    PlayerData = userDataTask.Result,
-                    BeatmapData = beatmapDataTask.Result,
-                    Score = jsonResult.score.ToObject<ulong>(),
-                    Combo = jsonResult.maxcombo.ToObject<int>(),
-                    Rank = jsonResult.rank.ToObject<string>(),
-                    Accuracy = mode switch
-                    {
-                        0 => new OsuStdAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                        },
-                        1 => new OsuTaikoAccuracy()
-                        {
-                            CountBad = jsonResult.countmiss.ToObject<uint>(),
-                            CountGood = jsonResult.count100.ToObject<uint>(),
-                            CountGreat = jsonResult.count300.ToObject<uint>(),
-                        },
-                        2 => new OsuCtbAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
-                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
-                        },
-                        3 => new OsuManiaAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
-                            CountGeki = jsonResult.countgeki.ToObject<uint>(),
-                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
-                        },
-                        _ => null,
-                    },
-                };
+                result.PlayerData = userDataTask.Result;
+                result.BeatmapData = beatmapDataTask.Result;
+
+                return result;
             }
         }
 
-        public static async Task<Beatmap> GetBeatmapAsync(string token, ulong id, int mode)
+        public static async Task<Beatmap> GetBeatmapAsync(string token, ulong id, uint mode)
         {
             Console.WriteLine($"Getting beatmap {id} in mode {mode}");
             using (HttpClient httpClient = new HttpClient())
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_beatmaps")}?b={id}&k={token}&m={mode}");
 
-                json = json.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
+                JArray arr = JArray.Parse(json);
 
-                if(string.IsNullOrEmpty(json))
-                    return new Beatmap();
+                if(arr.Count <= 0)
+                    return null;
 
-                dynamic obj = JObject.Parse(json);
-
-                dynamic jsonResult = (dynamic)obj.ToObject<dynamic>();
-
-                return new Beatmap
-                {
-                    Name = jsonResult.title.ToObject<string>(),
-                    CreatorName = jsonResult.creator.ToObject<string>(),
-                    CreatorId = jsonResult.creator_id.ToObject<ulong>(),
-                    Id = jsonResult.beatmap_id.ToObject<ulong>(),
-                    SetId = jsonResult.beatmapset_id.ToObject<ulong>(),
-                    StarRating = jsonResult.difficultyrating.ToObject<float>(),
-                    Bpm = jsonResult.bpm.ToObject<int>(),
-                    Length = TimeSpan.FromSeconds((int)jsonResult.total_length.ToObject<int>())
-                };
+                return arr[0].ToObject<Beatmap>();
             }
         }
 
-        public static async Task<UserBest> GetUserBestAsync(string token, string user, int mode)
+        public static async Task<UserBest> GetUserBestAsync(string token, string user, uint mode)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -143,60 +82,25 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                dynamic obj = JArray.Parse(json);
+                JArray arr = JArray.Parse(json);
 
-                dynamic[] jsonResults = (dynamic[])obj.ToObject<dynamic[]>();
+                if (arr.Count <= 0)
+                    return null;
 
-                if (jsonResults.Length <= 0)
-                    return new UserBest();
-                dynamic jsonResult = jsonResults[0];
+                JToken jsonResult = arr[0];
 
-                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult.beatmap_id.ToObject<ulong>(), mode);
+                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
+
+                UserBest result = jsonResult.ToObject<UserBest>();
+
+                result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
 
                 await Task.WhenAll(userDataTask, beatmapDataTask);
 
-                return new UserBest
-                {
-                    PlayerData = userDataTask.Result,
-                    BeatmapData = beatmapDataTask.Result,
-                    Score = jsonResult.score.ToObject<ulong>(),
-                    Combo = jsonResult.maxcombo.ToObject<uint>(),
-                    Rank = jsonResult.rank.ToObject<string>(),
-                    PP = jsonResult.pp.ToObject<float>(),
-                    Accuracy = mode switch
-                    {
-                        0 => new OsuStdAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                        },
-                        1 => new OsuTaikoAccuracy()
-                        {
-                            CountBad = jsonResult.countmiss.ToObject<uint>(),
-                            CountGood = jsonResult.count100.ToObject<uint>(),
-                            CountGreat = jsonResult.count300.ToObject<uint>(),
-                        },
-                        2 => new OsuCtbAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
-                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
-                        },
-                        3 => new OsuManiaAccuracy()
-                        {
-                            Count50 = jsonResult.count50.ToObject<uint>(),
-                            Count100 = jsonResult.count100.ToObject<uint>(),
-                            Count300 = jsonResult.count300.ToObject<uint>(),
-                            CountKatu = jsonResult.countkatu.ToObject<uint>(),
-                            CountGeki = jsonResult.countgeki.ToObject<uint>(),
-                            CountMiss = jsonResult.countmiss.ToObject<uint>(),
-                        },
-                        _ => null,
-                    },
-                };
+                result.PlayerData = userDataTask.Result;
+                result.BeatmapData = beatmapDataTask.Result;
+
+                return result;
             }
         }
     }

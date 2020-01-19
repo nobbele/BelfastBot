@@ -19,7 +19,7 @@ namespace OsuApiTests
         [DataRow("Nobbele", 1)]
         [DataRow("Nobbele", 2)]
         [DataRow("Nobbele", 3)]
-        public async Task SearchUser(string name, int mode)
+        public async Task SearchUser(string name, uint mode)
         {
             TestContext.WriteLine($"Trying to find {name} on mode {mode}");
             string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
@@ -33,7 +33,7 @@ namespace OsuApiTests
 
         [DataTestMethod]
         [DataRow("Nobbele", 0)]
-        public async Task GetUserRecent(string name, int mode)
+        public async Task GetUserRecent(string name, uint mode)
         {
             TestContext.WriteLine($"Trying to find {name} on mode {mode}");
             string token = Environment.GetEnvironmentVariable("SenkoSanOsuTestToken");
