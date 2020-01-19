@@ -65,7 +65,7 @@ namespace SenkoSanBot.Modules.Profiles
                          .WithName($"Profile of {target.Username}")
                          .WithIconUrl($"{target.GetAvatarUrl()}");
                  })
-                 .AddField("Details:",
+                 .AddField("Details ▼",
                  $"__**Status In Current Server**__\n" +
                  $"► Warn Amount: **{warns}**/{Config.Configuration.MaxWarnAmount}\n" +
                  $"__**Profile**__\n" +
