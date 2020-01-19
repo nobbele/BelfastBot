@@ -23,7 +23,9 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public int MaxWarnAmount { get; internal set; } = 3;
         [DataMember]
-        public string StatusMessage { get; internal set; } = "With My Tail";
+        public string StatusMessage { get; internal set; } = "Over :serverCount: servers";
+        [DataMember]
+        public ActivityType Activity { get; internal set; } = ActivityType.Watching;
         [DataMember]
         public UserStatus OnlineStatus = UserStatus.DoNotDisturb;
         [DataMember]
@@ -74,6 +76,7 @@ namespace SenkoSanBot.Services.Configuration
             WelcomeMessage = WelcomeMessage ?? config.WelcomeMessage;
             MaxWarnAmount = MaxWarnAmount == 0 ? config.MaxWarnAmount : MaxWarnAmount;
             StatusMessage = StatusMessage ?? config.StatusMessage;
+            Activity = Activity;
             // Assume no one that uses this bot has the log channel id be 0
             LogChannelID = LogChannelID == 0 ? config.LogChannelID : LogChannelID;
             BlacklistedWord = BlacklistedWord ?? config.BlacklistedWord;

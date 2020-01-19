@@ -74,7 +74,7 @@ namespace SenkoSanBot
                 };
                 client.Ready += async () =>
                 {
-                    await client.SetGameAsync($"{config.Configuration.StatusMessage}");
+                    await client.SetGameAsync(config.Configuration.StatusMessage.Replace(":serverCount:", client.Guilds.Count.ToString()), type: config.Configuration.Activity);
                     await client.SetStatusAsync(config.Configuration.OnlineStatus);
                 };
 
