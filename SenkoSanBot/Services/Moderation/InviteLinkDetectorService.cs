@@ -25,7 +25,7 @@ namespace SenkoSanBot.Services.Moderation
         {
             m_client.MessageReceived += async (SocketMessage message) =>
             {
-                if ((message.Author as SocketGuildUser)?.GuildPermissions.Administrator ?? false)
+                if ((message.Author as SocketGuildUser)?.GuildPermissions.Administrator ?? true)
                     return;
                 Match match = Regex.Match(message.Content);
                 if (match.Success && !match.Captures.Any(capture => m_config.Configuration.InviteLinkWhitelist == capture.Value))
