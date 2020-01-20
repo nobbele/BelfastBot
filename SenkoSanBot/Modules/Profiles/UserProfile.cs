@@ -17,6 +17,7 @@ namespace SenkoSanBot.Modules.Profiles
     {
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        public DiscordSocketClient Client { get; set; }
 
         private Embed GetUserGachaEmbed(IUser target, string gachaString, EmbedFooterBuilder footer) => new EmbedBuilder()
                  .WithColor(0x53DF1D)
@@ -89,10 +90,13 @@ namespace SenkoSanBot.Modules.Profiles
         [Command("leaderboard"), Alias("lb")]
         [Summary("Shows server leaderboard")]
         [RequireGuild]
-        public async Task LeaderboardAsync() 
+        public async Task LeaderboardAsync(bool global = false) 
         {
-            ServerEntry server = Db.GetServerEntry(Context.Guild.Id);
-            IEnumerable<DatabaseUserEntry> sortedUser = server.Users.OrderByDescending(user => user.Xp);
+            ServerEntry server = Db.GetServerEntry(0);
+            IEnumerable<DatabaseUserEntry> users = server.Users;
+            if(!global)
+                users = users.Where(user => Client.GetUser(user.Id).MutualGuilds.Select(guild => guild.Id).Contains(Context.Guild.Id));
+            IEnumerable<DatabaseUserEntry> sortedUser = users.OrderByDescending(user => user.Xp);
 
             string lbString = sortedUser.Select(user => $"`{Context.Guild.GetUser(user.Id)}` - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
 
