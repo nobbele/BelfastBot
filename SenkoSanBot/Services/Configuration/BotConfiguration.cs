@@ -19,7 +19,11 @@ namespace SenkoSanBot.Services.Configuration
         [DataMember]
         public string Prefix { get; internal set; } = ".";
         [DataMember]
-        public string WelcomeMessage { get; internal set; } = "おかえりなのじや! Welcome {0} to {1}";
+        public string[] WelcomeMessages { get; internal set; } = new string[] 
+        {
+            "おかえりなのじや! Welcome {0} to {1}",
+            "Welcome Home {0} , you've had a long day haven't you?",
+        };
         [DataMember]
         public int MaxWarnAmount { get; internal set; } = 3;
         [DataMember]
@@ -73,7 +77,7 @@ namespace SenkoSanBot.Services.Configuration
             Token = Token ?? config.Token;
             OsuApiToken = OsuApiToken ?? config.OsuApiToken;
             Prefix = Prefix ?? config.Prefix;
-            WelcomeMessage = WelcomeMessage ?? config.WelcomeMessage;
+            WelcomeMessages = WelcomeMessages ?? config.WelcomeMessages;
             MaxWarnAmount = MaxWarnAmount == 0 ? config.MaxWarnAmount : MaxWarnAmount;
             StatusMessage = StatusMessage ?? config.StatusMessage;
             Activity = Activity;

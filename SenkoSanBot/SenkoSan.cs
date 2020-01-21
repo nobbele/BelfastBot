@@ -23,10 +23,13 @@ namespace SenkoSanBot
 {
     public class SenkoSan
     {
+
         public const string Version = "1.2";
 
         public LoggingService Logger { get; private set; }
         public static SenkoSan Instance;
+
+        private Random m_random = new Random(Guid.NewGuid().GetHashCode());
 
         static void Main(string[] args)
         {
@@ -72,9 +75,10 @@ namespace SenkoSanBot
                 var client = services.GetRequiredService<DiscordSocketClient>();
 
                 client.Log += LogMessageAsync;
-                client.UserJoined += async (SocketGuildUser user) => 
+                client.UserJoined += async (SocketGuildUser user) =>
                 {
-                    await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessage, user.Mention, user.Guild.Name));
+                    int welcomeMessageIndex = m_random.Next(0, config.Configuration.WelcomeMessages.Length);
+                    await user.Guild.SystemChannel.SendMessageAsync(string.Format(config.Configuration.WelcomeMessages[welcomeMessageIndex], user.Mention, user.Guild.Name));
                 };
                 client.Ready += async () =>
                 {
@@ -88,9 +92,6 @@ namespace SenkoSanBot
                     throw new ConfigurationException("Default token detected, please put your token in the config file");
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
-
-                //await client.SetGameAsync($"{config.Configuration.StatusMessage}");
-                //await client.SetStatusAsync(config.Configuration.OnlineStatus);
 
                 Logger.LogInfo("Initializing services!");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();

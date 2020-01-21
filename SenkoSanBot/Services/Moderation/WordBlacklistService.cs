@@ -32,10 +32,13 @@ namespace SenkoSanBot.Services.Moderation
             if (!(messageParam is SocketUserMessage))
                 m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
             if ((messageParam.Author as SocketGuildUser)?.GuildPermissions.Administrator ?? false)
+            {
+                m_logger.LogInfo($"The message was sent by an administrator, ignoring.");
                 return;
+            }
             var message = messageParam as SocketUserMessage;
 
-            string letterOnlyMessage = new string(message.Content.Where(c => char.IsLetter(c)).ToArray());
+            string letterOnlyMessage = new string(message.Content.Where(c => char.IsLetter(c) || char.IsWhiteSpace(c)).ToArray());
 
             if (m_config.Configuration.BlacklistedWord.Any(s => letterOnlyMessage.Contains(s, StringComparison.OrdinalIgnoreCase)))
             {
