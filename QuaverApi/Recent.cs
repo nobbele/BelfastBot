@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Quaver.API.Enums;
+using Quaver.API.Helpers;
 
 namespace QuaverApi
 {
@@ -18,5 +20,9 @@ namespace QuaverApi
         public ulong Score;
         [JsonProperty("grade")]
         public string Grade;
+        [JsonProperty("mods")]
+        public ModIdentifier Mods;
+
+        public string ModsString => ModHelper.GetModsString(Mods);
     }
 }

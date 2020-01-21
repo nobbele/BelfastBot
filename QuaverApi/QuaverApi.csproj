@@ -7,5 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Quaver.API\Quaver.API\Quaver.API.csproj" />
   </ItemGroup>
 </Project>

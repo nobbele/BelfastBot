@@ -46,6 +46,7 @@ namespace SenkoSanBot.Modules.Quaver
             $"► Performance: **{recent.PerformanceRating:F2}**\n" +
             $"► Grade: **{recent.Grade}**\n" +
             $"► Accuracy: **{recent.Accuracy:F2}**\n" +
+            $"► Mods: **{recent.ModsString}**\n" +
             $"► Combo: **{recent.Combo}**\n" +
             $"__**Map**__\n" +
             $"**[{map.Title}](https://quavergame.com/mapsets/map/{map.Id})**\n" +
