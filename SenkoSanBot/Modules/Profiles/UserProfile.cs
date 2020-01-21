@@ -126,12 +126,15 @@ namespace SenkoSanBot.Modules.Profiles
 
             DatabaseUserEntry userData = Db.GetUserEntry(0, target.Id);
 
+            if (userData.Cards.Count <= 0)
+            {
+                await Context.Channel.SendMessageAsync($"{Emotes.SenkoShock} You don't seem to have any cards.\nTry .gao to open cards.");
+                return;
+            }
+
             string characterString = userData.Cards.Count > 0 
                 ? userData.Cards.Select(card => $"► **[{card.Name}](https://www.animecharactersdatabase.com/characters.php?id={card.Id})** [{card.Rarity}] x{card.Amount}").NewLineSeperatedString()
                 : "**None**";
-
-            if (userData.Cards.Count <= 0)
-                return;
 
             string[] strings = characterString.NCharLimitToClosestDelimeter(512, "\n");
 
