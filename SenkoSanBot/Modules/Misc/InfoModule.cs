@@ -1,7 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SenkoSanBot.Services.Pagination;
 
 namespace SenkoSanBot.Modules.Misc
 {
@@ -9,6 +11,7 @@ namespace SenkoSanBot.Modules.Misc
     public class InfoModule : SenkoSanModuleBase
     {
         public CommandService Command { get; set; }
+        public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("help")]
         public async Task HelpAsync([Remainder] string command = null)
@@ -21,31 +24,41 @@ namespace SenkoSanBot.Modules.Misc
                 await CommandHelp(command);
         }
 
+        private int modulesPerPage = 5;
+
         private async Task ModulesHelp()
         {
-            EmbedBuilder builder = new EmbedBuilder();
+            ModuleInfo[] moduleInfos = Command.Modules.GroupBy(x => x.Name).Select(y => y.First()).ToArray();
 
-            builder.Description = $"Do {Prefix}help [command] to get more information about a command";
-            builder.WithThumbnailUrl(Emotes.SenkoThink.Url);
-            builder.WithColor(0xffae0d);
+            EmbedBuilder[] builders = new EmbedBuilder[(moduleInfos.Length / modulesPerPage) + 1];
+
+            for(int j = 0; j < builders.Length; j++)
+            {
+                EmbedBuilder builder = builders[j] = new EmbedBuilder();
+                builder.Description = $"Do {Prefix}help [command] to get more information about a command";
+                builder.WithThumbnailUrl(Emotes.SenkoThink.Url);
+                builder.WithColor(0xffae0d);
+            }
 
             int i = 0;
 
-            foreach (ModuleInfo module in Command.Modules.GroupBy(x => x.Name).Select(y => y.First()))
+            foreach (ModuleInfo module in moduleInfos)
             {
-                i++;
-
                 string[] commandNames = module.Commands.Select(cmd => cmd.Name).ToArray();
+
+                EmbedBuilder builder = builders[i / modulesPerPage];
 
                 if (commandNames.Length > 0)
                 {
-                    builder.AddField($"{i}", $"" +
+                    builder.AddField($"{i+1}", $"" +
                         $"__**{module.Name.Replace("Module", " ")} - {module.Summary ?? ""}**__\n" +
                         $"{commandNames.CommaSeperatedString()}");
                 }
+
+                i++;
             }
 
-            await ReplyAsync(embed: builder.Build());
+            await PaginatedMessageService.SendPaginatedEmbedMessageAsync(Context.Channel, builders);
         }
 
         private async Task CommandHelp(string command)

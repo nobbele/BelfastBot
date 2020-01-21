@@ -139,7 +139,7 @@ namespace SenkoSanBot.Services.Pagination
 
         public async Task SendPaginatedDataAsyncMessageAsync<T>(IMessageChannel channel, T[] pageData, Func<T, int, EmbedFooterBuilder, Task<Embed>> getEmbed)
         {
-             Task<Embed> GetEmbedTask(int i)
+            Task<Embed> GetEmbedTask(int i)
             {
                 return getEmbed(pageData[i], i, new EmbedFooterBuilder().WithText($"page {i + 1} out of {pageData.Length}"));
             }
@@ -157,6 +157,28 @@ namespace SenkoSanBot.Services.Pagination
                 await msg.ModifyAsync((MessageProperties properties) =>
                 {
                     properties.Embed = Optional.Create(embed);
+                });
+            });
+        }
+
+        public async Task SendPaginatedEmbedMessageAsync(IMessageChannel channel, EmbedBuilder[] embeds)
+        {
+            Embed GetEmbed(int i) => embeds[i]
+                    .WithFooter(new EmbedFooterBuilder().WithText($"page {i + 1} out of {embeds.Length}"))
+                    .Build();
+
+            if(embeds.Length <= 0)
+                throw new ArgumentException("Passed zero length array");
+
+            IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
+
+            await message.AddReactionsAsync(ReactionEmotes);
+
+            AddCallback(message.Id, embeds.Length, async (IUserMessage msg, int i) =>
+            {
+                await msg.ModifyAsync((MessageProperties properties) =>
+                {
+                    properties.Embed = Optional.Create(GetEmbed(i));
                 });
             });
         }
