@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimeCharacterDatabaseApi",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuaverApi", "QuaverApi\QuaverApi.csproj", "{485428A5-CCAA-447E-BF89-84F956FACB23}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quaver.API", "Quaver.API\Quaver.API\Quaver.API.csproj", "{56D7BEF5-C470-4BCC-92D6-D43B77BEF87A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{485428A5-CCAA-447E-BF89-84F956FACB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{485428A5-CCAA-447E-BF89-84F956FACB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{485428A5-CCAA-447E-BF89-84F956FACB23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D7BEF5-C470-4BCC-92D6-D43B77BEF87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D7BEF5-C470-4BCC-92D6-D43B77BEF87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D7BEF5-C470-4BCC-92D6-D43B77BEF87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D7BEF5-C470-4BCC-92D6-D43B77BEF87A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
