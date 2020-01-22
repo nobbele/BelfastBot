@@ -11,8 +11,12 @@ namespace OsuApi
         [JsonProperty("score")]
         public ulong Score;
         [JsonProperty("maxcombo")]
-        public int Combo;
+        public uint Combo;
         [JsonProperty("rank")]
-        public string Rank;      
+        public string Rank;    
+        [JsonProperty("enabled_mods")]
+        public Mods Mods;
+        [JsonProperty("pp")]
+        public float PP = float.NaN;
     }
 }

@@ -36,26 +36,53 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                JArray arr = JArray.Parse(json);
-
-                if (arr.Count <= 0)
-                    return null;
-
-                JToken jsonResult = arr[0];
-
-                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
-
-                PlayResult result = jsonResult.ToObject<PlayResult>();
-
-                result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
-
-                await Task.WhenAll(userDataTask, beatmapDataTask);
-
-                result.PlayerData = userDataTask.Result;
-                result.BeatmapData = beatmapDataTask.Result;
+                PlayResult result = await GetPlayResultAsync(token, mode, json, userDataTask);
 
                 return result;
             }
+        }
+
+        public static async Task<UserBest> GetUserBestAsync(string token, string user, uint mode)
+        {
+            Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
+
+                PlayResult result = await GetPlayResultAsync(token, mode, json, userDataTask);
+
+                if(result == null)
+                    return null;
+
+                return new UserBest()
+                {
+                    PlayResult = result,
+                };
+            }
+        }
+
+        private static async Task<PlayResult> GetPlayResultAsync(string token, uint mode, string json, Task<UserProfile> userDataTask)
+        {
+            JArray arr = JArray.Parse(json);
+
+            if (arr.Count <= 0)
+                return null;
+
+            JToken jsonResult = arr[0];
+
+            Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
+
+            PlayResult result = jsonResult.ToObject<PlayResult>();
+
+            result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
+
+            await Task.WhenAll(userDataTask, beatmapDataTask);
+
+            result.PlayerData = userDataTask.Result;
+            result.BeatmapData = beatmapDataTask.Result;
+
+            return result;
         }
 
         public static async Task<Beatmap> GetBeatmapAsync(string token, ulong id, uint mode)
@@ -71,36 +98,6 @@ namespace OsuApi
                     return null;
 
                 return arr[0].ToObject<Beatmap>();
-            }
-        }
-
-        public static async Task<UserBest> GetUserBestAsync(string token, string user, uint mode)
-        {
-            Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
-
-                JArray arr = JArray.Parse(json);
-
-                if (arr.Count <= 0)
-                    return null;
-
-                JToken jsonResult = arr[0];
-
-                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
-
-                UserBest result = jsonResult.ToObject<UserBest>();
-
-                result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
-
-                await Task.WhenAll(userDataTask, beatmapDataTask);
-
-                result.PlayerData = userDataTask.Result;
-                result.BeatmapData = beatmapDataTask.Result;
-
-                return result;
             }
         }
     }

@@ -54,8 +54,8 @@ namespace SenkoSanBot.Modules.Osu
             {
                 case "SS":
                     return Emotes.OsuSS;
-                case "SSH":
-                    return Emotes.OsuSSH;
+                case "XH":
+                    return Emotes.OsuXH;
                 case "S":
                     return Emotes.OsuS;
                 case "SH":
@@ -107,6 +107,8 @@ namespace SenkoSanBot.Modules.Osu
             $"__**Main Details**__\n" +
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
             $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
+            $"► PP: **{result.PP:F2}**\n" +
+            $"► Mods: **{result.Mods.ToShortString()}**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
             $"__**Beatmap**__\n" +
@@ -118,29 +120,8 @@ namespace SenkoSanBot.Modules.Osu
             .WithFooter(footer)
             .Build();
 
-        private Embed GetUserBestEmbed(UserBest result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-            .WithColor(0xE664A0)
-            .WithFooter(footer)
-            .WithAuthor(author => {
-                author
-                    .WithName($"{result.PlayerData.UserName}'s Best Plays on osu!{GetNameForModeIndex(result.PlayerData.Mode)}")
-                    .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
-                    .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
-            })
-            .AddField($"Details ▼", $"" +
-            $"__**Main Details**__\n" +
-            $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
-            $"► PP: **{result.PP:F2}**\n" +
-            $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
-            $"► Score: **{result.Score}**\n" +
-            $"► Combo: **{result.Combo}**\n" +
-            $"__**Beatmap**__\n" +
-            $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
-            $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
-            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
-            $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
-            .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
-            .Build();
+        private Embed GetUserBestEmbed(UserBest result, int index, EmbedFooterBuilder footer) => 
+            GetBeatmapResultEmbed(result.PlayResult, index, footer);
 
         private string GetOsuUsername(IUser user)
         {
@@ -263,7 +244,7 @@ namespace SenkoSanBot.Modules.Osu
                 taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i);
             UserBest[] results = await Task.WhenAll(taskList);
 
-            UserBest[] validResults = results.Where(result => result.BeatmapData.Id != 0).ToArray();
+            UserBest[] validResults = results.Where(result => (result?.PlayResult.BeatmapData.Id ?? 0) != 0).ToArray();
 
             if(validResults.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);

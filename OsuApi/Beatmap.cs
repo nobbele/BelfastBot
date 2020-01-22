@@ -14,7 +14,7 @@ namespace OsuApi
         [JsonProperty("difficultyrating")]
         public float StarRating;
         [JsonProperty("bpm")]
-        public int Bpm;
+        public float Bpm;
         [JsonProperty("total_length"), JsonConverter(typeof(TimeSpanSecondsConverter))]
         public TimeSpan Length;
         [JsonProperty("creator")]
