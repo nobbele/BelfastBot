@@ -25,7 +25,7 @@ namespace AnimeApi
 
                 return new AnimeResult
                 {
-                    Id = jsonResult.mal_id,
+                    MalId = jsonResult.mal_id,
                     Status = jsonResult.status,
                     Title = jsonResult.title,
                     Synopsis = jsonResult.synopsis,
@@ -33,7 +33,7 @@ namespace AnimeApi
                     Episodes = jsonResult.episodes.ToObject<int?>(),
                     Score = jsonResult.score.ToObject<float?>(),
                     ImageUrl = jsonResult.image_url,
-                    AnimeUrl = jsonResult.url,
+                    SiteUrl = jsonResult.url,
                     //Detailed
                     Source = jsonResult.source,
                     Duration = jsonResult.duration,

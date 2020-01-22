@@ -72,10 +72,9 @@ namespace SenkoSanBot.Modules.Otaku
                 .Build();
         }
 
-        //Mal Module
         [Command("malanime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        public async Task SearchMalAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -83,7 +82,7 @@ namespace SenkoSanBot.Modules.Otaku
             AnimeApi.AnimeResult[] resultCache = new AnimeApi.AnimeResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
-                if (resultCache[index].Id != 0)
+                if (resultCache[index].MalId != 0)
                     return GetAnimeResultEmbed(resultCache[index], index, footer);
                 else
                 {
@@ -94,7 +93,7 @@ namespace SenkoSanBot.Modules.Otaku
         }
 
         [Command("malmanga"), Alias("malm")]
-        public async Task SearchMangaAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        public async Task SearchMalMangaAsync([Summary("Title to search")] [Remainder]string name = "Senko")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -112,13 +111,23 @@ namespace SenkoSanBot.Modules.Otaku
             });
         }
 
+        [Command("alanime"), Alias("ala")]
+        [Summary("Search for anime on anilist")]
+        public async Task SearchAlAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        {
+            Logger.LogInfo($"Searching for {name} on anilist");
+
+            AnimeApi.AnimeResult animeResult = await AnimeApi.AnilistClient.GetAnimeAsync(name);
+
+            await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
+        }
+
         private Embed GetMangaResultEmbed(AnimeApi.MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
                     .WithName($"{result.Title}")
-                    .WithUrl($"{result.MangaUrl}")
-                    .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+                    .WithUrl($"{result.MangaUrl}");
             })
             .WithDescription($"" +
             $"__**Description:**__\n" +
@@ -138,7 +147,7 @@ namespace SenkoSanBot.Modules.Otaku
             .WithAuthor(author => {
                 author
                     .WithName($"{result.Title}")
-                    .WithUrl($"{result.AnimeUrl}")
+                    .WithUrl($"{result.SiteUrl}")
                     .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
             })
             .WithDescription($"" +

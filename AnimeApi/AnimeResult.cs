@@ -2,7 +2,8 @@
 {
     public struct AnimeResult
     {
-        public ulong Id;
+        public ulong MalId;
+        public ulong AlId;
         public string Status;
         public string Title;
         public string Synopsis;
@@ -10,7 +11,7 @@
         public int? Episodes;
         public float? Score;
         public string ImageUrl;
-        public string AnimeUrl;
+        public string SiteUrl;
         //Detailed Information
         public string Source;
         public string Duration;

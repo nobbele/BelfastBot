@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-  </ItemGroup>
+  <PackageReference Include="GraphQL.Client" Version="1.0.3" />  
+</ItemGroup>
 
 </Project>
