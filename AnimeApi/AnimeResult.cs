@@ -1,4 +1,4 @@
-﻿namespace MalApi
+﻿namespace AnimeApi
 {
     public struct AnimeResult
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace MalApi
+namespace AnimeApi
 {
-    public static class Client
+    public static class MalClient
     {
         public static readonly Uri BaseUri = new Uri("https://api.jikan.moe/v3");
 

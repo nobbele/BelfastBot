@@ -79,15 +79,15 @@ namespace SenkoSanBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            ulong[] ids = await MalApi.Client.GetAnimeIdAsync(name);
-            MalApi.AnimeResult[] resultCache = new MalApi.AnimeResult[ids.Length];
+            ulong[] ids = await AnimeApi.MalClient.GetAnimeIdAsync(name);
+            AnimeApi.AnimeResult[] resultCache = new AnimeApi.AnimeResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
                 if (resultCache[index].Id != 0)
                     return GetAnimeResultEmbed(resultCache[index], index, footer);
                 else
                 {
-                    MalApi.AnimeResult result = resultCache[index] = await MalApi.Client.GetDetailedAnimeResultsAsync(id);
+                    AnimeApi.AnimeResult result = resultCache[index] = await AnimeApi.MalClient.GetDetailedAnimeResultsAsync(id);
                     return GetAnimeResultEmbed(result, index, footer);
                 }
             });
@@ -98,21 +98,21 @@ namespace SenkoSanBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            ulong[] ids = await MalApi.Client.GetMangaIdAsync(name);
-            MalApi.MangaResult[] resultCache = new MalApi.MangaResult[ids.Length];
+            ulong[] ids = await AnimeApi.MalClient.GetMangaIdAsync(name);
+            AnimeApi.MangaResult[] resultCache = new AnimeApi.MangaResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
                 if (resultCache[index].Id != 0)
                     return GetMangaResultEmbed(resultCache[index], index, footer);
                 else
                 {
-                    MalApi.MangaResult result = resultCache[index] = await MalApi.Client.GetDetailedMangaResultsAsync(id);
+                    AnimeApi.MangaResult result = resultCache[index] = await AnimeApi.MalClient.GetDetailedMangaResultsAsync(id);
                     return GetMangaResultEmbed(result, index, footer);
                 }
             });
         }
 
-        private Embed GetMangaResultEmbed(MalApi.MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetMangaResultEmbed(AnimeApi.MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
@@ -133,7 +133,7 @@ namespace SenkoSanBot.Modules.Otaku
             .WithImageUrl(result.ImageUrl)
             .Build();
 
-        private Embed GetAnimeResultEmbed(MalApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetAnimeResultEmbed(AnimeApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
