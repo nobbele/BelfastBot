@@ -23,7 +23,6 @@ namespace SenkoSanBot
 {
     public class SenkoSan
     {
-
         public const string Version = "1.2";
 
         public LoggingService Logger { get; private set; }
