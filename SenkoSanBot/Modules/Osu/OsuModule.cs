@@ -108,7 +108,7 @@ namespace SenkoSanBot.Modules.Osu
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
             $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
             $"► PP: **{result.PP:F2}**\n" +
-            $"► Mods: **{result.Mods.ToShortString()}**\n" +
+            $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
             $"__**Beatmap**__\n" +
