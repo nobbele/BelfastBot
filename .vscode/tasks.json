@@ -1,12 +1,12 @@
 {
     "version": "2.0.0",
     "tasks": [{
-            "label": "Build YohaneBot (Debug)",
+            "label": "Build YohaneDiscordClient (Debug)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneBot",
+                "YohaneDiscordClient",
                 "--no-restore",
                 "/p:Configuration=Debug",
                 "/p:GenerateFullPaths=true",
@@ -15,12 +15,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build YohaneBot (Release)",
+            "label": "Build YohaneDiscordClient (Release)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneBot",
+                "YohaneDiscordClient",
                 "--no-restore",
                 "/p:Configuration=Release",
                 "/p:GenerateFullPaths=true",

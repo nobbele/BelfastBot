@@ -32,7 +32,7 @@ namespace YohaneBot.Services.Commands
         {
             m_client.MessageReceived += HandleCommandAsync;
 
-            await m_command.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
+            await m_command.AddModulesAsync(assembly: Assembly.GetAssembly(typeof(CommandHandlingService)),
                                             services: m_services);
         }
 

@@ -2,18 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "YohaneBot (Debug)",
+            "name": "YohaneDiscordClient (Debug)",
             "type":"coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0/YohaneBot.dll"
+                "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0/YohaneDiscordClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0/",
-            "preLaunchTask": "Build YohaneBot (Debug)",
+            "cwd": "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0/",
+            "preLaunchTask": "Build YohaneDiscordClient (Debug)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -21,18 +21,18 @@
             }
         },
         {
-            "name": "YohaneBot (Release)",
+            "name": "YohaneDiscordClient (Release)",
             "type": "coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0/YohaneBot.dll"
+                "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0/YohaneDiscordClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0/",
-            "preLaunchTask": "Build YohaneBot (Release)",
+            "cwd": "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0/",
+            "preLaunchTask": "Build YohaneDiscordClient (Release)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {

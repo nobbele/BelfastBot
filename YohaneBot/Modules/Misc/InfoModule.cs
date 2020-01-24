@@ -14,6 +14,7 @@ namespace YohaneBot.Modules.Misc
         public CommandService Command { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient Client { get; set; } 
+        public IClient Yohane { get; set; }
 
 	[Command("servers"), RequireOwner]
 	public async Task ServersAsync()

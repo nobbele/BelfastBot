@@ -16,14 +16,14 @@ using YohaneBot.Services.Pagination;
 using YohaneBot.Services.Credits;
 using YohaneBot.Services.Giveaway;
 using YohaneBot.Services.Scheduler;
+using YohaneBot;
 using System.Threading;
 
-[assembly: InternalsVisibleTo("YohaneBotTests")]
-namespace YohaneBot
+namespace YohaneDiscordClient
 {
-    public class Yohane
+    public class Yohane : IClient
     {
-        public const string Version = "1.2";
+        public string Version => "1.2-Discord";
 
         public LoggingService Logger { get; private set; }
         public static Yohane Instance;
@@ -143,14 +143,15 @@ namespace YohaneBot
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton<IDiscordClient, DiscordSocketClient>()
-                .AddSingleton<BaseSocketClient, DiscordSocketClient>()
+                    .AddSingleton<IDiscordClient>(coll => coll.GetRequiredService<DiscordSocketClient>())
+                    .AddSingleton<BaseSocketClient>(coll => coll.GetRequiredService<DiscordSocketClient>())
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<ICommandHandlingService, CommandHandlingService>()
                 .AddSingleton<CommandLineHandlingService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<Yohane>()
+                    .AddSingleton<IClient>(coll => coll.GetRequiredService<Yohane>())
                 .AddSingleton<JsonDatabaseService>()
                 .AddSingleton<WordBlacklistService>()
                 .AddSingleton<LoggingService>()

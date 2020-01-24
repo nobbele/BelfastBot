@@ -14,7 +14,7 @@ namespace YohaneBot.Services.Commands
         private readonly CommandService m_command;
         private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
-        private readonly Yohane m_yohane;
+        private readonly IClient m_yohane;
         private readonly JsonDatabaseService m_database;
 
         public CommandLineHandlingService(IServiceProvider services)
@@ -22,7 +22,7 @@ namespace YohaneBot.Services.Commands
             m_command = services.GetRequiredService<CommandService>();
             m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
-            m_yohane = services.GetRequiredService<Yohane>();
+            m_yohane = services.GetRequiredService<IClient>();
             m_database = services.GetRequiredService<JsonDatabaseService>();
         }
 

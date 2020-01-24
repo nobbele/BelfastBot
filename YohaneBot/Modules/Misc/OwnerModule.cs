@@ -12,7 +12,7 @@ namespace YohaneBot.Modules.Misc
     [Summary("Commands that are only for owner")]
     public class OwnerModule : YohaneModuleBase
     {
-        public Yohane Yohane { get; set; }
+        public IClient Yohane { get; set; }
         public JsonDatabaseService Db { get; set; }
 
         [Command("stop")]
