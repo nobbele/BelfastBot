@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using YohaneBot.Services.Configuration;
 using YohaneBot.Services.Logging;
 using Discord;
+using System.Linq;
 
 #nullable enable
 
@@ -42,12 +43,25 @@ namespace YohaneBot.Services.Commands
                                             services: m_services);
         }
 
+        private bool IsIntentionalCommand(string message)
+        {
+            if(!message.Substring(m_config.Configuration.Prefix.Length).Any(c => char.IsLetter(c)))
+                return false;
+            return true;
+        }
+
         public async Task HandleCommandAsync(SocketMessage messageParam)
         {
             var message = messageParam as SocketUserMessage;
 
             if (message == null)
                 m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
+
+            if(!IsIntentionalCommand(message!.Content))
+            {
+                m_logger.LogInfo("Probably unintentional command, ignoring");
+                return;
+            }
 
             int argPos = 0;
 
