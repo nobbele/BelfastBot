@@ -2,18 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "SenkoSanBot (Debug)",
+            "name": "YohaneBot (Debug)",
             "type":"coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0/SenkoSanBot.dll"
+                "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0/YohaneBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0/",
-            "preLaunchTask": "Build SenkoSanBot (Debug)",
+            "cwd": "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0/",
+            "preLaunchTask": "Build YohaneBot (Debug)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneBot/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -21,18 +21,18 @@
             }
         },
         {
-            "name": "SenkoSanBot (Release)",
+            "name": "YohaneBot (Release)",
             "type": "coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0/SenkoSanBot.dll"
+                "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0/YohaneBot.dll"
             ],
-            "cwd": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0/",
-            "preLaunchTask": "Build SenkoSanBot (Release)",
+            "cwd": "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0/",
+            "preLaunchTask": "Build YohaneBot (Release)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/SenkoSanBot/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneBot/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {

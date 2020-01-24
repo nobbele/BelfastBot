@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SenkoSanBot", "SenkoSanBot\SenkoSanBot.csproj", "{D6B77B37-B35E-4926-AC17-DD99A4369BFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YohaneBot", "YohaneBot\YohaneBot.csproj", "{D6B77B37-B35E-4926-AC17-DD99A4369BFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeBooruApi", "SafeBooruApi\SafeBooruApi.csproj", "{ED107408-E37B-45B8-8CBE-2A287B964EC1}"
 EndProject
