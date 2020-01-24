@@ -1,12 +1,12 @@
 {
     "version": "2.0.0",
     "tasks": [{
-            "label": "Build SenkoSanBot (Debug)",
+            "label": "Build YohaneBot (Debug)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "SenkoSanBot",
+                "YohaneBot",
                 "--no-restore",
                 "/p:Configuration=Debug",
                 "/p:GenerateFullPaths=true",
@@ -15,12 +15,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build SenkoSanBot (Release)",
+            "label": "Build YohaneBot (Release)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "SenkoSanBot",
+                "YohaneBot",
                 "--no-restore",
                 "/p:Configuration=Release",
                 "/p:GenerateFullPaths=true",
