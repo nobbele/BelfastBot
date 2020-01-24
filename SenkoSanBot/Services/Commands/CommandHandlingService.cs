@@ -64,7 +64,7 @@ namespace SenkoSanBot.Services.Commands
 
             if(result == null)
             {
-                await context.Channel.SendMessageAsync($"Command timed out");
+                await context.Channel.SendMessageAsync($"{Emotes.SenkoPout} うや～！ Command timed out");
             }
             else if (!result.IsSuccess)
             {

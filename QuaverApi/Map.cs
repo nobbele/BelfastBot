@@ -17,6 +17,6 @@ namespace QuaverApi
         [JsonProperty("difficulty_rating")]
         public float DifficultyRating;
         [JsonProperty("mapset_id")]
-        public uint MapSetId;
+        public int MapSetId;
     }
 }

@@ -107,7 +107,8 @@ namespace SenkoSanBot.Modules.Misc
                 .AddField("About ▼", $"" +
                 $"► Made by: **Team Shinaosu**\n" +
                 $"► Version: **{SenkoSan.Version}**\n" +
-                $"► Developers: **[Nobbele](https://github.com/nobbele) & [TheJayDuck](https://github.com/thejayduck)**")
+                $"► Developers: **[Nobbele](https://github.com/nobbele) & [TheJayDuck](https://github.com/thejayduck)**\n" +
+                $"► Status: **Still In Development**")
                 .WithFooter("09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/629383238917292042/29692031.png")
                 .Build();

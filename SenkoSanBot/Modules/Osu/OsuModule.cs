@@ -53,23 +53,23 @@ namespace SenkoSanBot.Modules.Osu
             switch(rank)
             {
                 case "SS":
-                    return Emotes.OsuSS;
+                    return Emotes.SS;
                 case "XH":
-                    return Emotes.OsuXH;
+                    return Emotes.XH;
                 case "S":
-                    return Emotes.OsuS;
+                    return Emotes.S;
                 case "SH":
-                    return Emotes.OsuSH;
+                    return Emotes.SH;
                 case "A":
-                    return Emotes.OsuA;
+                    return Emotes.A;
                 case "B":
-                    return Emotes.OsuB;
+                    return Emotes.B;
                 case "C":
-                    return Emotes.OsuC;
+                    return Emotes.C;
                 case "D":
-                    return Emotes.OsuD;
+                    return Emotes.D;
                 case "F":
-                    return Emotes.OsuF;
+                    return Emotes.F;
             }
             return Emotes.SenkoShock;
         }
@@ -111,7 +111,7 @@ namespace SenkoSanBot.Modules.Osu
             $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
-            $"__**Beatmap**__\n" +
+            $"__**Beatmap**__ {Emotes.Note}\n" +
             $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
             $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
             $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +

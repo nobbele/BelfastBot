@@ -44,16 +44,40 @@ namespace SenkoSanBot.Modules.Quaver
             .AddField("Details ▼", $"" +
             $"__**Main Details**__\n" +
             $"► Performance: **{recent.PerformanceRating:F2}**\n" +
-            $"► Grade: **{recent.Grade}**\n" +
+            $"► Grade: **{GetEmoteForRank(recent.Grade)}**\n" +
             $"► Accuracy: **{recent.Accuracy:F2}**\n" +
             $"► Mods: **{recent.ModsString}**\n" +
             $"► Combo: **{recent.Combo}**\n" +
-            $"__**Map**__\n" +
+            $"__**Map**__ {Emotes.Note}\n" +
             $"**[{map.Title}](https://quavergame.com/mapsets/map/{map.Id})**\n" +
             $"► **{map.DifficultyName} [{map.DifficultyRating:F2}☆]**\n" +
             $"► Made By: **[{map.Creator}]**")
             .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
             .Build();
+
+        private IEmote GetEmoteForRank(string rank)
+        {
+            switch (rank)
+            {
+                case "X":
+                    return Emotes.X;
+                case "SS":
+                    return Emotes.SS;
+                case "S":
+                    return Emotes.S;
+                case "A":
+                    return Emotes.A;
+                case "B":
+                    return Emotes.B;
+                case "C":
+                    return Emotes.C;
+                case "D":
+                    return Emotes.D;
+                case "F":
+                    return Emotes.F;
+            }
+            return Emotes.SenkoShock;
+        }
 
         [Command("quaverset")]
         [Summary("Sets the user name for quaver commands")]
