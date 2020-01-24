@@ -14,7 +14,7 @@ namespace YohaneBot.Services.Commands
         private readonly CommandService m_command;
         private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
-        private readonly Yohane m_senko;
+        private readonly Yohane m_yohane;
         private readonly JsonDatabaseService m_database;
 
         public CommandLineHandlingService(IServiceProvider services)
@@ -22,7 +22,7 @@ namespace YohaneBot.Services.Commands
             m_command = services.GetRequiredService<CommandService>();
             m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
-            m_senko = services.GetRequiredService<Yohane>();
+            m_yohane = services.GetRequiredService<Yohane>();
             m_database = services.GetRequiredService<JsonDatabaseService>();
         }
 
@@ -34,7 +34,7 @@ namespace YohaneBot.Services.Commands
         {
             while (true)
             {
-                if (m_senko.Stopped)
+                if (m_yohane.Stopped)
                     break;
                 if (Console.KeyAvailable)
                 {
@@ -91,7 +91,7 @@ namespace YohaneBot.Services.Commands
             {
                 case "stop":
                 case "kill":
-                    BotCommandLineCommands.Stop(m_senko);
+                    m_yohane.Stop();
                 break;
 
                 case "db":

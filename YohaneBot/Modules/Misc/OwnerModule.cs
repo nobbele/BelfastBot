@@ -12,7 +12,7 @@ namespace YohaneBot.Modules.Misc
     [Summary("Commands that are only for owner")]
     public class OwnerModule : YohaneModuleBase
     {
-        public Yohane Senko { get; set; }
+        public Yohane Yohane { get; set; }
         public JsonDatabaseService Db { get; set; }
 
         [Command("stop")]
@@ -23,7 +23,7 @@ namespace YohaneBot.Modules.Misc
             Logger.LogInfo($"{Context.User} stopped senko");
             await ReplyAsync("Stopping...");
 
-            BotCommandLineCommands.Stop(Senko);
+            Yohane.Stop();
         }
 
         [Command("coin add")]
