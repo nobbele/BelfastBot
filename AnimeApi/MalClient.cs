@@ -41,6 +41,7 @@ namespace AnimeApi
                     TrailerUrl = jsonResult.trailer_url,
                     Studio = studio?.name,
                     StudioUrl = studio?.url,
+                    ApiType = ApiType.MyAnimeList,
                 };
             }
         }
@@ -74,6 +75,7 @@ namespace AnimeApi
                         Name = (string)author.name.ToObject<string>(),
                         Url = (string)author.url.ToObject<string>()
                     }).ToArray(),
+                    ApiType = ApiType.MyAnimeList,
                 };
             }
         }

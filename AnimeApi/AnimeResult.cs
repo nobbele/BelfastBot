@@ -2,6 +2,7 @@
 {
     public struct AnimeResult
     {
+        public ApiType ApiType;
         public ulong MalId;
         public ulong AlId;
         public string Status;

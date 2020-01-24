@@ -6,6 +6,7 @@ using YohaneBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using AnimeApi;
 
 namespace YohaneBot.Modules.Otaku
 {
@@ -78,15 +79,15 @@ namespace YohaneBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            ulong[] ids = await AnimeApi.MalClient.GetAnimeIdAsync(name);
-            AnimeApi.AnimeResult[] resultCache = new AnimeApi.AnimeResult[ids.Length];
+            ulong[] ids = await MalClient.GetAnimeIdAsync(name);
+            AnimeResult[] resultCache = new AnimeResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
                 if (resultCache[index].MalId != 0)
                     return GetAnimeResultEmbed(resultCache[index], index, footer);
                 else
                 {
-                    AnimeApi.AnimeResult result = resultCache[index] = await AnimeApi.MalClient.GetDetailedAnimeResultsAsync(id);
+                    AnimeResult result = resultCache[index] = await MalClient.GetDetailedAnimeResultsAsync(id);
                     return GetAnimeResultEmbed(result, index, footer);
                 }
             });
@@ -97,15 +98,15 @@ namespace YohaneBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
-            ulong[] ids = await AnimeApi.MalClient.GetMangaIdAsync(name);
-            AnimeApi.MangaResult[] resultCache = new AnimeApi.MangaResult[ids.Length];
+            ulong[] ids = await MalClient.GetMangaIdAsync(name);
+            MangaResult[] resultCache = new MangaResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
                 if (resultCache[index].Id != 0)
                     return GetMangaResultEmbed(resultCache[index], index, footer);
                 else
                 {
-                    AnimeApi.MangaResult result = resultCache[index] = await AnimeApi.MalClient.GetDetailedMangaResultsAsync(id);
+                    MangaResult result = resultCache[index] = await MalClient.GetDetailedMangaResultsAsync(id);
                     return GetMangaResultEmbed(result, index, footer);
                 }
             });
@@ -117,17 +118,18 @@ namespace YohaneBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {name} on anilist");
 
-            AnimeApi.AnimeResult animeResult = await AnimeApi.AnilistClient.GetAnimeAsync(name);
+            AnimeResult animeResult = await AnilistClient.GetAnimeAsync(name);
 
             await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
         }
 
-        private Embed GetMangaResultEmbed(AnimeApi.MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetMangaResultEmbed(MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
                     .WithName($"{result.Title}")
-                    .WithUrl($"{result.MangaUrl}");
+                    .WithUrl($"{result.MangaUrl}")
+                    .WithIconUrl(result.ApiType.ToIconUrl());
             })
             .WithDescription($"" +
             $"__**Description:**__\n" +
@@ -142,13 +144,13 @@ namespace YohaneBot.Modules.Otaku
             .WithImageUrl(result.ImageUrl)
             .Build();
 
-        private Embed GetAnimeResultEmbed(AnimeApi.AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetAnimeResultEmbed(AnimeResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
                     .WithName($"{result.Title}")
                     .WithUrl($"{result.SiteUrl}")
-                    .WithIconUrl("https://image.myanimelist.net/ui/OK6W_koKDTOqqqLDbIoPAiC8a86sHufn_jOI-JGtoCQ");
+                    .WithIconUrl(result.ApiType.ToIconUrl());
             })
             .WithDescription($"" +
             $"__**Description:**__\n" +

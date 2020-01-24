@@ -85,6 +85,7 @@ namespace AnimeApi
                 TrailerUrl = data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}",
                 Studio = data.studios.nodes.Count > 0 ? data.studios.nodes[0].name : null,
                 StudioUrl = data.studios.nodes.Count > 0 ? data.studios.nodes[0].siteUrl : null,
+                ApiType = ApiType.AniList,
             };
         }
     }

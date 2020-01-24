@@ -2,6 +2,7 @@
 {
     public struct MangaResult
     {
+        public ApiType ApiType;
         public ulong Id;
         public string Status;
         public string Title;
