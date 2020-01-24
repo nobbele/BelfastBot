@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SenkoSanBot.Services.Pagination;
+using Discord.WebSocket;
 
 namespace SenkoSanBot.Modules.Misc
 {
@@ -12,6 +13,13 @@ namespace SenkoSanBot.Modules.Misc
     {
         public CommandService Command { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        public DiscordSocketClient Client { get; set; } 
+
+	[Command("servers"), RequireOwner]
+	public async Task ServersAsync()
+	{
+            await ReplyAsync(string.Join("\n", Client.Guilds.Select(guild => guild.Name)));
+	}
 
         [Command("help")]
         public async Task HelpAsync([Remainder] string command = null)
