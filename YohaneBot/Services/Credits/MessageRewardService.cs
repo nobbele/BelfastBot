@@ -5,6 +5,7 @@ using YohaneBot.Services.Configuration;
 using YohaneBot.Services.Database;
 using System;
 using System.Threading.Tasks;
+using YohaneBot.Services.Logging;
 
 namespace YohaneBot.Services.Credits
 {
@@ -13,16 +14,23 @@ namespace YohaneBot.Services.Credits
         private readonly DiscordSocketClient m_client;
         private readonly IBotConfigurationService m_config;
         private readonly JsonDatabaseService m_db;
+        private readonly LoggingService m_logger;
 
-        public MessageRewardService(DiscordSocketClient client, IBotConfigurationService config, JsonDatabaseService db)
+        public MessageRewardService(IDiscordClient client, IBotConfigurationService config, JsonDatabaseService db, LoggingService logger)
         {
-            m_client = client;
+            m_client = client as DiscordSocketClient;
             m_config = config;
             m_db = db;
+            m_logger = logger;
         }
 
         public async Task InitializeAsync()
         {
+            if(m_client == null)
+            {
+                m_logger.LogWarning($"[{nameof(MessageRewardService)}] m_client is null, ignoring");
+                return;
+            }
             m_client.MessageReceived += async (SocketMessage msg) =>
             {
                 SocketUserMessage message = msg as SocketUserMessage;

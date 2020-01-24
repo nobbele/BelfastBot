@@ -6,6 +6,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using YohaneBot.Services.Configuration;
 using YohaneBot.Services.Logging;
+using Discord;
 
 #nullable enable
 
@@ -22,7 +23,12 @@ namespace YohaneBot.Services.Commands
         public CommandHandlingService(IServiceProvider services)
         {
             m_services = services;
-            m_client = services.GetRequiredService<DiscordSocketClient>();
+            IDiscordClient client = services.GetRequiredService<IDiscordClient>()!;
+            if(!(client is DiscordSocketClient))
+            {
+                throw new Exception("IClient must be DiscordSocketClient for this implementation to work");
+            }
+            m_client = (client as DiscordSocketClient)!;
             m_command = services.GetRequiredService<CommandService>();
             m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();

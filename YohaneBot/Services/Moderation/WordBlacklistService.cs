@@ -4,6 +4,7 @@ using YohaneBot.Services.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Discord;
 
 namespace YohaneBot.Services.Moderation
 {
@@ -13,15 +14,20 @@ namespace YohaneBot.Services.Moderation
         private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
 
-        public WordBlacklistService(DiscordSocketClient client, IBotConfigurationService config, LoggingService logger)
+        public WordBlacklistService(IDiscordClient client, IBotConfigurationService config, LoggingService logger)
         {
-            m_client = client;
+            m_client = client as DiscordSocketClient;
             m_config = config;
             m_logger = logger;
         }
 
         public async Task InitializeAsync()
         {
+            if(m_client == null)
+            {
+                m_logger.LogWarning($"[{nameof(WordBlacklistService)}] m_client is null, ignoring");
+                return;
+            }
             m_client.MessageReceived += HandleMessageAsync;
 
             await Task.CompletedTask;

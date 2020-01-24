@@ -71,7 +71,7 @@ namespace YohaneDiscordClient
 
             if (config.Initialize())
             {
-                var client = services.GetRequiredService<DiscordSocketClient>();
+                var client = services.GetRequiredService<IDiscordClient>() as DiscordSocketClient;
 
                 client.Log += LogMessageAsync;
                 client.UserJoined += async (SocketGuildUser user) =>
@@ -142,9 +142,7 @@ namespace YohaneDiscordClient
         });
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
-                .AddSingleton<DiscordSocketClient>()
-                    .AddSingleton<IDiscordClient>(coll => coll.GetRequiredService<DiscordSocketClient>())
-                    .AddSingleton<BaseSocketClient>(coll => coll.GetRequiredService<DiscordSocketClient>())
+                .AddSingleton<IDiscordClient, DiscordSocketClient>()
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<ICommandHandlingService, CommandHandlingService>()

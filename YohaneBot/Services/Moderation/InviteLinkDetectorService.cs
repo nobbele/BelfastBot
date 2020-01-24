@@ -5,6 +5,8 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Discord;
+using YohaneBot.Services.Logging;
 
 namespace YohaneBot.Services.Moderation
 {
@@ -14,15 +16,22 @@ namespace YohaneBot.Services.Moderation
 
         private DiscordSocketClient m_client;
         private IBotConfigurationService m_config;
+        private readonly LoggingService m_logger;
 
         public InviteLinkDetectorService(IServiceProvider services)
         {
-            m_client = services.GetRequiredService<DiscordSocketClient>();
+            m_client = services.GetRequiredService<IDiscordClient>() as DiscordSocketClient;
             m_config = services.GetRequiredService<IBotConfigurationService>();
+            m_logger = services.GetRequiredService<LoggingService>();
         }
 
         public async Task InitializeAsync()
         {
+            if(m_client == null)
+            {
+                m_logger.LogWarning($"[{nameof(InviteLinkDetectorService)}] m_client is null, ignoring");
+                return;
+            }
             m_client.MessageReceived += async (SocketMessage message) =>
             {
                 if ((message.Author as SocketGuildUser)?.GuildPermissions.Administrator ?? true)

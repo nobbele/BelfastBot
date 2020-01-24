@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using YohaneBot.Services.Logging;
 
 namespace YohaneBot.Services.Pagination
 {
@@ -27,15 +28,22 @@ namespace YohaneBot.Services.Pagination
 
         private readonly IServiceProvider m_services;
         public BaseSocketClient m_client;
+        public LoggingService m_logger;
 
         public PaginatedMessageService(IServiceProvider services)
         {
             m_services = services;
-            m_client = services.GetRequiredService<BaseSocketClient>();
+            m_client = services.GetRequiredService<IDiscordClient>() as BaseSocketClient;
+            m_logger = services.GetRequiredService<LoggingService>();
         }
 
         public async Task InitializeAsync()
         {
+            if(m_client == null)
+            {
+                m_logger.LogWarning($"[{nameof(PaginatedMessageService)}] m_client is null, ignoring");
+                return;
+            }
             m_client.ReactionAdded += ReactionChangedCallback;
             m_client.ReactionRemoved += ReactionChangedCallback;
 
