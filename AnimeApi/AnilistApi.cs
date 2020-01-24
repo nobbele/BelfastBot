@@ -79,10 +79,12 @@ namespace AnimeApi
                 SiteUrl = data.siteUrl,
                 Source = data.source,
                 Duration = data.duration,
-                Broadcast = DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToShortDateString(),
+                Broadcast = data.airingSchedule.nodes.Count > 0
+                    ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToShortDateString()
+                    : null,
                 TrailerUrl = data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}",
-                Studio = data.studios.nodes[0].name,
-                StudioUrl = data.studios.nodes[0].siteUrl,
+                Studio = data.studios.nodes.Count > 0 ? data.studios.nodes[0].name : null,
+                StudioUrl = data.studios.nodes.Count > 0 ? data.studios.nodes[0].siteUrl : null,
             };
         }
     }
