@@ -80,7 +80,7 @@ namespace AnimeApi
                 Source = data.source,
                 Duration = data.duration,
                 Broadcast = data.airingSchedule.nodes.Count > 0
-                    ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToShortDateString()
+                    ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToString("dddd, dd MMMM HH:mm (UTC)") 
                     : null,
                 TrailerUrl = data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}",
                 Studio = data.studios.nodes.Count > 0 ? data.studios.nodes[0].name : null,
