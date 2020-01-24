@@ -18,7 +18,7 @@ namespace SenkoSanBot.Modules.Misc
 	[Command("servers"), RequireOwner]
 	public async Task ServersAsync()
 	{
-            await ReplyAsync(Client.Guilds.Select(guild => guild.Name + "\n"));
+            await ReplyAsync(string.Join("\n", Client.Guilds.Select(guild => guild.Name));
 	}
 
         [Command("help")]
