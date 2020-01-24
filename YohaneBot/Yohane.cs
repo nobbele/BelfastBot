@@ -143,6 +143,8 @@ namespace YohaneBot
 
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<DiscordSocketClient>()
+                .AddSingleton<IDiscordClient, DiscordSocketClient>()
+                .AddSingleton<BaseSocketClient, DiscordSocketClient>()
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<ICommandHandlingService, CommandHandlingService>()

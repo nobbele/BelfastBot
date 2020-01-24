@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace YohaneBot.Modules.Fun
@@ -8,7 +7,7 @@ namespace YohaneBot.Modules.Fun
     [Summary("Contains commands for nekoslife")]
     public class NekosLifeModule : YohaneModuleBase
     {
-        public DiscordSocketClient Client { get; set; }
+        public IDiscordClient Client { get; set; }
 
         [Command("nekoimg"), Alias("nli")]
         [Summary("Sends a random image from nekoslife with the given tag")]

@@ -26,12 +26,12 @@ namespace YohaneBot.Services.Pagination
         private Buffer<(ulong Id, ReactionCallback Callback)> m_callbacks = new Buffer<(ulong, ReactionCallback)>(16);
 
         private readonly IServiceProvider m_services;
-        public DiscordSocketClient m_client;
+        public BaseSocketClient m_client;
 
         public PaginatedMessageService(IServiceProvider services)
         {
             m_services = services;
-            m_client = services.GetRequiredService<DiscordSocketClient>();
+            m_client = services.GetRequiredService<BaseSocketClient>();
         }
 
         public async Task InitializeAsync()

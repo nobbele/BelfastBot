@@ -14,13 +14,13 @@ namespace YohaneBot.Services.Giveaway
     public class GiveawayService
     {
         private JsonDatabaseService m_db;
-        private DiscordSocketClient m_client;
+        private IDiscordClient m_client;
         private SchedulerService m_scheduler;
         private readonly IBotConfigurationService m_config;
 
         private Random m_random = new Random();
 
-        public GiveawayService(JsonDatabaseService db, DiscordSocketClient client, IBotConfigurationService config, SchedulerService scheduler) 
+        public GiveawayService(JsonDatabaseService db, IDiscordClient client, IBotConfigurationService config, SchedulerService scheduler) 
         {
             m_db = db;
             m_client = client;
@@ -55,9 +55,9 @@ namespace YohaneBot.Services.Giveaway
 
         public async Task ExecuteGiveaway(GiveawayEntry entry, ulong serverId) 
         {
-            SocketGuild guild = m_client.GetGuild(serverId);
+            IGuild guild = await m_client.GetGuildAsync(serverId);
             ServerEntry server = m_db.GetServerEntry(serverId);
-            SocketTextChannel channel = guild.GetTextChannel(entry.ChannelId);
+            ITextChannel channel = await guild.GetTextChannelAsync(entry.ChannelId);
             IUserMessage message = await channel.GetMessageAsync(entry.ReactionMessageId) as IUserMessage;
 
             var asyncparticipants = message.GetReactionUsersAsync(new Emoji(server.GiveawayReactionEmote),int.MaxValue);

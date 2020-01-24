@@ -14,7 +14,7 @@ namespace YohaneBot.Modules.Osu
     {
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
-        public DiscordSocketClient IClient { get; set; }
+        public IDiscordClient IClient { get; set; }
 
         private string GetNameForModeIndex(uint mode)
         {

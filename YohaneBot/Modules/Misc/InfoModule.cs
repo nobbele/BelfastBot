@@ -13,12 +13,12 @@ namespace YohaneBot.Modules.Misc
     {
         public CommandService Command { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
-        public DiscordSocketClient Client { get; set; } 
+        public IDiscordClient Client { get; set; } 
 
 	[Command("servers"), RequireOwner]
 	public async Task ServersAsync()
 	{
-            await ReplyAsync(string.Join("\n", Client.Guilds.Select(guild => guild.Name)));
+            await ReplyAsync(string.Join("\n", (await Client.GetGuildsAsync()).Select(guild => guild.Name)));
 	}
 
         [Command("help")]

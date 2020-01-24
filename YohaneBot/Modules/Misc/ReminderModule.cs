@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using System.Threading.Tasks;
 using System;
+using Discord;
 using YohaneBot.Modules;
 using YohaneBot.Services.Scheduler;
 using Newtonsoft.Json;
@@ -13,7 +14,7 @@ namespace YohaneBot.Modules.Misc
     public class ReminderModule : YohaneModuleBase
     {
         public SchedulerService m_scheduler { get; set; }
-        public DiscordSocketClient m_client { get; set; }
+        public IDiscordClient m_client { get; set; }
 
         private struct ReminderSchedulerData
         {
@@ -48,8 +49,8 @@ namespace YohaneBot.Modules.Misc
         public void ReminderSchedulerCallback(string data)
         {
             ReminderSchedulerData schedulerData = JsonConvert.DeserializeObject<ReminderSchedulerData>(data);
-            SocketGuild server = m_client.GetGuild(schedulerData.serverId);
-            SocketTextChannel channel = server.GetTextChannel(schedulerData.channelId);
+            IGuild server = m_client.GetGuildAsync(schedulerData.serverId).Result;
+            ITextChannel channel = server.GetTextChannelAsync(schedulerData.channelId).Result;
             _ = channel.SendMessageAsync($"うやん～ {schedulerData.userMention}, I am here to remind you about **{schedulerData.content}**");
         }
     }

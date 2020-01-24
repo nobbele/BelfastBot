@@ -11,7 +11,6 @@ namespace YohaneBot.Services.Commands
 {
     public class CommandLineHandlingService
     {
-        private readonly DiscordSocketClient m_client;
         private readonly CommandService m_command;
         private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
@@ -20,7 +19,6 @@ namespace YohaneBot.Services.Commands
 
         public CommandLineHandlingService(IServiceProvider services)
         {
-            m_client = services.GetRequiredService<DiscordSocketClient>();
             m_command = services.GetRequiredService<CommandService>();
             m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
