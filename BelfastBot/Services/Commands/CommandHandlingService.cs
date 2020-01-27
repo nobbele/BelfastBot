@@ -85,11 +85,11 @@ namespace BelfastBot.Services.Commands
 
             if(result == null)
             {
-                await context.Channel.SendMessageAsync($"{Emotes.SenkoPout} うや～！ Command timed out");
+                await context.Channel.SendMessageAsync($"{Emotes.BelfastPout} うや～！ Command timed out");
             }
             else if (!result.IsSuccess)
             {
-                await context.Channel.SendMessageAsync($"{Emotes.SenkoShock}うや～！\n" +
+                await context.Channel.SendMessageAsync($"{Emotes.BelfastShock}うや～！\n" +
                     $"{result.ErrorReason} try **{m_config.Configuration.Prefix}help** for lists of commands");
             }
             else

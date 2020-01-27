@@ -43,7 +43,7 @@ namespace BelfastBot.Modules.Misc
             {
                 EmbedBuilder builder = builders[j] = new EmbedBuilder();
                 builder.Description = $"Do {Prefix}help [command] to get more information about a command";
-                builder.WithThumbnailUrl(Emotes.SenkoThink.Url);
+                builder.WithThumbnailUrl(Emotes.BelfastThink.Url);
                 builder.WithColor(0xffae0d);
             }
 
@@ -107,8 +107,7 @@ namespace BelfastBot.Modules.Misc
                 $"► Made by: **Team Shinaosu**\n" +
                 $"► Version: **{Belfast.Version}**\n" +
                 $"► Developers: **[Nobbele](https://github.com/nobbele) & [TheJayDuck](https://github.com/thejayduck)**\n" +
-                $"► Status: **Still In Development**\n" +
-                $"► Character Artist: https://twitter.com/erubo_")
+                $"► Status: **Still In Development**")
                 .WithFooter("09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/629383238917292042/29692031.png")
                 .Build();

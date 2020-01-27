@@ -129,7 +129,7 @@ namespace BelfastBot.Modules.Profiles
 
             if (userData.Cards.Count <= 0)
             {
-                await Context.Channel.SendMessageAsync($"{Emotes.SenkoShock} You don't seem to have any cards.\nTry .gao to open cards.");
+                await Context.Channel.SendMessageAsync($"{Emotes.BelfastShock} You don't seem to have any cards.\nTry .gao to open cards.");
                 return;
             }
 

@@ -71,7 +71,7 @@ namespace BelfastBot.Modules.Osu
                 case "F":
                     return Emotes.F;
             }
-            return Emotes.SenkoShock;
+            return Emotes.BelfastShock;
         }
 
         private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()

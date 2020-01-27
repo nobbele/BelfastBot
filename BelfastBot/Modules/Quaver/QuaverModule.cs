@@ -76,7 +76,7 @@ namespace BelfastBot.Modules.Quaver
                 case "F":
                     return Emotes.F;
             }
-            return Emotes.SenkoShock;
+            return Emotes.BelfastShock;
         }
 
         [Command("quaverset")]

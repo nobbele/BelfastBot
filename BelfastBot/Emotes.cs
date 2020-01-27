@@ -16,10 +16,10 @@ namespace BelfastBot
         public static readonly Emote F = Emote.Parse("<:F:616340348918169607>");
         public static readonly Emote Note = Emote.Parse("<:Note:616343572039336111>");
 
-        public static readonly Emote SenkoShock = Emote.Parse("<:senkoShock:616343608861130762>");
-        public static readonly Emote SenkoThink = Emote.Parse("<:senkoThink:616713896165638155>");
-        public static readonly Emote SenkoHappy = Emote.Parse("<:senkoHappy:668338991359066112>");
-        public static readonly Emote SenkoPout = Emote.Parse("<:senkoPout:668339027124158475>");
+        public static readonly Emote BelfastShock = Emote.Parse("<:belfastShock:671406562060795933>");
+        public static readonly Emote BelfastThink = Emote.Parse("<:belfastThink:671404142433927188>");
+        public static readonly Emote BelfastPout = Emote.Parse("<:belfastPout:671401206786293763>");
+        public static readonly Emote BelfastHappy = Emote.Parse("<:belfastHappy:671407755005001738>");
 
         public static readonly Emote DiscordCoin = Emote.Parse("<:discordCoin:616717275113848857>");
     }

@@ -56,7 +56,7 @@ namespace BelfastBot.Services.Credits
 
                         Embed embed = new EmbedBuilder()
                             .WithColor(0xFF1288)
-                            .WithThumbnailUrl(Emotes.SenkoHappy.Url)
+                            .WithThumbnailUrl(Emotes.BelfastHappy.Url)
                             .WithAuthor(author => {
                                 author
                                     .WithName($"Profile of {message.Author.Username}")
