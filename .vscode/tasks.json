@@ -1,12 +1,12 @@
 {
     "version": "2.0.0",
     "tasks": [{
-            "label": "Build YohaneDiscordClient (Debug)",
+            "label": "Build BelfastDiscordClient (Debug)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneDiscordClient",
+                "BelfastDiscordClient",
                 "--no-restore",
                 "/p:Configuration=Debug",
                 "/p:GenerateFullPaths=true",
@@ -15,12 +15,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build YohaneDiscordClient (Release)",
+            "label": "Build BelfastDiscordClient (Release)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneDiscordClient",
+                "BelfastDiscordClient",
                 "--no-restore",
                 "/p:Configuration=Release",
                 "/p:GenerateFullPaths=true",
@@ -29,12 +29,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build YohaneWebClient (Debug)",
+            "label": "Build BelfastWebClient (Debug)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneWebClient",
+                "BelfastWebClient",
                 "--no-restore",
                 "/p:Configuration=Debug",
                 "/p:GenerateFullPaths=true",
@@ -43,12 +43,12 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "Build YohaneWebClient (Release)",
+            "label": "Build BelfastWebClient (Release)",
             "type": "shell",
             "command": "dotnet",
             "args": [
                 "build",
-                "YohaneWebClient",
+                "BelfastWebClient",
                 "--no-restore",
                 "/p:Configuration=Release",
                 "/p:GenerateFullPaths=true",

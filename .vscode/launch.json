@@ -2,18 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "YohaneDiscordClient (Debug)",
+            "name": "BelfastDiscordClient (Debug)",
             "type":"coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0/YohaneDiscordClient.dll"
+                "${workspaceRoot}/BelfastDiscordClient/bin/Debug/netcoreapp3.0/BelfastDiscordClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0/",
-            "preLaunchTask": "Build YohaneDiscordClient (Debug)",
+            "cwd": "${workspaceRoot}/BelfastDiscordClient/bin/Debug/netcoreapp3.0/",
+            "preLaunchTask": "Build BelfastDiscordClient (Debug)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneDiscordClient/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/BelfastDiscordClient/bin/Debug/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -21,18 +21,18 @@
             }
         },
         {
-            "name": "YohaneDiscordClient (Release)",
+            "name": "BelfastDiscordClient (Release)",
             "type": "coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0/YohaneDiscordClient.dll"
+                "${workspaceRoot}/BelfastDiscordClient/bin/Release/netcoreapp3.0/BelfastDiscordClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0/",
-            "preLaunchTask": "Build YohaneDiscordClient (Release)",
+            "cwd": "${workspaceRoot}/BelfastDiscordClient/bin/Release/netcoreapp3.0/",
+            "preLaunchTask": "Build BelfastDiscordClient (Release)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneDiscordClient/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/BelfastDiscordClient/bin/Release/netcoreapp3.0:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -40,18 +40,18 @@
             }
         },
         {
-            "name": "YohaneWebClient (Debug)",
+            "name": "BelfastWebClient (Debug)",
             "type":"coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneWebClient/bin/Debug/netcoreapp3.1/YohaneWebClient.dll"
+                "${workspaceRoot}/BelfastWebClient/bin/Debug/netcoreapp3.1/BelfastWebClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneWebClient/",
-            "preLaunchTask": "Build YohaneWebClient (Debug)",
+            "cwd": "${workspaceRoot}/BelfastWebClient/",
+            "preLaunchTask": "Build BelfastWebClient (Debug)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneWebClient/bin/Debug/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/BelfastWebClient/bin/Debug/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {
@@ -59,18 +59,18 @@
             }
         },
         {
-            "name": "YohaneWebClient (Release)",
+            "name": "BelfastWebClient (Release)",
             "type": "coreclr",
             "request": "launch",
             "program": "dotnet",
             "args": [
-                "${workspaceRoot}/YohaneWebClient/bin/Release/netcoreapp3.1/YohaneWebClient.dll"
+                "${workspaceRoot}/BelfastWebClient/bin/Release/netcoreapp3.1/BelfastWebClient.dll"
             ],
-            "cwd": "${workspaceRoot}/YohaneWebClient/",
-            "preLaunchTask": "Build YohaneWebClient (Release)",
+            "cwd": "${workspaceRoot}/BelfastWebClient/",
+            "preLaunchTask": "Build BelfastWebClient (Release)",
             "linux": {
                 "env": {
-                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneWebClient/bin/Release/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/BelfastWebClient/bin/Release/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
                 }
             },
             "logging": {

@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using System.Web;
 using GraphQL.Client;
 using GraphQL.Common.Request;
 using GraphQL.Common.Response;
@@ -28,7 +27,7 @@ namespace AnimeApi
                     episodes
                     averageScore
                     coverImage {
-                        medium
+                        large
                     }
                     siteUrl
                     source
@@ -74,8 +73,8 @@ namespace AnimeApi
                 Synopsis = data.description,
                 Type = data.type,
                 Episodes = data.episodes,
-                Score = (float)data.averageScore / 100,
-                ImageUrl = data.coverImage.medium,
+                Score = (float)data.averageScore,
+                ImageUrl = data.coverImage.large,
                 SiteUrl = data.siteUrl,
                 Source = data.source,
                 Duration = data.duration,
