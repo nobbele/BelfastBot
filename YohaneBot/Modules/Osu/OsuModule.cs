@@ -148,7 +148,7 @@ namespace YohaneBot.Modules.Osu
         {
             string username = null;
 
-            IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
 
             if (target != null && target.IsBot)
                 return;
@@ -186,7 +186,7 @@ namespace YohaneBot.Modules.Osu
         {
             string username = null;
 
-            IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
             if (target != null)
                 username = GetOsuUsername(target);
             else if (!string.IsNullOrEmpty(target_name))
@@ -222,7 +222,7 @@ namespace YohaneBot.Modules.Osu
         {
             string username = null;
 
-            IUser target = Context.Message.MentionedUsers.FirstOrDefault();
+            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
             if (target != null)
                 username = GetOsuUsername(target);
             else if (!string.IsNullOrEmpty(target_name))

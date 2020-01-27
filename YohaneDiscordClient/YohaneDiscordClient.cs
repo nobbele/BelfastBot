@@ -18,15 +18,16 @@ using YohaneBot.Services.Giveaway;
 using YohaneBot.Services.Scheduler;
 using YohaneBot;
 using System.Threading;
+using YohaneBot.Services.Communiciation;
 
 namespace YohaneDiscordClient
 {
-    public class Yohane : IClient
+    public class YohaneDiscordClient : IClient
     {
         public string Version => "1.2-Discord";
 
         public LoggingService Logger { get; private set; }
-        public static Yohane Instance;
+        public static YohaneDiscordClient Instance;
 
         private Random m_random = new Random(Guid.NewGuid().GetHashCode());
 
@@ -34,7 +35,7 @@ namespace YohaneDiscordClient
         {
             using (var services = ConfigureServices())
             {
-                Instance = services.GetRequiredService<Yohane>();
+                Instance = services.GetRequiredService<YohaneDiscordClient>();
                 try
                 {
                     var mainTask = Instance.MainAsync(services);
@@ -144,12 +145,13 @@ namespace YohaneDiscordClient
         private static ServiceProvider ConfigureServices() => new ServiceCollection()
                 .AddSingleton<IDiscordClient, DiscordSocketClient>()
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
+                .AddSingleton<ICommunicationService, DiscordCommunicationService>()
                 .AddSingleton<CommandService>()
                 .AddSingleton<ICommandHandlingService, CommandHandlingService>()
                 .AddSingleton<CommandLineHandlingService>()
                 .AddSingleton<HttpClient>()
-                .AddSingleton<Yohane>()
-                    .AddSingleton<IClient>(coll => coll.GetRequiredService<Yohane>())
+                .AddSingleton<YohaneDiscordClient>()
+                    .AddSingleton<IClient>(coll => coll.GetRequiredService<YohaneDiscordClient>())
                 .AddSingleton<JsonDatabaseService>()
                 .AddSingleton<WordBlacklistService>()
                 .AddSingleton<LoggingService>()

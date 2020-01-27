@@ -1,7 +1,10 @@
-﻿public enum CardRarity
+﻿namespace YohaneBot.Modules.Gacha
 {
-    Common,
-    Rare,
-    SR,
-    SSR
+    public enum CardRarity
+    {
+        Common,
+        Rare,
+        SR,
+        SSR
+    }
 }

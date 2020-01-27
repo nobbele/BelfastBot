@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using YohaneBot.Modules.Preconditions;
+using YohaneBot.Modules.Gacha;
 
 namespace YohaneBot.Modules.Profiles
 {
@@ -31,7 +32,7 @@ namespace YohaneBot.Modules.Profiles
                  .WithThumbnailUrl($"{target.GetAvatarUrl()}")
                  .Build();
 
-        private Embed GetLeaderBoardPageEmbed(SocketGuild guild, string lbString, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetLeaderBoardPageEmbed(IGuild guild, string lbString, EmbedFooterBuilder footer) => new EmbedBuilder()
                  .WithColor(0x53DF1D)
                  .WithAuthor(author => {
                      author
@@ -95,10 +96,10 @@ namespace YohaneBot.Modules.Profiles
             ServerEntry server = Db.GetServerEntry(0);
             IEnumerable<DatabaseUserEntry> users = server.Users;
             if(!global)
-                users = users.Where(user => Context.Guild.GetUser(user.Id) != null);
+                users = users.Where(user => Context.Guild.GetUserAsync(user.Id).Result != null);
             IEnumerable<DatabaseUserEntry> sortedUser = users.OrderByDescending(user => user.Xp);
 
-            string lbString = sortedUser.Select(user => $"`{Context.Guild.GetUser(user.Id)}` - lvl {user.Level}({user.Xp} xp)").NewLineSeperatedString();
+            string lbString = (await Task.WhenAll(sortedUser.Select(async (user) => $"`{await Context.Guild.GetUserAsync(user.Id)}` - lvl {user.Level}({user.Xp} xp)"))).NewLineSeperatedString();
 
             if(string.IsNullOrEmpty(lbString))
             {

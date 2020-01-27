@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using YohaneBot.Services.Communiciation;
 using YohaneBot.Services.Logging;
 
 namespace YohaneBot.Services.Pagination
@@ -29,12 +30,14 @@ namespace YohaneBot.Services.Pagination
         private readonly IServiceProvider m_services;
         public BaseSocketClient m_client;
         public LoggingService m_logger;
+        public ICommunicationService m_communication;
 
         public PaginatedMessageService(IServiceProvider services)
         {
             m_services = services;
             m_client = services.GetRequiredService<IDiscordClient>() as BaseSocketClient;
             m_logger = services.GetRequiredService<LoggingService>();
+            m_communication = services.GetRequiredService<ICommunicationService>();
         }
 
         public async Task InitializeAsync()
@@ -132,7 +135,7 @@ namespace YohaneBot.Services.Pagination
             if(pageData.Length <= 0)
                 throw new ArgumentException("Passed zero length array");
 
-            IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
+            IUserMessage message = await m_communication.SendMessageAsync(channel, embed: GetEmbed(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
 
@@ -155,7 +158,7 @@ namespace YohaneBot.Services.Pagination
             if(pageData.Length <= 0)
                 throw new ArgumentException("Passed zero length array");
 
-            IUserMessage message = await channel.SendMessageAsync(embed: await GetEmbedTask(0));
+            IUserMessage message = await m_communication.SendMessageAsync(channel, embed: await GetEmbedTask(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
 
@@ -178,7 +181,7 @@ namespace YohaneBot.Services.Pagination
             if(embeds.Length <= 0)
                 throw new ArgumentException("Passed zero length array");
 
-            IUserMessage message = await channel.SendMessageAsync(embed: GetEmbed(0));
+            IUserMessage message = await m_communication.SendMessageAsync(channel, embed: GetEmbed(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
 

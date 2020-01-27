@@ -8,6 +8,7 @@ using YohaneBot.Services.Configuration;
 using YohaneBot.Services.Logging;
 using Discord;
 using System.Linq;
+using YohaneBot.Modules;
 
 #nullable enable
 
@@ -52,7 +53,7 @@ namespace YohaneBot.Services.Commands
 
         public async Task HandleCommandAsync(SocketMessage messageParam)
         {
-            var message = messageParam as SocketUserMessage;
+            SocketUserMessage? message = messageParam as SocketUserMessage;
 
             if (message == null)
                 m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
@@ -70,7 +71,7 @@ namespace YohaneBot.Services.Commands
                 message!.Author.IsBot)
                 return;
 
-            var context = new SocketCommandContext(m_client, message);
+            YohaneCommandContext context = new YohaneCommandContext(m_client, message);
 
             Task<IResult> task = m_command.ExecuteAsync(
                 context: context,

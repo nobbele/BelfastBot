@@ -39,13 +39,11 @@ namespace YohaneBot.Services.Scheduler
     public class SchedulerService : IDisposable
     {
         private IServiceProvider _serviceProvider;
-        private CommandService _commandService;
         private JsonDatabaseService _database;
 
         public SchedulerService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _commandService = _serviceProvider.GetRequiredService<CommandService>();
             _database = _serviceProvider.GetRequiredService<JsonDatabaseService>();
         }
 

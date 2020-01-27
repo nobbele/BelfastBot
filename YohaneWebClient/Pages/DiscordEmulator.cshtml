@@ -1,0 +1,66 @@
+@page
+@{
+    ViewData["Title"] = "Discord Emulator";
+}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>My Site's Title</title>
+    <script src="/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="/lib/showdown/dist/showdown.min.js"></script>
+    <script>
+        var converter = new showdown.Converter();
+        function createView(data) {
+            console.log(data);
+            return data.map(function(msg) {
+                if(msg.embeds.length <= 0)
+                    return `<li><p>${converter.makeHtml(msg.content)}</p></li><hr>`
+                let embed = msg.embeds[0];
+                return `
+<li>
+    ${(msg.content != null ? `<pre>${converter.makeHtml(msg.content)}</pre>` : "")}
+    ${(embed.title != null ? `<pre>${converter.makeHtml(embed.title)}</pre>` : "")}
+    <table>
+        <tr>
+            ${embed.fields.map(function(field) {
+                return `<td><pre>${converter.makeHtml(field)}</pre></td>`
+            })}
+        </tr>
+    </table>
+</li>
+<hr>
+`
+            }).join("");
+        }
+        $(function () {
+            $('#command-form').on('submit', function(e) {
+                e.preventDefault();
+                var data = objectifyArrayOfObjects($("#command-form :input").serializeArray());
+                console.log("sending data");
+                console.log(data);
+                $.get('/api/botcommand', data, 'json')
+                    .done(function (data) {
+                        let content = createView(data.result);
+                        console.log(content);
+                        $("#result").html(content);
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("ERROR " + errorThrown);
+                    });
+                console.log("done sending");
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="command-form">
+        <input type="text" name="command" id="command"/>
+        <input type="submit" value="send"/>
+    </form>
+    <ul id="result">
+
+    </ul>
+</body>
+</html>

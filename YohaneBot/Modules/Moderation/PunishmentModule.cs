@@ -16,7 +16,9 @@ namespace YohaneBot.Modules.Moderation
         private bool IsBotHigherRoleThan(SocketGuildUser target)
         {
             int targetMaxRole = target.Roles.Max(role => role.Position);
-            int botMaxRole = Context.Guild.GetUser(Context.User.Id).Roles.Max(role => role.Position);
+            int botMaxRole = Context.Guild.GetUserAsync(Context.User.Id).Result.RoleIds
+                .Select(id => Context.Guild.GetRole(id))
+                .Max(role => role.Position);
 
             return botMaxRole > targetMaxRole;
         }

@@ -40,6 +40,44 @@
             }
         },
         {
+            "name": "YohaneWebClient (Debug)",
+            "type":"coreclr",
+            "request": "launch",
+            "program": "dotnet",
+            "args": [
+                "${workspaceRoot}/YohaneWebClient/bin/Debug/netcoreapp3.1/YohaneWebClient.dll"
+            ],
+            "cwd": "${workspaceRoot}/YohaneWebClient/",
+            "preLaunchTask": "Build YohaneWebClient (Debug)",
+            "linux": {
+                "env": {
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneWebClient/bin/Debug/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "logging": {
+                "moduleLoad": false
+            }
+        },
+        {
+            "name": "YohaneWebClient (Release)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "dotnet",
+            "args": [
+                "${workspaceRoot}/YohaneWebClient/bin/Release/netcoreapp3.1/YohaneWebClient.dll"
+            ],
+            "cwd": "${workspaceRoot}/YohaneWebClient/",
+            "preLaunchTask": "Build YohaneWebClient (Release)",
+            "linux": {
+                "env": {
+                    "LD_LIBRARY_PATH": "${workspaceRoot}/YohaneWebClient/bin/Release/netcoreapp3.1:${env:LD_LIBRARY_PATH}"
+                }
+            },
+            "logging": {
+                "moduleLoad": false,
+            }
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach",

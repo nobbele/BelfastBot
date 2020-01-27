@@ -1,4 +1,6 @@
-﻿namespace YohaneBot.Services.Database
+﻿using YohaneBot.Modules.Gacha;
+
+namespace YohaneBot.Services.Database
 {
     public class GachaCard
     {

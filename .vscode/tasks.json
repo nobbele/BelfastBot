@@ -27,6 +27,34 @@
             ],
             "group": "build",
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build YohaneWebClient (Debug)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "YohaneWebClient",
+                "--no-restore",
+                "/p:Configuration=Debug",
+                "/p:GenerateFullPaths=true",
+            ],
+            "group": "build",
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build YohaneWebClient (Release)",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "YohaneWebClient",
+                "--no-restore",
+                "/p:Configuration=Release",
+                "/p:GenerateFullPaths=true",
+            ],
+            "group": "build",
+            "problemMatcher": "$msCompile"
         }
     ]
 }
