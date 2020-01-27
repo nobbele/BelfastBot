@@ -109,7 +109,7 @@ namespace BelfastBot.Modules.Misc
                 $"► Made by: **Team Shinaosu**\n" +
                 $"► Version: **{Belfast.Version}**\n" +
                 $"► Developers: **[Nobbele](https://github.com/nobbele) & [TheJayDuck](https://github.com/thejayduck)**\n" +
-                $"► Status: **Still In Development**" +
+                $"► Status: **Still In Development**\n" +
                 $"► Character Artist: https://twitter.com/erubo_")
                 .WithFooter("09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/629383238917292042/29692031.png")
