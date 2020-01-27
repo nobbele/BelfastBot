@@ -1,5 +1,4 @@
 ﻿using Discord.Commands;
-using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using BelfastBot.Services.Configuration;
 using BelfastBot.Services.Database;

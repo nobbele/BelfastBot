@@ -11,7 +11,6 @@ using BelfastBot.Services.Configuration;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Commands;
 using BelfastBot.Services.Moderation;
-using System.Runtime.CompilerServices;
 using BelfastBot.Services.Pagination;
 using BelfastBot.Services.Credits;
 using BelfastBot.Services.Giveaway;

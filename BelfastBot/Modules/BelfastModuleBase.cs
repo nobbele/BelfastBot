@@ -3,7 +3,6 @@ using Discord.Commands;
 using BelfastBot.Services.Configuration;
 using BelfastBot.Services.Logging;
 using System.Threading.Tasks;
-using Discord.WebSocket;
 using BelfastBot.Services.Communiciation;
 
 namespace BelfastBot.Modules
