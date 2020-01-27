@@ -23,7 +23,7 @@ namespace BelfastWebClient.Controllers
         {
             await _communication.SendMessageAsync(null, "hello world");
             DiscordEmulatorModel model = new DiscordEmulatorModel();
-            model.Messages = _communication.Messages.ToArray();
+            model.Messages = _communication.Channels[0].ToArray();
             return View(model);
         }
     }

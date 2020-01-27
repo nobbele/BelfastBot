@@ -77,8 +77,11 @@ namespace BelfastWebClient
         {
             (BelfastModuleBase instance, MethodInfo method, CommandAttribute attribute, AliasAttribute alias) command = Commands
                 .Single(command => command.attribute.Text == cmd || (command.alias?.Aliases.Contains(cmd) ?? false));
-            await _communication.SendMessageAsync(null, $"{cmd} {argsStr.DelimeterSeperatedString(" ")}");
-            BelfastCommandContext commandContext = new BelfastCommandContext();
+            await _communication.SendMessageAsync(new WebMessageChannel(), $"{cmd} {argsStr.DelimeterSeperatedString(" ")}");
+            BelfastCommandContext commandContext = new BelfastCommandContext()
+            {
+                Channel = new WebMessageChannel()
+            };
             PropertyInfo contextProp = typeof(BelfastModuleBase).GetProperty("Context").DeclaringType.GetProperty("Context");
             contextProp.SetValue(command.instance, commandContext, BindingFlags.NonPublic | BindingFlags.Instance, null, null, null);
             object[] args = command.method.GetParameters()

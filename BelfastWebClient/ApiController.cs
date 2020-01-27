@@ -30,7 +30,7 @@ namespace BelfastWebClient
                 args = new string[0];
             await _command.HandleCommandAsync(command, args);
             return Json(new { 
-                result = _communication.Messages.Select(msg => new {
+                result = _communication.Channels[0].Select(msg => new {
                     content = msg.Content,
                     embeds = msg.Embeds.Select(embed => new {
                         title = embed.Title,
