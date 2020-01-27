@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using BelfastBot;
 using BelfastBot.Modules;
 using BelfastBot.Services.Communiciation;
+using Moq;
+using Discord;
 
 namespace BelfastWebClient
 {
@@ -16,7 +18,7 @@ namespace BelfastWebClient
         private DummyType _dummy;
         private IServiceProvider _serviceProvider;
         private CommandService _commandService;
-        private ICommunicationService _communication;
+        private WebCommunicationService _communication;
 
         public (BelfastModuleBase instance, MethodInfo method, CommandAttribute attribute, AliasAttribute alias)[] Commands;
 
@@ -25,7 +27,7 @@ namespace BelfastWebClient
             _dummy = dummy;
             _serviceProvider = serviceProvider;
             _commandService = commandService;
-            _communication = communication;
+            _communication = communication as WebCommunicationService;
         }
 
         public void Initialize()
@@ -77,10 +79,11 @@ namespace BelfastWebClient
         {
             (BelfastModuleBase instance, MethodInfo method, CommandAttribute attribute, AliasAttribute alias) command = Commands
                 .Single(command => command.attribute.Text == cmd || (command.alias?.Aliases.Contains(cmd) ?? false));
-            await _communication.SendMessageAsync(new WebMessageChannel(), $"{cmd} {argsStr.DelimeterSeperatedString(" ")}");
+            IMessageChannel channel = _communication.CreateChannelWithId(0);
+            await channel.SendMessageAsync($"{cmd} {argsStr.DelimeterSeperatedString(" ")}");
             BelfastCommandContext commandContext = new BelfastCommandContext()
             {
-                Channel = new WebMessageChannel()
+                Channel = channel
             };
             PropertyInfo contextProp = typeof(BelfastModuleBase).GetProperty("Context").DeclaringType.GetProperty("Context");
             contextProp.SetValue(command.instance, commandContext, BindingFlags.NonPublic | BindingFlags.Instance, null, null, null);

@@ -21,6 +21,7 @@ using BelfastBot.Services.Commands;
 using Discord.Commands;
 using BelfastBot.Services.Configuration;
 using BelfastBot.Services.Communiciation;
+using Moq;
 
 namespace BelfastWebClient
 {
@@ -37,7 +38,7 @@ namespace BelfastWebClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSingleton<IDiscordClient, WebFakeDiscordSocketClient>()
+            services.AddSingleton<IDiscordClient>(coll => new Mock<IDiscordClient>().Object)
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<WebBelfastClient>()
