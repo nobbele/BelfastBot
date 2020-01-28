@@ -12,27 +12,35 @@
     <script src="/lib/showdown/dist/showdown.min.js"></script>
     <script>
         var converter = new showdown.Converter();
+        function mdToHtml(md) {
+            return $(converter.makeHtml(md)).html();
+        }
         function createView(data) {
             console.log(data);
             return data.map(function(msg) {
+                let embed;
                 if(msg.embeds.length <= 0)
-                    return `<li><p>${converter.makeHtml(msg.content)}</p></li><hr>`
-                let embed = msg.embeds[0];
+                    embed = null;
+                else
+                    embed = msg.embeds[0];
                 return `
 <li>
-    ${(msg.content != null ? `<pre>${converter.makeHtml(msg.content)}</pre>` : "")}
-    ${(embed.title != null ? `<pre>${converter.makeHtml(embed.title)}</pre>` : "")}
+    Author: ${msg.username}<br>
+    Content: ${(msg.content != null ? `<pre>${mdToHtml(msg.content)}</pre>` : "")}
+${embed == null ? "" : `
+    <br>Embed Title: ${embed.title != null ? `<pre>${mdToHtml(embed.title)}</pre>` : ""}
     <table>
         <tr>
             ${embed.fields.map(function(field) {
-                return `<td><pre>${converter.makeHtml(field)}</pre></td>`
+                return `<br><td><pre>${mdToHtml(field)}</pre></td>`
             })}
         </tr>
     </table>
+`}
 </li>
 <hr>
 `
-            }).join("");
+            }).reverse().join("");
         }
         $(function () {
             $('#command-form').on('submit', function(e) {

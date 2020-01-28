@@ -12,14 +12,28 @@ namespace BelfastWebClient
     {
         public ConcurrentDictionary<ulong, ConcurrentBag<IUserMessage>> Channels = new ConcurrentDictionary<ulong, ConcurrentBag<IUserMessage>>();
 
-        public async Task<IUserMessage> SendMessageAsync(IMessageChannel channel, string message = null, Embed embed = null)
+        private IDiscordClient _client;
+
+        public WebCommunicationService(IDiscordClient client)
         {
-            IUserMessage userMessage = CreateMessage(message, embed);
-            Channels.GetOrAdd(channel.Id, new ConcurrentBag<IUserMessage>()).Add(userMessage);
-            return userMessage;
+            _client = client;
         }
 
-        public IUserMessage CreateMessage(string message = null, Embed embed = null)
+        public Task<IUserMessage> SendMessageAsync(IMessageChannel channel, string message = null, Embed embed = null)
+        {
+            IUserMessage userMessage = CreateMessage(channel, _client.CurrentUser, message, embed);
+            Channels.GetOrAdd(channel.Id, new ConcurrentBag<IUserMessage>()).Add(userMessage);
+            return Task.FromResult(userMessage);
+        }
+
+        public Task<IUserMessage> SendMessageAsync(IMessageChannel channel, IUser author, string message = null, Embed embed = null)
+        {
+            IUserMessage userMessage = CreateMessage(channel, author, message, embed);
+            Channels.GetOrAdd(channel.Id, new ConcurrentBag<IUserMessage>()).Add(userMessage);
+            return Task.FromResult(userMessage);
+        }
+
+        public IUserMessage CreateMessage(IMessageChannel channel, IUser author, string message = null, Embed embed = null)
         {
             Mock<IUserMessage> messageMock = new Mock<IUserMessage>();
             messageMock.Setup(o => o.Content).Returns(message);
@@ -27,10 +41,12 @@ namespace BelfastWebClient
             if(embed != null)
                 embeds.Add(embed);
             messageMock.Setup(o => o.Embeds).Returns(embeds);
+            messageMock.Setup(o => o.Channel).Returns(channel);
+            messageMock.Setup(o => o.Author).Returns(author);
             return messageMock.Object;
         }
 
-        public IMessageChannel CreateChannelWithId(ulong id)
+        public IMessageChannel CreateChannel(ulong id)
         {
             Mock<IMessageChannel> channelMock = new Mock<IMessageChannel>();
             channelMock.Setup(o => o.Id).Returns(0);
@@ -41,6 +57,14 @@ namespace BelfastWebClient
                     => SendMessageAsync(channelMock.Object, text, embed)
                 );
             return channelMock.Object;
+        }
+
+        public IUser CreateUser(string name, ulong id)
+        {
+            Mock<IUser> userMock = new Mock<IUser>();
+            userMock.Setup(o => o.Username).Returns(name);
+            userMock.Setup(o => o.Id).Returns(id);
+            return userMock.Object;
         }
     }
 }

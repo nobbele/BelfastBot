@@ -17,7 +17,7 @@ namespace BelfastBot.Services.Commands
     public class CommandHandlingService : ICommandHandlingService
     {
         private readonly IServiceProvider m_services;
-        private readonly DiscordSocketClient m_client;
+        private readonly DiscordSocketClient? m_client;
         private readonly CommandService m_command;
         private readonly IBotConfigurationService m_config;
         private readonly LoggingService m_logger;
@@ -25,12 +25,7 @@ namespace BelfastBot.Services.Commands
         public CommandHandlingService(IServiceProvider services)
         {
             m_services = services;
-            IDiscordClient client = services.GetRequiredService<IDiscordClient>()!;
-            if(!(client is DiscordSocketClient))
-            {
-                throw new Exception("IClient must be DiscordSocketClient for this implementation to work");
-            }
-            m_client = (client as DiscordSocketClient)!;
+            m_client = services.GetRequiredService<IDiscordClient>() as DiscordSocketClient;
             m_command = services.GetRequiredService<CommandService>();
             m_config = services.GetRequiredService<IBotConfigurationService>();
             m_logger = services.GetRequiredService<LoggingService>();
@@ -38,8 +33,6 @@ namespace BelfastBot.Services.Commands
 
         public async Task InitializeAsync()
         {
-            m_client.MessageReceived += HandleCommandAsync;
-
             await m_command.AddModulesAsync(assembly: Assembly.GetAssembly(typeof(CommandHandlingService)),
                                             services: m_services);
         }
@@ -51,12 +44,13 @@ namespace BelfastBot.Services.Commands
             return true;
         }
 
-        public async Task HandleCommandAsync(SocketMessage messageParam)
+        public async Task HandleCommandAsync(IUserMessage message, bool parsePrefix)
         {
-            SocketUserMessage? message = messageParam as SocketUserMessage;
-
             if (message == null)
-                m_logger.LogWarning("Received a message that wasn't a SocketUserMessage");
+            {
+                m_logger.LogCritical("Received a message that wasn't a SocketUserMessage");
+                return;
+            }
 
             if(!IsIntentionalCommand(message!.Content))
             {
@@ -66,10 +60,13 @@ namespace BelfastBot.Services.Commands
 
             int argPos = 0;
 
-            if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase) ||
-                message.HasMentionPrefix(m_client.CurrentUser, ref argPos)) ||
+            if(parsePrefix)
+            {
+                if (!(message.HasStringPrefix(m_config.Configuration.Prefix, ref argPos, StringComparison.OrdinalIgnoreCase) ||
+                message.HasMentionPrefix(m_client?.CurrentUser, ref argPos)) ||
                 message!.Author.IsBot)
-                return;
+                    return;
+            }
 
             BelfastCommandContext context = new BelfastCommandContext(m_client, message);
 

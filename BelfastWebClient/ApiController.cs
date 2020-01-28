@@ -6,31 +6,31 @@ using Discord.WebSocket;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using BelfastBot.Services.Commands;
+using Discord;
 
 namespace BelfastWebClient
 {
     public class ApiController : Controller
     {
-        private WebCommandHandlingService _command;
+        private ICommandHandlingService _command;
         public WebCommunicationService _communication;
 
-        public ApiController(WebCommandHandlingService command, WebCommunicationService communication)
+        public ApiController(ICommandHandlingService command, WebCommunicationService communication)
         {
             _command = command;
             _communication = communication;
         }
 
         [Route("api/botcommand")]
-        public async Task<IActionResult> BotCommandAsync(string command, string data) 
+        public async Task<IActionResult> BotCommandAsync(string command) 
         {
-            string[] args;
-            if(data != null)
-                args = JArray.Parse(data).Children<JValue>().Select(val => val.ToString()).ToArray();
-            else
-                args = new string[0];
-            await _command.HandleCommandAsync(command, args);
+            IMessageChannel channel = _communication.CreateChannel(0);
+            IUserMessage message = await _communication.SendMessageAsync(channel, _communication.CreateUser("Guest", 2), command);
+            await _command.HandleCommandAsync(message, false);
             return Json(new { 
                 result = _communication.Channels[0].Select(msg => new {
+                    username = msg.Author.Username,
+                    userId = msg.Author.Id,
                     content = msg.Content,
                     embeds = msg.Embeds.Select(embed => new {
                         title = embed.Title,

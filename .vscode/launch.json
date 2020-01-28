@@ -47,7 +47,7 @@
             "args": [
                 "${workspaceRoot}/BelfastWebClient/bin/Debug/netcoreapp3.1/BelfastWebClient.dll"
             ],
-            "cwd": "${workspaceRoot}/BelfastWebClient/",
+            "cwd": "${workspaceRoot}/BelfastWebClient/bin/Debug/netcoreapp3.1/",
             "preLaunchTask": "Build BelfastWebClient (Debug)",
             "linux": {
                 "env": {
@@ -66,7 +66,7 @@
             "args": [
                 "${workspaceRoot}/BelfastWebClient/bin/Release/netcoreapp3.1/BelfastWebClient.dll"
             ],
-            "cwd": "${workspaceRoot}/BelfastWebClient/",
+            "cwd": "${workspaceRoot}/BelfastWebClient/bin/Release/netcoreapp3.1/",
             "preLaunchTask": "Build BelfastWebClient (Release)",
             "linux": {
                 "env": {

@@ -18,7 +18,7 @@ namespace BelfastBot.Modules
 
         public BelfastCommandContext() {}
 
-        public BelfastCommandContext(DiscordSocketClient client, SocketUserMessage msg)
+        public BelfastCommandContext(DiscordSocketClient client, IUserMessage msg)
         {
             Client = client;
             Guild = (msg.Channel as SocketGuildChannel)?.Guild;

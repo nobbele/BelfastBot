@@ -92,14 +92,18 @@ namespace BelfastDiscordClient
                 await client.LoginAsync(TokenType.Bot, config.Configuration.Token, true);
                 await client.StartAsync();
 
+                ICommandHandlingService commandService = services.GetRequiredService<ICommandHandlingService>();
+
                 Logger.LogInfo("Initializing services!");
                 await services.GetRequiredService<JsonDatabaseService>().InitializeAsync();
-                await services.GetRequiredService<ICommandHandlingService>().InitializeAsync();
+                await commandService.InitializeAsync();
                 await services.GetRequiredService<WordBlacklistService>().InitializeAsync();
                 await services.GetRequiredService<PaginatedMessageService>().InitializeAsync();
                 await services.GetRequiredService<InviteLinkDetectorService>().InitializeAsync();
                 await services.GetRequiredService<MessageRewardService>().InitializeAsync();
                 services.GetRequiredService<SchedulerService>().Initialize();
+
+                client.MessageReceived += msg => commandService.HandleCommandAsync((msg as IUserMessage)!, true);
 
                 if(Environment.UserInteractive && !Console.IsInputRedirected) 
                 {

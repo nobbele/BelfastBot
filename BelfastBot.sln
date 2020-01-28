@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quaver.API", "Quaver.API\Qu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BelfastWebClient", "BelfastWebClient\BelfastWebClient.csproj", "{DDE55603-D9E1-4745-8C4A-64AB49BC2D16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IAsyncEnumerableFix", "IAsyncEnumerableFix\IAsyncEnumerableFix.csproj", "{DA7F9404-A58E-4603-85E7-5F74275CC819}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

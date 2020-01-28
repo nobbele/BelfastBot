@@ -34,11 +34,27 @@ namespace BelfastWebClient
 
         public IConfiguration Configuration { get; }
 
+        public ISelfUser CreateSelfUser()
+        {
+            Mock<ISelfUser> userMock = new Mock<ISelfUser>();
+            userMock.Setup(o => o.Username).Returns("Belfast");
+            userMock.Setup(o => o.Id).Returns(1);
+            return userMock.Object;
+        }
+
+        public IDiscordClient CreateClient()
+        {
+            Mock<IDiscordClient> mockClient = new Mock<IDiscordClient>();
+            ISelfUser selfUser = CreateSelfUser();
+            mockClient.Setup(o => o.CurrentUser).Returns(selfUser);
+            return mockClient.Object;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSingleton<IDiscordClient>(coll => new Mock<IDiscordClient>().Object)
+            services.AddSingleton<IDiscordClient>(coll => CreateClient())
                 .AddSingleton<IBotConfigurationService, BotConfigurationService>()
                 .AddSingleton<HttpClient>()
                 .AddSingleton<WebBelfastClient>()
@@ -51,9 +67,8 @@ namespace BelfastWebClient
                 .AddSingleton<PaginatedMessageService>()
                 .AddSingleton<MessageRewardService>()
                 .AddSingleton<GiveawayService>()
-                .AddSingleton<DummyType>()
                 .AddSingleton<CommandService>()
-                .AddSingleton<WebCommandHandlingService>()
+                .AddSingleton<ICommandHandlingService, CommandHandlingService>()
                 .AddSingleton<IServiceProvider>(coll => coll);
         }
 
@@ -84,7 +99,16 @@ namespace BelfastWebClient
                 endpoints.MapControllerRoute("api", "{controller}/{action}");
             });
 
-            app.ApplicationServices.GetRequiredService<WebCommandHandlingService>().Initialize();
+            app.ApplicationServices.GetRequiredService<LoggingService>().InitializeAsync().Wait();
+            Task[] tasks = {
+                app.ApplicationServices.GetRequiredService<JsonDatabaseService>().InitializeAsync(),
+                app.ApplicationServices.GetRequiredService<PaginatedMessageService>().InitializeAsync(),
+                app.ApplicationServices.GetRequiredService<MessageRewardService>().InitializeAsync(),
+                app.ApplicationServices.GetRequiredService<ICommandHandlingService>().InitializeAsync()
+            };
+            app.ApplicationServices.GetRequiredService<SchedulerService>().Initialize();
+            app.ApplicationServices.GetRequiredService<IBotConfigurationService>().Initialize();
+            Task.WaitAll(tasks);
         }
     }
 }
