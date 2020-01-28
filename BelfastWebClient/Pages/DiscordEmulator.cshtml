@@ -13,7 +13,12 @@
     <script>
         var converter = new showdown.Converter();
         function mdToHtml(md) {
-            return $(converter.makeHtml(md)).html();
+            let text = $(converter.makeHtml(md)).html();
+            text = text.replace(
+                /&lt;:[A-z]*:([0-9]*)&gt;/g, 
+                "<img src=\"https://cdn.discordapp.com/emojis/$1.png\" alt=\"Smiley face\" align=\"middle\" width=\"16\" height=\"16\">"
+            );
+            return text;
         }
         function createView(data) {
             console.log(data);
@@ -46,12 +51,9 @@ ${embed == null ? "" : `
             $('#command-form').on('submit', function(e) {
                 e.preventDefault();
                 var data = objectifyArrayOfObjects($("#command-form :input").serializeArray());
-                console.log("sending data");
-                console.log(data);
                 $.get('/api/botcommand', data, 'json')
                     .done(function (data) {
                         let content = createView(data.result);
-                        console.log(content);
                         $("#result").html(content);
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
