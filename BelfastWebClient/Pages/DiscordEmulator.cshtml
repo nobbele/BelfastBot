@@ -32,13 +32,13 @@
                 return `
 <li>
         <b><font size="1.3">${msg.username}</font></b>
-        ${(msg.content != null ? `<pre>${mdToHtml(msg.content)}</pre><br>` : "")}
+        ${(msg.content != null ? `<br><pre>${mdToHtml(msg.content)}</pre>` : "")}
 ${embed == null ? "" : `
-        ${embed.title != null ? `<pre>${mdToHtml(embed.title)}</pre><br>` : ""}
+        ${embed.title != null ? `<br><pre>${mdToHtml(embed.title)}</pre>` : ""}
         <ul>
             <tr>
                 ${embed.fields.map(function (field) {
-                    return `<td><pre>${mdToHtml(field)}</pre></td><br>`
+                    return `<br><td><pre>${mdToHtml(field)}</pre></td>`;
                 })}
             </tr>
         </ul>
