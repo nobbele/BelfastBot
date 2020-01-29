@@ -26,7 +26,12 @@ namespace BelfastWebClient
         {
             IMessageChannel channel = _communication.CreateChannel(0);
             IUserMessage message = await _communication.SendMessageAsync(channel, _communication.CreateUser("Guest", 2), command);
-            await _command.HandleCommandAsync(message, false);
+
+            if (command == "clear")
+                _communication.Channels[channel.Id].Clear();
+            else
+                await _command.HandleCommandAsync(message, false);
+
             return Json(new { 
                 result = _communication.Channels[0].Select(msg => new {
                     username = msg.Author.Username,

@@ -1,0 +1,32 @@
+﻿body {
+    background-color: black;
+    color: white;
+}
+
+pre {
+    color: white;
+}
+
+hr {
+    border-top: 1px solid white;
+}
+
+#result {
+    max-height: 760px;
+    width: 100%;
+    overflow-y: scroll; 
+
+}
+
+#app {
+    position: absolute;
+    left: 0px;
+    margin-top: 1px;
+    width: 100%;
+}
+
+#command-form {
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+}

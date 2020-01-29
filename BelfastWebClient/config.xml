@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <Activity>Watching</Activity>
+  <AlphaCodersApiToken>YOUR TOKEN</AlphaCodersApiToken>
+  <BlacklistedWord xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <d2p1:string>bad word</d2p1:string>
+  </BlacklistedWord>
+  <CommonCardPrice>5</CommonCardPrice>
+  <GachaPrice>20</GachaPrice>
+  <InviteLinkWhitelist>http://discord.gg/MYSERVERINV</InviteLinkWhitelist>
+  <LogChannelID>0</LogChannelID>
+  <MaxWarnAmount>3</MaxWarnAmount>
+  <OnlineStatus>DoNotDisturb</OnlineStatus>
+  <OsuApiToken>YOUR TOKEN</OsuApiToken>
+  <Packs xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>1</d2p1:Key>
+      <d2p1:Value>Fate (Series)</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>2</d2p1:Key>
+      <d2p1:Value>Azur Lane</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>3</d2p1:Key>
+      <d2p1:Value>Honkai Impact 3rd</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>4</d2p1:Key>
+      <d2p1:Value>Pokemon (Series)</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>5</d2p1:Key>
+      <d2p1:Value>One Piece (Series)</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+    <d2p1:KeyValueOfintstring>
+      <d2p1:Key>6</d2p1:Key>
+      <d2p1:Value>Touhou Project</d2p1:Value>
+    </d2p1:KeyValueOfintstring>
+  </Packs>
+  <Prefix>.</Prefix>
+  <RareCardPrice>30</RareCardPrice>
+  <SRCardPrice>50</SRCardPrice>
+  <SSRCardPrice>200</SSRCardPrice>
+  <SourceCodeGit>https://github.com/nobbele/BelfastBot.git</SourceCodeGit>
+  <StatusMessage>Over :serverCount: servers</StatusMessage>
+  <Tags xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <Token>YOUR TOKEN</Token>
+  <UpdatePath>/tmp/senko</UpdatePath>
+  <WelcomeMessages xmlns:d2p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+    <d2p1:string>おかえりなのじや! Welcome {0} to {1}</d2p1:string>
+    <d2p1:string>Welcome Home {0} , you've had a long day haven't you?</d2p1:string>
+  </WelcomeMessages>
+</Configuration>

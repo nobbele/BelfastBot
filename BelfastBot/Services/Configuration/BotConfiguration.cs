@@ -21,8 +21,8 @@ namespace BelfastBot.Services.Configuration
         [DataMember]
         public string[] WelcomeMessages { get; internal set; } = new string[] 
         {
-            "おかえりなのじや! Welcome {0} to {1}",
-            "Welcome Home {0} , you've had a long day haven't you?",
+            "I Belfast welcome you {0} to our base {1}",
+            "It is my pleasure to welcome you {0} to {1}",
         };
         [DataMember]
         public int MaxWarnAmount { get; internal set; } = 3;

@@ -12,7 +12,7 @@ namespace BelfastBot.Modules.Fun
 
         [Command("wallpaper")]
         [Summary("Gets wallpaper from alphacoders")]
-        public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name)
+        public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on alphacoders");
 

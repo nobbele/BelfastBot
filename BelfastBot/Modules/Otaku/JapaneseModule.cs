@@ -21,7 +21,7 @@ namespace BelfastBot.Modules.Otaku
         {
             Logger.LogInfo($"Searching for {searchWord} on jisho");
 
-            JishoApi.SearchResult[] results = await JishoApi.Client.GetWordAsync(searchWord);
+            JishoApi.SearchResult[] results = await Client.GetWordAsync(searchWord);
 
             if(results.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(
@@ -75,7 +75,7 @@ namespace BelfastBot.Modules.Otaku
 
         [Command("malanime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
-        public async Task SearchMalAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        public async Task SearchMalAnimeAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -94,7 +94,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("malmanga"), Alias("malm")]
-        public async Task SearchMalMangaAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        public async Task SearchMalMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
 
@@ -114,7 +114,7 @@ namespace BelfastBot.Modules.Otaku
 
         [Command("alanime"), Alias("ala")]
         [Summary("Search for anime on anilist")]
-        public async Task SearchAlAnimeAsync([Summary("Title to search")] [Remainder]string name = "Senko")
+        public async Task SearchAlAnimeAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on anilist");
 

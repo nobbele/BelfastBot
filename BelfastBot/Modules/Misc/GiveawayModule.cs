@@ -1,11 +1,9 @@
 ﻿using Discord;
 using Discord.Commands;
-using System.Linq;
 using System.Threading.Tasks;
 using System;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Giveaway;
-using Discord.WebSocket;
 using BelfastBot.Modules.Preconditions;
 
 namespace BelfastBot.Modules.Misc
@@ -24,6 +22,7 @@ namespace BelfastBot.Modules.Misc
             if(!DateTimeHelper.TryParseRelative(time, out DateTime end))
                 await ReplyAsync("Couldn't parse time");
 
+            ServerEntry server = DatabaseService.GetServerEntry(Context.Guild.Id);
 
             Embed embed = new EmbedBuilder()
                  .WithColor(0xF5CD63)
@@ -35,7 +34,8 @@ namespace BelfastBot.Modules.Misc
                  .AddField("Details ▼",
                  $"► Prize: __**{content}**__\n" +
                  $"► Time Limit: **{end.Date}** \n" +
-                 $"**React with 🥳 to enter the giveaway!**")
+                 $"**React with {server.GiveawayReactionEmote} to enter the giveaway!**\n" +
+                 $"I Belfast wish every one of the commanders a good luck!")
                  .WithFooter(footer => {
                      footer
                          .WithText($"Requested by {Context.User}")
@@ -53,7 +53,6 @@ namespace BelfastBot.Modules.Misc
                 ReactionMessageId = message.Id,
                 Count = count,
             };
-            ServerEntry server = DatabaseService.GetServerEntry(Context.Guild.Id);
             await message.AddReactionAsync(new Emoji(server.GiveawayReactionEmote));
             GiveawayService.AddGiveaway(entry, Context.Guild.Id);
         }

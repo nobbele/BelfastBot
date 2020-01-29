@@ -1,7 +1,5 @@
-using Discord;
 using Discord.Commands;
 using System;
-using System.Threading;
 using System.Reflection;
 using System.Threading.Tasks;
 using BelfastBot.Services.Configuration;

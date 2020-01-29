@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Discord;
-using Discord.WebSocket;
 using BelfastBot.Services.Configuration;
 using BelfastBot.Services.Scheduler;
 using Newtonsoft.Json;
@@ -81,10 +80,8 @@ namespace BelfastBot.Services.Giveaway
                     winners.Add(winner);
                 }
                 
-                await channel.SendMessageAsync($"{string.Join(' ', winners.Select(winner => winner.Mention))} won {entry.Content}!");
+                await channel.SendMessageAsync($"{string.Join(' ', winners.Select(winner => winner.Mention))} won **{entry.Content}**!");
             }
-
-            
         }
     }
 }
