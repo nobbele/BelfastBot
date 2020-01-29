@@ -31,21 +31,20 @@
                     embed = msg.embeds[0];
                 return `
 <li>
-        ${(msg.content != null ? `Content: <pre>${mdToHtml(msg.content)}</pre>` : "")}
+        <b><font size="1.3">${msg.username}</font></b>
+        ${(msg.content != null ? `<pre>${mdToHtml(msg.content)}</pre><br>` : "")}
 ${embed == null ? "" : `
-        <br>Embed Title: ${embed.title != null ? `<pre>${mdToHtml(embed.title)}</pre>` : ""}
-        <table>
+        ${embed.title != null ? `<pre>${mdToHtml(embed.title)}</pre><br>` : ""}
+        <ul>
             <tr>
                 ${embed.fields.map(function (field) {
-                    return `<br><td><pre>${mdToHtml(field)}</pre></td>`
+                    return `<td><pre>${mdToHtml(field)}</pre></td><br>`
                 })}
             </tr>
-        </table>
-        <font size="0.8">Author: ${msg.username}</font>
+        </ul>
 `}
 </li>
-<hr>
-`
+<hr>`
             }).reverse().join("");
         }
         $(function () {

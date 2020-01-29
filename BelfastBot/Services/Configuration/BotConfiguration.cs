@@ -48,8 +48,8 @@ namespace BelfastBot.Services.Configuration
         [DataMember]
         public Dictionary<int, string> Packs { get; internal set; } = new Dictionary<int, string>
         {
-            {1, "Fate (Series)"},
-            {2, "Azur Lane"},
+            {1, "Azur Lane"},
+            {2, "Fate (Series)"},
             {3, "Honkai Impact 3rd"},
             {4, "Pokemon (Series)"},
             {5, "One Piece (Series)"},

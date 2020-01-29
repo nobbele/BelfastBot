@@ -9,13 +9,13 @@ pre {
 
 hr {
     border-top: 1px solid white;
+    margin-right: 50px;
 }
 
 #result {
-    max-height: 760px;
+    max-height: 715px;
     width: 100%;
-    overflow-y: scroll; 
-
+    overflow-y: scroll;
 }
 
 #app {
@@ -28,5 +28,12 @@ hr {
 #command-form {
     position: fixed;
     bottom: 100px;
-    left: 20px;
+    left: 3%;
+    min-width: 95%;
+    width: 95%;
+}
+
+#command {
+    min-width: 95%;
+    width: 95%;
 }

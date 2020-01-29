@@ -23,7 +23,7 @@ namespace BelfastBot.Modules.Otaku
 
             JishoApi.SearchResult[] results = await Client.GetWordAsync(searchWord);
 
-            if(results.Length > 0)
+            if (results.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(
                     Context.Channel, 
                     results, 
