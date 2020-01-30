@@ -16,7 +16,16 @@ namespace BelfastBot.Modules.Osu
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
 
-        private string GetNameForModeIndex(uint mode)
+        public int GetIndexFromModeName(string name) => name.ToLower() switch
+        {
+            "std" => 0,
+            "taiko" => 1,
+            "ctb" => 2,
+            "mania" => 3,
+            _ => -1,
+        };
+
+     private string GetNameForModeIndex(uint mode)
         {
             switch (mode)
             {
@@ -173,7 +182,7 @@ namespace BelfastBot.Modules.Osu
 
         [Command("orecent"), Alias("ors")]
         [Summary("Get recent play")]
-        public async Task GetRecentPlay([Summary("Name to search")] [Remainder] string target_name = "")
+        public async Task GetRecentPlay(string target_mode = "_", [Summary("Name to search")] [Remainder] string target_name = "")
         {
             string username = null;
 
@@ -193,16 +202,23 @@ namespace BelfastBot.Modules.Osu
 
             Logger.LogInfo($"Searching for user {username}'s recent plays on Osu");
 
+            int mode = GetIndexFromModeName(target_mode);
+
             const int modeCount = 4;
-            Task<PlayResult>[] taskList = new Task<PlayResult>[modeCount];
+            Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
             for(uint i = 0; i < modeCount; i++)
                 taskList[i] = Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i);
-            PlayResult[] results = await Task.WhenAll(taskList);
+            PlayResult[][] results = await Task.WhenAll(taskList);
 
-            PlayResult[] validResults = results.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray();
+            PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
 
             if(validResults.Length > 0)
-                await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
+            {
+                if(mode == -1)
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetBeatmapResultEmbed);
+                else
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetBeatmapResultEmbed);
+            }
             else
                 await ReplyAsync($"> No recent plays found for {username}");
         }
