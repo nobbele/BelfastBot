@@ -1,9 +1,8 @@
 ﻿namespace AnimeApi
 {
-    public struct Author
+    public struct Staff
     {
         public string Name;
         public string Url;
     }
-
 }

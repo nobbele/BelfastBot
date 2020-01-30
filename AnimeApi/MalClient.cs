@@ -59,7 +59,7 @@ namespace AnimeApi
 
                 return new MangaResult
                 {
-                    Id = jsonResult.mal_id,
+                    MalId = jsonResult.mal_id,
                     Status = jsonResult.status,
                     Title = jsonResult.title,
                     Synopsis = jsonResult.synopsis,
@@ -68,9 +68,9 @@ namespace AnimeApi
                     Volumes = jsonResult.volumes.ToObject<int?>(),
                     Score = jsonResult.score.ToObject<float?>(),
                     ImageUrl = jsonResult.image_url,
-                    MangaUrl = jsonResult.url,
+                    SiteUrl = jsonResult.url,
                     //Detailed
-                    Authors = authors.Select(author => new Author()
+                    Staff = authors.Select(author => new Staff()
                     {
                         Name = (string)author.name.ToObject<string>(),
                         Url = (string)author.url.ToObject<string>()

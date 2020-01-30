@@ -102,7 +102,7 @@ namespace BelfastBot.Modules.Otaku
             MangaResult[] resultCache = new MangaResult[ids.Length];
 
             await PaginatedMessageService.SendPaginatedDataAsyncMessageAsync(Context.Channel, ids, async (ulong id, int index, EmbedFooterBuilder footer) => {
-                if (resultCache[index].Id != 0)
+                if (resultCache[index].MalId != 0)
                     return GetMangaResultEmbed(resultCache[index], index, footer);
                 else
                 {
@@ -122,13 +122,23 @@ namespace BelfastBot.Modules.Otaku
 
             await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
         }
+        [Command("alamanga"), Alias("alm")]
+        [Summary("Search for anime on anilist")]
+        public async Task SearchAlMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
+        {
+            Logger.LogInfo($"Searching for {name} on anilist");
+
+            MangaResult mangaResult = await AnilistClient.GetMangaAsync(name);
+
+            await ReplyAsync(embed: GetMangaResultEmbed(mangaResult, 0, new EmbedFooterBuilder()));
+        }
 
         private Embed GetMangaResultEmbed(MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
                     .WithName($"{result.Title}")
-                    .WithUrl($"{result.MangaUrl}")
+                    .WithUrl($"{result.SiteUrl}")
                     .WithIconUrl(result.ApiType.ToIconUrl());
             })
             .WithDescription($"" +
@@ -137,9 +147,10 @@ namespace BelfastBot.Modules.Otaku
             .AddField("Details ▼",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())} [Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}]** \n" +
+            $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())}**\n" +
+            $"► Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}" +
             $"► Score: **{"Unknown".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}☆")}**\n" +
-            $"► Author(s): **{(result.Authors.Length > 0 ? result.Authors.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
+            $"► Author(s): **{(result.Staff.Length > 0 ? result.Staff.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();

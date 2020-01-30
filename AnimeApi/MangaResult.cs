@@ -3,7 +3,8 @@
     public struct MangaResult
     {
         public ApiType ApiType;
-        public ulong Id;
+        public ulong MalId;
+        public ulong AlId;
         public string Status;
         public string Title;
         public string Synopsis;
@@ -12,7 +13,9 @@
         public int? Chapters;
         public float? Score;
         public string ImageUrl;
-        public string MangaUrl;
-        public Author[] Authors;
+        public string SiteUrl;
+        //Detailed Information
+        public string Source;   
+        public Staff[] Staff;
     }
 }
