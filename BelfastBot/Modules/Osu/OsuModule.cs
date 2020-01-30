@@ -133,15 +133,6 @@ namespace BelfastBot.Modules.Osu
             return name;
         }
 
-        [Command("osuset")]
-        [Summary("Set osu name")]
-        public async Task SetUserAsync([Summary("Name to set")] string name)
-        {
-            Db.GetUserEntry(0, Context.User.Id).OsuName = name;
-            Db.WriteData();
-            await ReplyAsync($"> Your osu name is now set to **{name}**");
-        }
-
         [Command("osu")]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")

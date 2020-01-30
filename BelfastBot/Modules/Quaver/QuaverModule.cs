@@ -79,15 +79,6 @@ namespace BelfastBot.Modules.Quaver
             return Emotes.BelfastShock;
         }
 
-        [Command("quaverset")]
-        [Summary("Sets the user name for quaver commands")]
-        public async Task SetUserAsync([Summary("Name to set")] string name)
-        {
-            uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await Client.GetUserIdByNameAsync(name)).Value;
-            Db.WriteData();
-            await ReplyAsync($"Set user id to {id}");
-        }
-
         [Command("quaver")]
         [Summary("Get info about user")]
         public async Task GetUserAsync([Summary("Name to get info about")] [Remainder] string name = null)

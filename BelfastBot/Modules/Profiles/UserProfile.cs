@@ -1,7 +1,6 @@
 ﻿using Common;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
 using System;
@@ -86,6 +85,28 @@ namespace BelfastBot.Modules.Profiles
                  .Build();
 
             await ReplyAsync(embed: embed);
+        }
+
+        [Command("set")]
+        public async Task SetID(string Type, [Remainder]string name)
+        {
+            switch (Type.ToLower())
+            {
+                case "anilist":
+                    Db.GetUserEntry(0, Context.User.Id).AnilistName = name;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Anilist** name is now set to __**{name}**__");
+                    break;
+                case "osu":
+                    Db.GetUserEntry(0, Context.User.Id).OsuName = name;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Osu** name is now set to __**{name}**__");
+                    break;
+                //case "Quaver":
+                //    Db.GetUserEntry(0, Context.User.Id).QuaverId = name;
+                //    Db.WriteData();
+                //    break;
+            }
         }
 
         [Command("leaderboard"), Alias("lb")]
