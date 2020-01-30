@@ -102,10 +102,11 @@ namespace BelfastBot.Modules.Profiles
                     Db.WriteData();
                     await ReplyAsync($"> Your **Osu** name is now set to __**{name}**__");
                     break;
-                //case "Quaver":
-                //    Db.GetUserEntry(0, Context.User.Id).QuaverId = name;
-                //    Db.WriteData();
-                //    break;
+                case "quaver":
+                    uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await QuaverApi.Client.GetUserIdByNameAsync(name)).Value;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Quaver** name is now set to __**{name}**__");
+                    break;
             }
         }
 
