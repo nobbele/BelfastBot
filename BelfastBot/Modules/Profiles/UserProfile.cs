@@ -168,7 +168,7 @@ namespace BelfastBot.Modules.Profiles
             );
         }
 
-        [Command("cardfavorite"), Alias("cfav")]
+        [Command("cafavorite"), Alias("cafav")]
         [Summary("Favorite one of the cards you own")]
         public async Task FavoriteCardAsync([Summary("Card name to favorite")][Remainder]string cardName)
         {
@@ -184,7 +184,7 @@ namespace BelfastBot.Modules.Profiles
             await ReplyAsync("> Couldn't find the specified card with given name");
         }
 
-        [Command("cardsell"), Alias("csell")]
+        [Command("casell"), Alias("cas")]
         [Summary("Sell your cards")]
         public async Task SellCardAsync([Summary("Card rarity to sell")] string rarity, [Summary("Card name to sell")] [Remainder] string cardName)
         {

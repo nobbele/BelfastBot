@@ -9,7 +9,7 @@ namespace BelfastBot.Modules.Fun
     {
         public IDiscordClient Client { get; set; }
 
-        [Command("nekoimg"), Alias("nli")]
+        [Command("nekoimg"), Alias("nimg")]
         [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")] string category = "neko")
         {
@@ -31,7 +31,7 @@ namespace BelfastBot.Modules.Fun
             await ReplyAsync(embed: embed);
         }
 
-        [Command("nekogif"), Alias("nlg")]
+        [Command("nekogif"), Alias("ngif")]
         [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")] string category, [Summary("The user to do [verb] with")] IUser target = null, [Summary("The verb to display")] [Remainder] string verb = "interacted with")
         {

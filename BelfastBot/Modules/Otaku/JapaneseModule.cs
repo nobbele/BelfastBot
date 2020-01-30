@@ -187,7 +187,7 @@ namespace BelfastBot.Modules.Otaku
             $"► Status: **{result.Status}**\n" +
             $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())}**\n" +
             $"► Volumes: **{"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}**\n" +
-            $"► Average Score: **{"NaN".IfTargetIsNullOrEmpty(result.Score?.ToString())}**\n" +
+            $"► Average Score: **{"NaN".IfTargetIsNullOrEmpty(result.Score?.ToString())}**☆\n" +
             $"► Author(s): **{(result.Staff.Length > 0 ? result.Staff.Select(author => $"[{author.Name}]({author.SiteUrl})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
@@ -208,7 +208,7 @@ namespace BelfastBot.Modules.Otaku
             $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
             $"► Status: **{result.Status}**\n" +
             $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration} Min]** \n" +
-            $"► Score: **{"NaN".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}")}**\n" +
+            $"► Score: **{"NaN".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}")}**☆\n" +
             $"► Studio: **[{"Unknown".IfTargetIsNullOrEmpty(result.Studio?.ToString())}]({result.StudioUrl})**\n" +
             $"Broadcast Time: **[{"Unknown".IfTargetIsNullOrEmpty(result.Broadcast?.ToString())}]**\n" +
             $"**{(result.TrailerUrl != null ? $"[Trailer]({result.TrailerUrl})" : "No trailer")}**\n")

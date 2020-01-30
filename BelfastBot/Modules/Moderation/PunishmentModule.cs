@@ -179,7 +179,7 @@ namespace BelfastBot.Modules.Moderation
             await ReplyAsync(embed: embed);
         }
 
-        [Command("deletewarn"), Alias("delwarn")]
+        [Command("warndel")]
         [Summary("Deletes a specific warning from a user")]
         [RequireUserPermission(GuildPermission.KickMembers)]
         [RequireGuild]

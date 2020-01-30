@@ -103,7 +103,7 @@ namespace BelfastBot.Modules.Quaver
             await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, keys, GetUserEmbed);
         }
 
-        [Command("quaverrecent 4k"), Alias("qr4k")]
+        [Command("qrecent4k"), Alias("qr4k")]
         [Summary("Get recent 4k play info by user")]
         public async Task GetRecent4KAsync([Summary("User to get recent play from")] string name = null)
         {
@@ -128,7 +128,7 @@ namespace BelfastBot.Modules.Quaver
             await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
 
-        [Command("quaverrecent 7k"), Alias("qr7k")]
+        [Command("qrecent7k"), Alias("qr7k")]
         [Summary("Get recent 7k play info by user")]
         public async Task GetRecent7KAsync([Summary("User to get recent play from")] string name = null)
         {

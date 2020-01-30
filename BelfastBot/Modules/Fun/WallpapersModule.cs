@@ -10,7 +10,7 @@ namespace BelfastBot.Modules.Fun
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
-        [Command("wallpaper")]
+        [Command("wp")]
         [Summary("Gets wallpaper from alphacoders")]
         public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name = "Azur Lane")
         {

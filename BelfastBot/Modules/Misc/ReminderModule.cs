@@ -32,7 +32,7 @@ namespace BelfastBot.Modules.Misc
             }
         }
 
-        [Command("remindme")]
+        [Command("remind")]
         [RequireGuild] // For now it cant be run in dm
         public async Task AddReminder(string time, string content)
         {

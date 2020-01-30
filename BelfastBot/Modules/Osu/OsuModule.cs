@@ -171,7 +171,7 @@ namespace BelfastBot.Modules.Osu
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
 
-        [Command("osurecent"), Alias("rs")]
+        [Command("orecent"), Alias("ors")]
         [Summary("Get recent play")]
         public async Task GetRecentPlay([Summary("Name to search")] [Remainder] string target_name = "")
         {
@@ -207,7 +207,7 @@ namespace BelfastBot.Modules.Osu
                 await ReplyAsync($"> No recent plays found for {username}");
         }
 
-        [Command("osubest"), Alias("bs")]
+        [Command("obest"), Alias("obs")]
         [Summary("Get recent play")]
         public async Task GetBestPlays([Summary("Name to search")] string target_name = "")
         {

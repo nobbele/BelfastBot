@@ -13,7 +13,7 @@ namespace BelfastBot.Modules.Misc
     [Summary("Commands for configurations")]
     public class ConfigurationModule : BelfastModuleBase
     {
-        [Command("configshow")]
+        [Command("cshow")]
         [Summary("Show configurations")]
         public async Task ShowConfigAsync()
         {
@@ -29,7 +29,7 @@ namespace BelfastBot.Modules.Misc
             await ReplyAsync(sb.ToString());
         }
 
-        [Command("configset")]
+        [Command("cset")]
         [Summary("Set configuration values")]
         [RequireOwner]
         public async Task SetConfigAsync(string name, [Remainder] string value)
@@ -50,7 +50,7 @@ namespace BelfastBot.Modules.Misc
             return Convert.ChangeType(value, type);
         }
 
-        [Command("configwrite")]
+        [Command("cwrite")]
         [Summary("Write configuration values")]
         [RequireOwner]
         public async Task WriteConfigAsync()

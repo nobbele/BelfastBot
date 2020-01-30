@@ -14,7 +14,7 @@ namespace BelfastBot.Modules.Misc
         public JsonDatabaseService DatabaseService { get; set; }
         public GiveawayService GiveawayService { get; set; }
 
-        [Command("giveaway create")]
+        [Command("gcreate")]
         [Summary("Create a giveaway")]
         [RequireGuild]
         public async Task CreateGiveawayAsync([Summary("Time giveaway will last(ex. 2 days)")] string time, [Summary("What to give away")] string content, uint count = 1) 
@@ -56,7 +56,7 @@ namespace BelfastBot.Modules.Misc
             await message.AddReactionAsync(new Emoji(server.GiveawayReactionEmote));
             GiveawayService.AddGiveaway(entry, Context.Guild.Id);
         }
-        [Command("giveaway setemoji")]
+        [Command("gemote")]
         [Summary("Sets giveaway emoji")]
         [RequireGuild]
         public async Task SetEmojiAsync([Summary("Emoji to use")] string emote) 

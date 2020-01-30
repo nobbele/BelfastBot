@@ -7,7 +7,7 @@ namespace BelfastBot.Modules.Fun
     [Summary("Commands for booru websites")]
     public class SafeBooruModule : BelfastModuleBase
     {
-        [Command("booru"), Alias("sbi")]
+        [Command("sb")]
         [Summary("Gets images from safebooru with the given tag")]
         public async Task GetImage([Summary("Tag for search")] [Remainder] string tag = "azur_lane")
         {

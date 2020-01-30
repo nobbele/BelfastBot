@@ -51,7 +51,7 @@ namespace BelfastBot.Modules.Misc
 
             foreach (ModuleInfo module in moduleInfos)
             {
-                string[] commandNames = module.Commands.Select(cmd => $"► **{cmd.Name}**: [{cmd.Summary ?? "NaN"}]").ToArray();
+                string[] commandNames = module.Commands.Select(cmd => $"► **{cmd.Name}**: [{cmd.Summary ?? "None"}]").ToArray();
 
                 EmbedBuilder builder = builders[i / modulesPerPage];
 
