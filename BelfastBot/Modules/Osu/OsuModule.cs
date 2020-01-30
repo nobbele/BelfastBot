@@ -225,7 +225,7 @@ namespace BelfastBot.Modules.Osu
 
         [Command("obest"), Alias("obs")]
         [Summary("Get recent play")]
-        public async Task GetBestPlays([Summary("Name to search")] string target_name = "")
+        public async Task GetBestPlays(string target_mode = "_", [Summary("Name to search")] string target_name = "")
         {
             string username = null;
 
@@ -245,16 +245,23 @@ namespace BelfastBot.Modules.Osu
 
             Logger.LogInfo($"Searching for user {username}'s best plays on Osu");
 
+            int mode = GetIndexFromModeName(target_mode);
+
             const int modeCount = 4;
-            Task<UserBest>[] taskList = new Task<UserBest>[modeCount];
+            Task<UserBest[]>[] taskList = new Task<UserBest[]>[modeCount];
             for (uint i = 0; i < modeCount; i++)
                 taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i);
-            UserBest[] results = await Task.WhenAll(taskList);
+            UserBest[][] results = await Task.WhenAll(taskList);
 
-            UserBest[] validResults = results.Where(result => (result?.PlayResult.BeatmapData.Id ?? 0) != 0).ToArray();
+            UserBest[][] validResults = results.Select(a => a.Where(result => (result?.PlayResult?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
 
-            if(validResults.Length > 0)
-                await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
+            if (validResults.Length > 0)
+            {
+                if (mode == -1)
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetUserBestEmbed);
+                else
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetUserBestEmbed);
+            }
             else
                 await ReplyAsync($"> No best plays found for {username}");
         }

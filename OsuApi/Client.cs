@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -43,7 +44,7 @@ namespace OsuApi
             }
         }
 
-        public static async Task<UserBest> GetUserBestAsync(string token, string user, uint mode)
+        public static async Task<UserBest[]> GetUserBestAsync(string token, string user, uint mode)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -53,15 +54,7 @@ namespace OsuApi
 
                 PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask);
 
-                PlayResult result = results[0];
-
-                if(result == null)
-                    return null;
-
-                return new UserBest()
-                {
-                    PlayResult = result,
-                };
+                return results.Select(r => r == null ? null : new UserBest() { PlayResult = r }).ToArray();
             }
         }
 
