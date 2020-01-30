@@ -149,7 +149,7 @@ namespace BelfastBot.Modules.Otaku
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
                 author
-                    .WithName($"Anilist Data Of {result.Name}")
+                    .WithName($"Anilist Data of {result.Name}")
                     .WithUrl($"{result.SiteUrl}")
                     .WithIconUrl(result.ApiType.ToIconUrl());
             })
