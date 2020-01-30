@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 using GraphQL.Client;
 using GraphQL.Common.Request;
 using GraphQL.Common.Response;
@@ -154,7 +155,7 @@ namespace AnimeApi
             {
                 MalId = data.idMal,
                 AlId = data.id,
-                Title = data.title.english ?? data.title.romaji ?? data.title.native,
+                Title = (data.title.native.ToString() as string).IfTargetIsNullOrEmpty((data.title.romaji.ToString() as string).IfTargetIsNullOrEmpty(data.title.english.ToString() as string)),
                 Status = data.status,
                 Synopsis = data.description,
                 Type = data.type,
@@ -193,7 +194,7 @@ namespace AnimeApi
             {
                 MalId = data.idMal,
                 AlId = data.id,
-                Title = data.title.english ?? data.title.romaji ?? data.title.native,
+                Title = (data.title.native.ToString() as string).IfTargetIsNullOrEmpty((data.title.romaji.ToString() as string).IfTargetIsNullOrEmpty(data.title.english.ToString() as string)),
                 Status = data.status,
                 Synopsis = data.description,
                 Type = data.type,

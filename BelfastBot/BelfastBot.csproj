@@ -12,6 +12,7 @@
     <ProjectReference Include="..\AlphaCodersApi\AlphaCodersApi.csproj" />
     <ProjectReference Include="..\AnimeCharacterDatabaseApi\AnimeCharacterDatabaseApi.csproj" />
     <ProjectReference Include="..\AnimeApi\AnimeApi.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\JishoApi\JishoApi.csproj" />
     <ProjectReference Include="..\NekosLifeApi\NekosLifeApi.csproj" />
     <ProjectReference Include="..\OsuApi\OsuApi.csproj" />

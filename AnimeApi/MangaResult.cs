@@ -11,7 +11,7 @@
         public string Type;
         public int? Volumes;
         public int? Chapters;
-        public int? Score;
+        public float? Score;
         public string ImageUrl;
         public string SiteUrl;
         //Detailed Information

@@ -207,7 +207,7 @@ namespace BelfastBot.Modules.Otaku
             .AddField("Details ▼", 
             $"► Type: **{result.Type}** [Source: **{result.Source}**] \n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration}]** \n" +
+            $"► Episodes: **{"Unknown".IfTargetIsNullOrEmpty(result.Episodes?.ToString())} [{result.Duration} Min]** \n" +
             $"► Score: **{"NaN".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}")}**\n" +
             $"► Studio: **[{"Unknown".IfTargetIsNullOrEmpty(result.Studio?.ToString())}]({result.StudioUrl})**\n" +
             $"Broadcast Time: **[{"Unknown".IfTargetIsNullOrEmpty(result.Broadcast?.ToString())}]**\n" +
