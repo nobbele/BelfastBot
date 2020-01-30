@@ -185,9 +185,9 @@ namespace BelfastBot.Modules.Otaku
             .AddField("Details ▼",
             $"► Type: **{result.Type}**\n" +
             $"► Status: **{result.Status}**\n" +
-            $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())}**\n" +
-            $"► Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}" +
-            $"► Score: **{"Unknown".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}☆")}**\n" +
+            $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters.ToString())}**\n" +
+            $"► Volumes: **{"Unknown".IfTargetIsNullOrEmpty(result.Volumes.ToString())}**\n" +
+            $"► Average Score: **{"NaN".IfTargetIsNullOrEmpty(result.Score.ToString())}**\n" +
             $"► Author(s): **{(result.Staff.Length > 0 ? result.Staff.Select(author => $"[{author.Name}]({author.SiteUrl})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
