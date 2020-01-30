@@ -73,7 +73,7 @@ namespace AnimeApi
                     Staff = authors.Select(author => new Staff()
                     {
                         Name = (string)author.name.ToObject<string>(),
-                        Url = (string)author.url.ToObject<string>()
+                        SiteUrl = (string)author.url.ToObject<string>()
                     }).ToArray(),
                     ApiType = ApiType.MyAnimeList,
                 };

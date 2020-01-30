@@ -122,6 +122,7 @@ namespace BelfastBot.Modules.Otaku
 
             await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
         }
+
         [Command("alamanga"), Alias("alm")]
         [Summary("Search for anime on anilist")]
         public async Task SearchAlMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
@@ -150,7 +151,7 @@ namespace BelfastBot.Modules.Otaku
             $"► Chapters: **{"Unknown".IfTargetIsNullOrEmpty(result.Chapters?.ToString())}**\n" +
             $"► Volumes: {"Unknown".IfTargetIsNullOrEmpty(result.Volumes?.ToString())}" +
             $"► Score: **{"Unknown".IfTargetIsNullOrEmpty($"{result.Score?.ToString()}☆")}**\n" +
-            $"► Author(s): **{(result.Staff.Length > 0 ? result.Staff.Select(author => $"[{author.Name}]({author.Url})").CommaSeperatedString() : "Unknown")}**\n")
+            $"► Author(s): **{(result.Staff.Length > 0 ? result.Staff.Select(author => $"[{author.Name}]({author.SiteUrl})").CommaSeperatedString() : "Unknown")}**\n")
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();

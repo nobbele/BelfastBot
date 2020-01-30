@@ -82,6 +82,60 @@ namespace AnimeApi
                   }
                 }
             }
+            query GetUserByName($name: String) {
+              User(search: $name) {
+                id
+                name
+                about
+                siteUrl
+                avatar {
+                  large
+                }
+                bannerImage
+                favourites {
+                  anime {
+                    nodes {
+                      title {
+                        userPreferred
+                      }
+                      siteUrl
+                    }
+                  }
+                  manga {
+                    nodes {
+                      title {
+                        userPreferred
+                      }
+                      siteUrl
+                    }
+                  }
+                  characters {
+                    nodes {
+                      name {
+                        full
+                        native
+                      }
+                      siteUrl
+                      image {
+                        large
+                      }
+                    }
+                  }
+                }
+                statistics {
+                  anime {
+                    count
+                    episodesWatched
+                    meanScore
+                  }
+                  manga {
+                    count
+                    chaptersRead
+                    meanScore
+                  }
+                }
+              }
+            }
         ";
 
         public static async Task<AnimeResult> GetAnimeAsync(string name)
@@ -153,9 +207,66 @@ namespace AnimeApi
                 Staff = staff.Select(author => new Staff()
                 {
                     Name = (string)author.name.full.ToObject<string>(),
-                    Url = (string)author.siteUrl.ToObject<string>()
+                    SiteUrl = (string)author.siteUrl.ToObject<string>()
                 }).ToArray(),
                 ApiType = ApiType.AniList,
+            };
+        }
+
+        public static async Task<UserResult> GetUserAsync(string name)
+        {
+            GraphQLResponse response = await Client.PostAsync(new GraphQLRequest()
+            {
+                Query = Query,
+                OperationName = "GetUserByName",
+                Variables = new
+                {
+                    name = name,
+                }
+            });
+
+            dynamic data = response.Data.Media;
+
+            return new UserResult()
+            {
+                ApiType = ApiType.AniList,
+                Name = data.name,
+                SiteUrl = data.siteUrl,
+                About = data.about,
+                AvatarImage = data.avatar.large,
+                BannerImage = data.bannerImage,
+                //Favorites
+                AnimeFavorite = new UserFavorite
+                {
+                    Name = data.favorites.anime.nodes[0].title.userPreferred,
+                    SiteUrl = data.favorites.anime.nodes[0].siteUrl,
+                },
+                MangaFavorite = new UserFavorite
+                {
+                    Name = data.favorites.manga.nodes[0].title.userPreferred,
+                    SiteUrl = data.favorites.manga.nodes[0].siteUrl,
+                },
+                CharacterFavorite = new UserFavorite
+                {
+                    Name = data.favorites.characters.nodes[0].name.full,
+                    SiteUrl = data.favorites.characters.nodes[0].siteUrl,
+                    ImageUrl = data.favorites.characters.nodes[0].image.large,
+                },
+                //Statistics
+                AnimeStats = new UserStatistic
+                {
+                    StatisticType = StatisticType.Anime,
+                    Count = data.statistics.anime.count,
+                    Amount = data.statistics.anime.episodesWatched,
+                    MeanScore = data.statistics.anime.meanScore,
+                },
+                MangaStats = new UserStatistic
+                {
+                    StatisticType = StatisticType.Manga,
+                    Count = data.statistics.manga.count,
+                    Amount = data.statistics.manga.chaptersRead ,
+                    MeanScore = data.statistics.manga.meanScore,
+                }
             };
         }
     }

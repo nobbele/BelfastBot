@@ -6,6 +6,12 @@ namespace AnimeApi
         MyAnimeList,
     }
 
+    public enum StatisticType
+    {
+        Anime,
+        Manga,
+    }
+
     public static class ApiTypeExtensionMethods
     {
         public static string ToIconUrl(this ApiType type) => type switch
