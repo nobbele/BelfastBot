@@ -85,17 +85,13 @@ namespace BelfastBot.Modules.Quaver
         {
             uint? id = null;
             if(string.IsNullOrEmpty(name))
-            {
                 id = Db.GetUserEntry(0, Context.User.Id).QuaverId;
-            }
             else
-            {
                 id = await Client.GetUserIdByNameAsync(name);
-            }
 
-            if(id == null)
+            if (id == null)
             {
-                await ReplyAsync("Couldn't find any user, please set one or specify in arguments");
+                await ReplyAsync("> Couldn't find any user, please set one or specify in arguments");
                 return;
             }
 
@@ -119,7 +115,7 @@ namespace BelfastBot.Modules.Quaver
 
             if (id == null)
             {
-                await ReplyAsync("Couldn't find any user, please set one or specify in arguments");
+                await ReplyAsync("> Couldn't find any user, please set one or specify in arguments");
                 return;
             }
 
@@ -144,7 +140,7 @@ namespace BelfastBot.Modules.Quaver
 
             if (id == null)
             {
-                await ReplyAsync("Couldn't find any user, please set one or specify in arguments");
+                await ReplyAsync("> Couldn't find any user, please set one or specify in arguments");
                 return;
             }
 

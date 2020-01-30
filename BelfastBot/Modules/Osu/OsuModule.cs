@@ -5,7 +5,6 @@ using Discord;
 using System.Linq;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
-using Discord.WebSocket;
 
 namespace BelfastBot.Modules.Osu
 {
@@ -153,7 +152,7 @@ namespace BelfastBot.Modules.Osu
 
             if (username == null)
             {
-                await ReplyAsync("Couldn't find a valid user, have you set your username using osuset?");
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using osuset?");
                 return;
             }
 
@@ -166,7 +165,7 @@ namespace BelfastBot.Modules.Osu
             results = results.Where(res => res != null).ToArray();
 
             if(results.Length <= 0)
-                await ReplyAsync($"No user **{username}** found");
+                await ReplyAsync($"> No user **{username}** found");
             else
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetUserProfileEmbed);
         }
@@ -187,7 +186,7 @@ namespace BelfastBot.Modules.Osu
 
             if (username == null)
             {
-                await ReplyAsync("Couldn't find a valid user, have you set your username using osuset?");
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using osuset?");
                 return;
             }
 
@@ -204,7 +203,7 @@ namespace BelfastBot.Modules.Osu
             if(validResults.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetBeatmapResultEmbed);
             else
-                await ReplyAsync($"No recent plays found for {username}");
+                await ReplyAsync($"> No recent plays found for {username}");
         }
 
         [Command("osubest"), Alias("bs")]
@@ -223,7 +222,7 @@ namespace BelfastBot.Modules.Osu
 
             if (username == null)
             {
-                await ReplyAsync("Couldn't find a valid user, have you set your username using **.osuset**?");
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using **.osuset**?");
                 return;
             }
 
@@ -240,7 +239,7 @@ namespace BelfastBot.Modules.Osu
             if(validResults.Length > 0)
                 await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults, GetUserBestEmbed);
             else
-                await ReplyAsync($"No best plays found for {username}");
+                await ReplyAsync($"> No best plays found for {username}");
         }
     }
 }
