@@ -86,7 +86,6 @@ namespace AnimeApi
               User(search: $name) {
                 id
                 name
-                about
                 siteUrl
                 avatar {
                   large
@@ -160,7 +159,7 @@ namespace AnimeApi
                 Synopsis = data.description,
                 Type = data.type,
                 Episodes = data.episodes,
-                Score = (float)data.averageScore,
+                Score = data.averageScore,
                 ImageUrl = data.coverImage.large,
                 SiteUrl = data.siteUrl,
                 Source = data.source,
@@ -168,7 +167,7 @@ namespace AnimeApi
                 Broadcast = data.airingSchedule.nodes.Count > 0
                     ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToString("dddd, dd MMMM HH:mm (UTC)") 
                     : null,
-                TrailerUrl = data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}",
+                TrailerUrl = data.trailer != null ? (data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}") : null,
                 Studio = data.studios.nodes.Count > 0 ? data.studios.nodes[0].name : null,
                 StudioUrl = data.studios.nodes.Count > 0 ? data.studios.nodes[0].siteUrl : null,
                 ApiType = ApiType.AniList,
@@ -232,7 +231,6 @@ namespace AnimeApi
                 ApiType = ApiType.AniList,
                 Name = data.name,
                 SiteUrl = data.siteUrl,
-                About = data.about,
                 AvatarImage = data.avatar.large,
                 BannerImage = data.bannerImage,
                 //Favorites

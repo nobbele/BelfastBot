@@ -7,7 +7,6 @@
         public string AvatarImage;
         public string BannerImage;
         public string SiteUrl;
-        public string About;
         public UserFavorite AnimeFavorite;
         public UserFavorite MangaFavorite;
         public UserFavorite CharacterFavorite;

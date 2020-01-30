@@ -10,7 +10,7 @@
         public string Synopsis;
         public string Type;
         public int? Episodes;
-        public float? Score;
+        public int? Score;
         public string ImageUrl;
         public string SiteUrl;
         //Detailed Information

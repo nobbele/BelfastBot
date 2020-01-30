@@ -73,7 +73,7 @@ namespace BelfastBot.Modules.Misc
             SearchResult result = Command.Search(Context, command);
             if (!result.IsSuccess || result.Commands.Count == 0)
             {
-                await ReplyAsync($"Couldn't find command '{command}'");
+                await ReplyAsync($"> Couldn't find command '{command}'");
                 return;
             }
 
