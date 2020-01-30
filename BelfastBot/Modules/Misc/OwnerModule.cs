@@ -16,11 +16,11 @@ namespace BelfastBot.Modules.Misc
         public JsonDatabaseService Db { get; set; }
 
         [Command("stop")]
-        [Summary("Stops senko-san")]
+        [Summary("Stops Belfast")]
         [RequireOwner]
         public async Task StopAsync()
         {
-            Logger.LogInfo($"{Context.User} stopped senko");
+            Logger.LogInfo($"{Context.User} stopped Belfast");
             await ReplyAsync("Stopping...");
 
             Belfast.Stop();

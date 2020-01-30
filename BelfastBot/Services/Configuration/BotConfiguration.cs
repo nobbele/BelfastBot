@@ -64,8 +64,6 @@ namespace BelfastBot.Services.Configuration
         [DataMember]
         public int CommonCardPrice { get; internal set; } = 5;
         [DataMember]
-        public string UpdatePath { get; internal set; } = "/tmp/senko";
-        [DataMember]
         public string SourceCodeGit { get; internal set; } = "https://github.com/nobbele/BelfastBot.git";
 
         public ExtensionDataObject ExtensionData { get; set; }
@@ -91,7 +89,6 @@ namespace BelfastBot.Services.Configuration
             SRCardPrice = SRCardPrice == 0 ? config.SRCardPrice : SRCardPrice;
             RareCardPrice = RareCardPrice == 0 ? config.RareCardPrice : RareCardPrice;
             CommonCardPrice = CommonCardPrice == 0 ? config.CommonCardPrice : CommonCardPrice;
-            UpdatePath = UpdatePath ?? config.UpdatePath;
         }
     }
 }

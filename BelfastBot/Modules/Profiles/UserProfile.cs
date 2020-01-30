@@ -88,7 +88,7 @@ namespace BelfastBot.Modules.Profiles
         }
 
         [Command("set")]
-        public async Task SetID(string Type, [Remainder]string name)
+        public async Task SetName(string Type, [Remainder]string name)
         {
             switch (Type.ToLower())
             {

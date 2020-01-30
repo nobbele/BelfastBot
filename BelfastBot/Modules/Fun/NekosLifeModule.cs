@@ -57,16 +57,19 @@ namespace BelfastBot.Modules.Fun
         }
 
         [Command("hug")]
-        [Summary("Hugs senko-san or user specified")]
-        public async Task GetHug([Summary("The user to hug")] IUser target = null) => await GetGif("hug", target, "hugged");
+        [Summary("Hugs Belfast or user specified")]
+        public async Task GetHug([Summary("User to hug")] IUser target = null) => await GetGif("hug", target, "hugged");
         [Command("kiss")]
-        [Summary("kisses senko-san or user specified")]
-        public async Task GetKiss([Summary("The user to kiss")] IUser target = null) => await GetGif("kiss", target, "kissed");
+        [Summary("kisses Belfast or user specified")]
+        public async Task GetKiss([Summary("User to kiss")] IUser target = null) => await GetGif("kiss", target, "kissed");
         [Command("poke")]
-        [Summary("pokes senko-san or user specified")]
-        public async Task GetPoke([Summary("The user to poke")] IUser target = null) => await GetGif("poke", target, "poked");
+        [Summary("pokes Belfast or user specified")]
+        public async Task GetPoke([Summary("User to poke")] IUser target = null) => await GetGif("poke", target, "poked");
         [Command("slap")]
-        [Summary("slaps senko-san or user specified")]
-        public async Task GetSlap([Summary("The user to slap")] IUser target = null) => await GetGif("slap", target, "slapped");
+        [Summary("slaps Belfast or user specified")]
+        public async Task GetSlap([Summary("User to slap")] IUser target = null) => await GetGif("slap", target, "slapped");        
+        [Command("pat")]
+        [Summary("Pats Belfast or user specified")] 
+        public async Task GetPat([Summary("User to pat")] IUser target = null) => await GetGif("pat", target, "patted");
     }
 }

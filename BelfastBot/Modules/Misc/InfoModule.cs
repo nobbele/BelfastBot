@@ -14,11 +14,11 @@ namespace BelfastBot.Modules.Misc
         public IDiscordClient Client { get; set; } 
         public IClient Belfast { get; set; }
 
-	[Command("servers"), RequireOwner]
-	public async Task ServersAsync()
-	{
-            await ReplyAsync(string.Join("\n", (await Client.GetGuildsAsync()).Select(guild => guild.Name)));
-	}
+	    [Command("servers"), RequireOwner]
+	    public async Task ServersAsync()
+	    {
+                await ReplyAsync(string.Join("\n", (await Client.GetGuildsAsync()).Select(guild => guild.Name)));
+	    }
 
         [Command("help")]
         public async Task HelpAsync([Remainder] string command = null)
@@ -51,7 +51,7 @@ namespace BelfastBot.Modules.Misc
 
             foreach (ModuleInfo module in moduleInfos)
             {
-                string[] commandNames = module.Commands.Select(cmd => cmd.Name).ToArray();
+                string[] commandNames = module.Commands.Select(cmd => $"► **{cmd.Name}**: [{cmd.Summary ?? "NaN"}]").ToArray();
 
                 EmbedBuilder builder = builders[i / modulesPerPage];
 
@@ -59,7 +59,7 @@ namespace BelfastBot.Modules.Misc
                 {
                     builder.AddField($"{i+1}", $"" +
                         $"__**{module.Name.Replace("Module", " ")} - {module.Summary ?? ""}**__\n" +
-                        $"{commandNames.CommaSeperatedString()}");
+                        $"{commandNames.NewLineSeperatedString()}");
                 }
 
                 i++;
