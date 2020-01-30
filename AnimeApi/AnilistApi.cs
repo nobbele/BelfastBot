@@ -225,7 +225,7 @@ namespace AnimeApi
                 }
             });
 
-            dynamic data = response.Data.Media;
+            dynamic data = response.Data.User;
 
             return new UserResult()
             {
@@ -238,33 +238,31 @@ namespace AnimeApi
                 //Favorites
                 AnimeFavorite = new UserFavorite
                 {
-                    Name = data.favorites.anime.nodes[0].title.userPreferred,
-                    SiteUrl = data.favorites.anime.nodes[0].siteUrl,
+                    Name = data.favourites.anime.nodes.Count > 0 ? data.favourites.anime.nodes[0].title.userPreferred : null,
+                    SiteUrl = data.favourites.anime.nodes.Count > 0 ? data.favourites.anime.nodes[0].siteUrl : null,
                 },
                 MangaFavorite = new UserFavorite
                 {
-                    Name = data.favorites.manga.nodes[0].title.userPreferred,
-                    SiteUrl = data.favorites.manga.nodes[0].siteUrl,
+                    Name = data.favourites.manga.nodes.Count > 0 ? data.favourites.manga.nodes[0].title.userPreferred : null,
+                    SiteUrl = data.favourites.manga.nodes.Count > 0 ? data.favourites.manga.nodes[0].siteUrl : null,
                 },
                 CharacterFavorite = new UserFavorite
                 {
-                    Name = data.favorites.characters.nodes[0].name.full,
-                    SiteUrl = data.favorites.characters.nodes[0].siteUrl,
-                    ImageUrl = data.favorites.characters.nodes[0].image.large,
+                    Name = data.favourites.characters.nodes.Count > 0 ? data.favourites.characters.nodes[0].name.full : null,
+                    SiteUrl = data.favourites.characters.nodes.Count > 0 ? data.favourites.characters.nodes[0].siteUrl : null,
+                    ImageUrl = data.favourites.characters.nodes.Count > 0 ? data.favourites.characters.nodes[0].image.large : null,
                 },
                 //Statistics
                 AnimeStats = new UserStatistic
                 {
-                    StatisticType = StatisticType.Anime,
                     Count = data.statistics.anime.count,
                     Amount = data.statistics.anime.episodesWatched,
                     MeanScore = data.statistics.anime.meanScore,
                 },
                 MangaStats = new UserStatistic
                 {
-                    StatisticType = StatisticType.Manga,
                     Count = data.statistics.manga.count,
-                    Amount = data.statistics.manga.chaptersRead ,
+                    Amount = data.statistics.manga.chaptersRead,
                     MeanScore = data.statistics.manga.meanScore,
                 }
             };

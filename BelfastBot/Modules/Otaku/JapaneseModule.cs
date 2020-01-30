@@ -124,7 +124,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("alamanga"), Alias("alm")]
-        [Summary("Search for anime on anilist")]
+        [Summary("Search for manga on anilist")]
         public async Task SearchAlMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on anilist");
@@ -133,6 +133,43 @@ namespace BelfastBot.Modules.Otaku
 
             await ReplyAsync(embed: GetMangaResultEmbed(mangaResult, 0, new EmbedFooterBuilder()));
         }
+
+        [Command("aluser"), Alias("alu")]
+        [Summary("Search for a User on anilist")]
+        public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string name)
+        {
+            Logger.LogInfo($"Searching for {name} on anilist");
+
+            UserResult userResult = await AnilistClient.GetUserAsync(name);
+
+            await ReplyAsync(embed: GetUserResultEmbed(userResult, 0, new EmbedFooterBuilder()));
+        }
+
+        private Embed GetUserResultEmbed(UserResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithColor(0x2E51A2)
+            .WithAuthor(author => {
+                author
+                    .WithName($"Anilist Data Of {result.Name}")
+                    .WithUrl($"{result.SiteUrl}")
+                    .WithIconUrl(result.ApiType.ToIconUrl());
+            })
+            .AddField("Statistics ▼",
+            $"__**Anime Stats:**__\n" +
+            $"► Total Count: **{result.AnimeStats.Count}**\n" +
+            $"► Episodes Watched: **{result.AnimeStats.Amount}**\n" +
+            $"► Mean Score: **{result.AnimeStats.MeanScore}**\n" +
+            $"__**Manga Stats:**__\n" +
+            $"► Total Count: **{result.MangaStats.Count}**\n" +
+            $"► Chapters Read: **{result.MangaStats.Amount}**\n" +
+            $"► Mean Score: **{result.MangaStats.MeanScore}**\n")
+            .AddField("Favorites ▼",
+            $"► Anime: **[{result.AnimeFavorite.Name.ShortenText(limit: 25)}]({result.AnimeFavorite.SiteUrl})**\n" +
+            $"► Manga: **[{result.MangaFavorite.Name.ShortenText(limit: 25)}]({result.MangaFavorite.SiteUrl})**\n" +
+            $"► Character: **[{result.CharacterFavorite.Name.ShortenText(limit: 25)}]({result.CharacterFavorite.SiteUrl})**\n")
+            .WithFooter(footer)
+            .WithThumbnailUrl(result.AvatarImage)
+            .WithImageUrl(result.BannerImage)
+            .Build();
 
         private Embed GetMangaResultEmbed(MangaResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)

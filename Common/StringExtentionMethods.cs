@@ -4,10 +4,10 @@ namespace Common
 {
     public static class StringExtentionMethods
     {
-        public static string ShortenText(this string text)
+        public static string ShortenText(this string text, int limit = 256)
         {
-            if (text.Length > 256)
-                text = text?.Substring(0, 256) + "...";
+            if (text.Length > limit)
+                text = text?.Substring(0, limit) + "...";
 
             return text;
         }
