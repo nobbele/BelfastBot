@@ -167,7 +167,7 @@ namespace BelfastBot.Modules.Osu
 
             if (username == null)
             {
-                await ReplyAsync("> Couldn't find a valid user, have you set your username using osuset?");
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using set?");
                 return;
             }
 

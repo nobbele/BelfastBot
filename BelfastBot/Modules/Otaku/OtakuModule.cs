@@ -5,6 +5,7 @@ using BelfastBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
 using AnimeApi;
+using BelfastBot.Services.Database;
 
 namespace BelfastBot.Modules.Otaku
 {
@@ -12,6 +13,7 @@ namespace BelfastBot.Modules.Otaku
     public class OtakuModule : BelfastModuleBase
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        public JsonDatabaseService Db { get; set; }
 
         [Command("malanime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
@@ -74,13 +76,43 @@ namespace BelfastBot.Modules.Otaku
             await ReplyAsync(embed: GetMangaResultEmbed(mangaResult, 0, new EmbedFooterBuilder()));
         }
 
+        private string GetAnilistUsername(IUser user)
+        {
+            string name = Db.GetUserEntry(0, user.Id).AnilistName;
+            if (string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+            return name;
+        }
+
         [Command("aluser"), Alias("alu")]
         [Summary("Search for a User on anilist")]
-        public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string name)
+        public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string target_name = null)
         {
-            Logger.LogInfo($"Searching for {name} on anilist");
+            string username = null;
 
-            UserResult userResult = await AnilistClient.GetUserAsync(name);
+            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
+
+            if (target != null && target.IsBot)
+                return;
+
+            if (target != null)
+                username = GetAnilistUsername(target);
+            else if (!string.IsNullOrEmpty(target_name))
+                username = target_name;
+            else
+                username = GetAnilistUsername(Context.User);
+
+            if (username == null)
+            {
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using set?");
+                return;
+            }
+
+            Logger.LogInfo($"Searching for {username} on anilist");
+
+            UserResult userResult = await AnilistClient.GetUserAsync(username);
 
             await ReplyAsync(embed: GetUserResultEmbed(userResult, 0, new EmbedFooterBuilder()));
         }
