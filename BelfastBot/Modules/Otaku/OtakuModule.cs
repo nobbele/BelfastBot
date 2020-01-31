@@ -76,33 +76,11 @@ namespace BelfastBot.Modules.Otaku
             await ReplyAsync(embed: GetMangaResultEmbed(mangaResult, 0, new EmbedFooterBuilder()));
         }
 
-        private string GetAnilistUsername(IUser user)
-        {
-            string name = Db.GetUserEntry(0, user.Id).AnilistName;
-            if (string.IsNullOrEmpty(name))
-            {
-                return null;
-            }
-            return name;
-        }
-
         [Command("aluser"), Alias("alu")]
         [Summary("Search for a User on anilist")]
         public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string target_name = null)
         {
-            string username = null;
-
-            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
-
-            if (target != null && target.IsBot)
-                return;
-
-            if (target != null)
-                username = GetAnilistUsername(target);
-            else if (!string.IsNullOrEmpty(target_name))
-                username = target_name;
-            else
-                username = GetAnilistUsername(Context.User);
+            string username = await TryGetUserData(target_name, user =>　NotNullOrEmptyStringDatabaseAccessor(user, entry => entry.AnilistName));
 
             if (username == null)
             {
