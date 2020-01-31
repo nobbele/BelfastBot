@@ -31,7 +31,7 @@ namespace BelfastBot.Modules.Misc
                 await CommandHelp(command);
         }
 
-        private int modulesPerPage = 5;
+        private int modulesPerPage = 4;
 
         private async Task ModulesHelp()
         {
@@ -42,7 +42,7 @@ namespace BelfastBot.Modules.Misc
             for(int j = 0; j < builders.Length; j++)
             {
                 EmbedBuilder builder = builders[j] = new EmbedBuilder();
-                builder.Description = $"Do {Prefix}help [command] to get more information about a command";
+                builder.Description = $"Do \"{Prefix}help [command]\" to get more information about a command";
                 builder.WithThumbnailUrl(Emotes.BelfastThink.Url);
                 builder.WithColor(0xffae0d);
             }

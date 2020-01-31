@@ -4,6 +4,9 @@ using BelfastBot.Services.Pagination;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JishoApi;
+using Common;
+using System.Web;
 
 namespace BelfastBot.Modules.Misc
 {
@@ -98,42 +101,91 @@ namespace BelfastBot.Modules.Misc
         }
         #endregion
 
+        #region Commands
         [Command("lmgtfy"), Alias("lmg")]
         [Summary("Creates lmgtfy url")]
-        public async Task LmgtfySearchAsync([Summary("0 = google\n" +
-            "1 = yahoo\n" +
-            "2 = bing\n" +
-            "3 = ask\n" +
-            "4 = aol.\n" +
-            "5 = duckduckgo")]int type = 0, [Remainder] string search = "")
+        public async Task LmgtfySearchAsync([Summary("" +
+            "► 0 = google\n" +
+            "► 1 = yahoo\n" +
+            "► 2 = bing\n" +
+            "► 3 = ask\n" +
+            "► 4 = aol.\n" +
+            "► 5 = duckduckgo")]int type = 0, [Remainder] string search = "")
         {
-            string engine = null;
-            switch (type)
-            {
-                case 0:
-                    engine = "p=1&s=g&t=w";
-                    break;
-                case 1:
-                    engine = "p=1&s=y&t=w";
-                    break;
-                case 2:
-                    engine = "p=1&s=b&t=w";
-                    break;
-                case 3:
-                    engine = "p=1&s=k&t=w";
-                    break;
-                case 4:
-                    engine = "p=1&s=a&t=w";
-                    break;
-                case 5:
-                    engine = "p=1&s=d&t=w";
-                    break;
-            }
+            string engine = type switch
+            { 
+                0 => "p=1&s=g&t=w",
+                1 => "p=1&s=y&t=w",
+                2 => "p=1&s=b&t=w",
+                3 => "p=1&s=k&t=w",
+                4 => "p=1&s=a&t=w.",
+                5 => "p=1&s=d&t=w",
+
+            };
 
             search = search.Replace(' ', '+');
             string url = $"<{BaseUrlLmgtfy}/?q={search}&{engine}>";
 
             await ReplyAsync(url);
+        }
+
+        [Command("jisho"), Alias("jsh")]
+        [Summary("Searches given word from jisho.org")]
+        public async Task SearchWordAsync([Summary("Word to search for")] [Remainder] string searchWord)
+        {
+            Logger.LogInfo($"Searching for {searchWord} on jisho");
+
+            JishoApi.SearchResult[] results = await Client.GetWordAsync(searchWord);
+
+            if (results.Length > 0)
+                await PaginatedMessageService.SendPaginatedDataMessageAsync(
+                    Context.Channel,
+                    results,
+                    (result, index, footer) => GenerateEmbedFor(result, searchWord, footer)
+                );
+            else
+                await ReplyAsync("No result found");
+        }
+        #endregion
+
+        private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
+        {
+            string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
+
+            EmbedFieldBuilder fieldBuilder = new EmbedFieldBuilder()
+                .WithName(japanese);
+
+            string value = string.Empty;
+
+            int i = 1;
+            foreach (EnglishDefinition def in result.English)
+            {
+                string meaning = def.English.CommaSeperatedString();
+                string info = def.Info.CommaSeperatedString();
+
+                string infoDisplay = $"({info})".NothingIfCheckNullOrEmpty(info);
+
+                value += $"{i}. **{meaning} {infoDisplay}**\n";
+
+                i++;
+            }
+
+            value = "Nothing found".IfTargetIsNullOrEmpty(value);
+
+            fieldBuilder.WithValue(value);
+
+            return new EmbedBuilder()
+                .WithColor(0x53DF1D)
+                .WithAuthor(author => {
+                    author
+                        .WithName($"Results For {searchWord}")
+                        .WithUrl($"https://jisho.org/search/{HttpUtility.UrlEncode(searchWord)}")
+                        .WithIconUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png");
+                })
+                .AddField(fieldBuilder)
+                .WithFooter(footer)
+                .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
+                .Build();
         }
     }
 }

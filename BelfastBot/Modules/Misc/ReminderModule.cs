@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using System;
 using Discord;
-using BelfastBot.Modules;
 using BelfastBot.Services.Scheduler;
 using Newtonsoft.Json;
-using Discord.WebSocket;
 using BelfastBot.Modules.Preconditions;
 
 namespace BelfastBot.Modules.Misc
@@ -51,7 +49,9 @@ namespace BelfastBot.Modules.Misc
             ReminderSchedulerData schedulerData = JsonConvert.DeserializeObject<ReminderSchedulerData>(data);
             IGuild server = m_client.GetGuildAsync(schedulerData.serverId).Result;
             ITextChannel channel = server.GetTextChannelAsync(schedulerData.channelId).Result;
-            _ = channel.SendMessageAsync($"うやん～ {schedulerData.userMention}, I am here to remind you about **{schedulerData.content}**");
+            _ = channel.SendMessageAsync($"" +
+                $"Commander {schedulerData.userMention}!\n" +
+                $"I Belfast am here to remind you about \"**{schedulerData.content}**\"");
         }
     }
 }

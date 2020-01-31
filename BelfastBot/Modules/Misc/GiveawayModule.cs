@@ -34,6 +34,7 @@ namespace BelfastBot.Modules.Misc
                  .AddField("Details ▼",
                  $"► Prize: __**{content}**__\n" +
                  $"► Time Limit: **{end.Date}** \n" +
+                 $"► Winner Limit: **{count}** " +
                  $"**React with {server.GiveawayReactionEmote} to enter the giveaway!**\n" +
                  $"I Belfast wish every one of the commanders a good luck!")
                  .WithFooter(footer => {

@@ -16,6 +16,7 @@ namespace BelfastBot.Modules.Osu
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
 
+        #region Other
         public int GetIndexFromModeName(string name) => name.ToLower() switch
         {
             "std" => 0,
@@ -25,7 +26,7 @@ namespace BelfastBot.Modules.Osu
             _ => -1,
         };
 
-     private string GetNameForModeIndex(uint mode)
+        private string GetNameForModeIndex(uint mode)
         {
             switch (mode)
             {
@@ -82,7 +83,9 @@ namespace BelfastBot.Modules.Osu
             }
             return Emotes.BelfastShock;
         }
+        #endregion
 
+        #region Embed
         private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
             .WithAuthor(author => {
@@ -131,7 +134,9 @@ namespace BelfastBot.Modules.Osu
 
         private Embed GetUserBestEmbed(UserBest result, int index, EmbedFooterBuilder footer) => 
             GetBeatmapResultEmbed(result.PlayResult, index, footer);
+        #endregion
 
+        #region Commands
         private string GetOsuUsername(IUser user)
         {
             string name = Db.GetUserEntry(0, user.Id).OsuName;
@@ -265,5 +270,6 @@ namespace BelfastBot.Modules.Osu
             else
                 await ReplyAsync($"> No best plays found for {username}");
         }
+        #endregion
     }
 }

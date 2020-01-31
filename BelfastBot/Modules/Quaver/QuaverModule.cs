@@ -13,6 +13,7 @@ namespace BelfastBot.Modules.Quaver
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
+        #region Embed
         private Embed GetUserEmbed((User user, KeyInfo key) data, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x43EBFB)
             .WithAuthor(author => {
@@ -78,7 +79,9 @@ namespace BelfastBot.Modules.Quaver
             }
             return Emotes.BelfastShock;
         }
+        #endregion
 
+        #region Commands
         [Command("quaver")]
         [Summary("Get info about user")]
         public async Task GetUserAsync([Summary("Name to get info about")] [Remainder] string name = null)
@@ -152,5 +155,6 @@ namespace BelfastBot.Modules.Quaver
 
             await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
         }
+        #endregion
     }
 }
