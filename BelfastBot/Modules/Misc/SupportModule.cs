@@ -120,13 +120,14 @@ namespace BelfastBot.Modules.Misc
                 3 => "p=1&s=k&t=w",
                 4 => "p=1&s=a&t=w.",
                 5 => "p=1&s=d&t=w",
+                _ => "p=1&s=g&t=w",
 
             };
 
             search = search.Replace(' ', '+');
-            string url = $"<{BaseUrlLmgtfy}/?q={search}&{engine}>";
+            string url = $"{BaseUrlLmgtfy}/?q={search}&{engine}";
 
-            await ReplyAsync(url);
+            await ReplyAsync(embed: GetLmgUrlEmbed(url, search, new EmbedFooterBuilder()));
         }
 
         [Command("jisho"), Alias("jsh")]
@@ -187,5 +188,11 @@ namespace BelfastBot.Modules.Misc
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/610152248265408512/LpCOJrnh6weuEKishpfZCw2YY82J4GRiTjbqmdkgqCVCpqlBM4yLyAAS-qLpZvbcCcg.png")
                 .Build();
         }
+        private Embed GetLmgUrlEmbed(string url, string search, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithColor(0xffffff)
+            .AddField("Link:", $"" +
+            $"► [**Click Here to Learn More About \"{search}\"**]({url})\n")
+            .WithFooter(footer)
+            .Build();
     }
 }
