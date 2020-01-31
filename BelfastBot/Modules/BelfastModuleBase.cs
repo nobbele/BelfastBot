@@ -67,7 +67,7 @@ namespace BelfastBot.Modules
                 return result;
         }
 
-        protected T NormalAccessor<T>(IUser user, Func<DatabaseUserEntry, T> accessor)
+        protected T NormalDatabaseAccessor<T>(IUser user, Func<DatabaseUserEntry, T> accessor)
             => accessor.Invoke(Database.GetUserEntry(0, user.Id));
     }
 }
