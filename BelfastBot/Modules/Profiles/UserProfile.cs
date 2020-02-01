@@ -173,7 +173,7 @@ namespace BelfastBot.Modules.Profiles
         public async Task FavoriteCardAsync([Summary("Card name to favorite")][Remainder]string cardName)
         {
             DatabaseUserEntry userData = Db.GetUserEntry(0, Context.Message.Author.Id);
-            GachaCard exits = userData.Cards.SingleOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase));
+            GachaCard exits = userData.Cards.FirstOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase));
             if (exits != null)
             {
                 userData.FavoriteCard = exits;
