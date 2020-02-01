@@ -15,7 +15,7 @@
   </ItemGroup> 
 
   <ItemGroup>
-    <Content Update="wwwroot\**"  CopyToOutputDirectory="PreserveNewest"  />
+    <Content Update="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
