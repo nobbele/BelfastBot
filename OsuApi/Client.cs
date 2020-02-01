@@ -19,6 +19,7 @@ using osu.Game.Rulesets.Catch;
 using osu.Game.Rulesets.Mania;
 using osu.Game.Rulesets;
 using osu.Game.Rulesets.Difficulty;
+using System.Collections.Concurrent;
 
 namespace OsuApi
 {
@@ -43,7 +44,7 @@ namespace OsuApi
             }
         }
 
-        public static async Task<PlayResult[]> GetUserRecentAsync(string token, string user, uint mode)
+        public static async Task<PlayResult[]> GetUserRecentAsync(string token, string user, uint mode, uint count = 10)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -51,7 +52,7 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_recent")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask);
+                PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask, count);
 
                 return results;
             }
@@ -103,7 +104,7 @@ namespace OsuApi
             return (float)calc.Calculate();
         }
 
-        public static async Task<PlayResult[]> GetUserBestAsync(string token, string user, uint mode)
+        public static async Task<PlayResult[]> GetUserBestAsync(string token, string user, uint mode, uint count = 10)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -111,46 +112,49 @@ namespace OsuApi
             {
                 string json = await httpClient.GetStringAsync($"{BaseUrl.Append("get_user_best")}?u={HttpUtility.UrlEncode(user)}&k={token}&m={mode}");
 
-                PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask);
+                PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask, count);
 
                 return results;
             }
         }
 
-        private static async Task<PlayResult[]> GetPlayResultAsync(string token, uint mode, string json, Task<UserProfile> userDataTask)
+        private static async Task<PlayResult[]> GetPlayResultAsync(string token, uint mode, string json, Task<UserProfile> userDataTask, uint count)
         {
             JArray arr = JArray.Parse(json);
 
             List<PlayResult> results = new List<PlayResult>(arr.Count);
 
-            foreach (JToken jsonResult in arr)
+            using(HttpClient httpClient = new HttpClient())
             {
-                Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
-
-                PlayResult result = jsonResult.ToObject<PlayResult>();
-
-                result.Mode = mode;
-
-                result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
-
-                await Task.WhenAll(userDataTask, beatmapDataTask);
-
-                result.PlayerData = userDataTask.Result;
-                result.BeatmapData = beatmapDataTask.Result;
-
-                if(result.BeatmapData == null || result.PlayerData == null)
-                    continue;
-
-                using(HttpClient httpClient = new HttpClient())
+                foreach(JToken jsonResult in arr)
                 {
+                    Task<Beatmap> beatmapDataTask = GetBeatmapAsync(token, jsonResult["beatmap_id"].ToObject<ulong>(), mode);
+
+                    PlayResult result = jsonResult.ToObject<PlayResult>();
+
+                    result.Mode = mode;
+
+                    result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
+
+                    await Task.WhenAll(userDataTask, beatmapDataTask);
+
+                    result.PlayerData = userDataTask.Result;
+                    result.BeatmapData = beatmapDataTask.Result;
+
+                    if(result.BeatmapData == null || result.PlayerData == null)
+                        continue;
+
                     Stream beatmap = await httpClient.GetStreamAsync($"https://osu.ppy.sh/osu/{result.BeatmapData.Id}");
                     if(float.IsNaN(result.PP))
                         result.PP = GetPP(beatmap, result, false);
                     if(float.IsNaN(result.SSPP))
                         result.SSPP = GetPP(beatmap, result, true);
-                }
 
-                results.Add(result);
+                    results.Add(result);
+
+                    if(results.Count >= count)
+                        break;
+                };
             }
 
             return results.ToArray();

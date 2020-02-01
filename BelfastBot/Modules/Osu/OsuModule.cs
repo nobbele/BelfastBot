@@ -178,23 +178,29 @@ namespace BelfastBot.Modules.Osu
 
             int mode = GetIndexFromModeName(target_mode);
 
-            const int modeCount = 4;
-            Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
-            for(uint i = 0; i < modeCount; i++)
-                taskList[i] = Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i);
-            PlayResult[][] results = await Task.WhenAll(taskList);
-
-            PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
-
-            if(validResults.Length > 0)
+            if(mode == -1)
             {
-                if(mode == -1)
+                const int modeCount = 4;
+                Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
+                for (uint i = 0; i < modeCount; i++)
+                    taskList[i] = Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, i, 1);
+                PlayResult[][] results = await Task.WhenAll(taskList);
+
+                PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
+
+                if (validResults.Length > 0)
                     await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetBeatmapResultEmbed);
                 else
-                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetBeatmapResultEmbed);
+                    await ReplyAsync($"> No best plays found for {username}");
             }
             else
-                await ReplyAsync($"> No recent plays found for {username}");
+            {
+                PlayResult[] results = await Client.GetUserRecentAsync(Config.Configuration.OsuApiToken, username, (uint)mode);
+                if(results.Length > 0)
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetBeatmapResultEmbed);
+                else
+                    await ReplyAsync($"> No best plays found for {username}");
+            }
         }
 
         [Command("obest"), Alias("obs")]
@@ -213,23 +219,29 @@ namespace BelfastBot.Modules.Osu
 
             int mode = GetIndexFromModeName(target_mode);
 
-            const int modeCount = 4;
-            Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
-            for (uint i = 0; i < modeCount; i++)
-                taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i);
-            PlayResult[][] results = await Task.WhenAll(taskList);
-
-            PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
-
-            if (validResults.Length > 0)
+            if(mode == -1)
             {
-                if (mode == -1)
+                const int modeCount = 4;
+                Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
+                for (uint i = 0; i < modeCount; i++)
+                    taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i, 1);
+                PlayResult[][] results = await Task.WhenAll(taskList);
+
+                PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
+
+                if (validResults.Length > 0)
                     await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetBeatmapResultEmbed);
                 else
-                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetBeatmapResultEmbed);
+                    await ReplyAsync($"> No best plays found for {username}");
             }
             else
-                await ReplyAsync($"> No best plays found for {username}");
+            {
+                PlayResult[] results = await Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, (uint)mode);
+                if(results.Length > 0)
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, results, GetBeatmapResultEmbed);
+                else
+                    await ReplyAsync($"> No best plays found for {username}");
+            }          
         }
         #endregion
     }
