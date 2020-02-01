@@ -121,7 +121,6 @@ namespace BelfastBot.Modules.Misc
                 4 => "p=1&s=a&t=w.",
                 5 => "p=1&s=d&t=w",
                 _ => "p=1&s=g&t=w",
-
             };
 
             search = search.Replace(' ', '+');

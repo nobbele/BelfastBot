@@ -141,7 +141,7 @@ namespace BelfastBot.Modules.Profiles
         [Command("cards")]
         [Summary("Shows cards that an user has")]
         public async Task GetUserGacha([Summary("(optional) The user profile to get")] IUser target = null)
-        {
+            {
             target = target ?? Context.Message.Author;
 
             if (target.IsBot)

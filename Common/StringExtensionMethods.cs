@@ -28,6 +28,9 @@ namespace Common
                 int indexToClosestDelim = 0;
                 while ((indexToClosestDelim = str.IndexOf(delim, indexToClosestDelim + delim.Length)) < n)
                 {
+                    if (indexToClosestDelim == -1)
+                        break;
+
                     lastIndexToClosestDelim = indexToClosestDelim;
                 }
 
