@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using osu.Game.Beatmaps;
 
 namespace OsuApi
 {
@@ -21,5 +22,13 @@ namespace OsuApi
         public string CreatorName;
         [JsonProperty("creator_id")]
         public ulong CreatorId;
+        [JsonProperty(@"diff_drain")]
+        public float DrainRate { get; set; }
+        [JsonProperty(@"diff_size")]
+        public float CircleSize { get; set; }
+        [JsonProperty(@"diff_approach")]
+        public float ApproachRate { get; set; }
+        [JsonProperty(@"diff_overall")]
+        public float OverallDifficulty { get; set; }
     }
 }

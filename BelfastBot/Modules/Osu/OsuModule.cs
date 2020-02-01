@@ -119,7 +119,7 @@ namespace BelfastBot.Modules.Osu
             $"__**Main Details**__\n" +
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
             $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
-            $"► PP: **{result.PP:F2}**\n" +
+            $"► PP: **{result.PP:F2} ({result.FCPP:F2} if FC)**\n" +
             $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +
@@ -132,8 +132,6 @@ namespace BelfastBot.Modules.Osu
             .WithFooter(footer)
             .Build();
 
-        private Embed GetUserBestEmbed(UserBest result, int index, EmbedFooterBuilder footer) => 
-            GetBeatmapResultEmbed(result.PlayResult, index, footer);
         #endregion
 
         #region Commands
@@ -216,19 +214,19 @@ namespace BelfastBot.Modules.Osu
             int mode = GetIndexFromModeName(target_mode);
 
             const int modeCount = 4;
-            Task<UserBest[]>[] taskList = new Task<UserBest[]>[modeCount];
+            Task<PlayResult[]>[] taskList = new Task<PlayResult[]>[modeCount];
             for (uint i = 0; i < modeCount; i++)
                 taskList[i] = Client.GetUserBestAsync(Config.Configuration.OsuApiToken, username, i);
-            UserBest[][] results = await Task.WhenAll(taskList);
+            PlayResult[][] results = await Task.WhenAll(taskList);
 
-            UserBest[][] validResults = results.Select(a => a.Where(result => (result?.PlayResult?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
+            PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
 
             if (validResults.Length > 0)
             {
                 if (mode == -1)
-                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetUserBestEmbed);
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetBeatmapResultEmbed);
                 else
-                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetUserBestEmbed);
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults[mode], GetBeatmapResultEmbed);
             }
             else
                 await ReplyAsync($"> No best plays found for {username}");

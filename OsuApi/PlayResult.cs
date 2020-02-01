@@ -7,6 +7,8 @@ namespace OsuApi
         public UserProfile PlayerData;
         public Beatmap BeatmapData;
         public OsuAccuracy Accuracy;
+        public float FCPP = float.NaN;
+        public uint Mode;
 
         [JsonProperty("score")]
         public ulong Score;
