@@ -29,7 +29,7 @@ namespace BelfastBot.Modules.Misc
         [Command("addcoin")]
         [Summary("Adds coin with given amount")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task AddCoinAsync([Summary("Amount to give")]int amount = 100, [Summary("Optional mention")]IUser target = null)
+        public async Task AddCoinAsync([Summary("Amount to give")]uint amount = 100, [Summary("Optional mention")]IUser target = null)
         {
             target = target ?? Context.Message.Author;
 

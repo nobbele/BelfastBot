@@ -12,10 +12,11 @@ namespace BelfastBot.Services.Database
         public string AnilistName { get; set; } = null;
         public string OsuName { get; set; } = null;
         public uint? QuaverId { get; set; } = null;
-        public int Coins { get; set; } = 100;
+        public uint Coins { get; set; } = 100;
         public int GachaRolls { get; set; } = 0;
         public List<GachaCard> Cards { get; set; } = new List<GachaCard>();
         public GachaCard FavoriteCard { get; set; } = null;
+        public DateTime? LastDaily { get; set; } = null;
 
         public static DatabaseUserEntry CreateNew(ulong userId) => new DatabaseUserEntry
         {

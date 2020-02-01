@@ -192,7 +192,7 @@ namespace BelfastBot.Modules.Profiles
             GachaCard exits = userData.Cards.FirstOrDefault(card => string.Equals(card.Name, cardName, StringComparison.OrdinalIgnoreCase) && string.Equals(card.Rarity.ToString(), rarity, StringComparison.OrdinalIgnoreCase));
             if(exits != null)
             {
-                int refundCoin = GetPriceForCard(exits.Rarity);
+                uint refundCoin = GetPriceForCard(exits.Rarity);
 
                 await ReplyAsync($"> Sold **{exits.Name} [{exits.Rarity.ToString()}]** for **{refundCoin}** coins {Emotes.DiscordCoin}");
                 if (exits.Amount > 1)
@@ -209,7 +209,7 @@ namespace BelfastBot.Modules.Profiles
             }
             await ReplyAsync("> Couldn't find the specified card with given name");
         }
-        private int GetPriceForCard(CardRarity rarity)
+        private uint GetPriceForCard(CardRarity rarity)
         {
             switch (rarity)
             {

@@ -44,7 +44,7 @@ namespace BelfastBot.Services.Configuration
 
         };
         [DataMember]
-        public int GachaPrice { get; internal set; } = 20;
+        public uint GachaPrice { get; internal set; } = 20;
         [DataMember]
         public Dictionary<int, string> Packs { get; internal set; } = new Dictionary<int, string>
         {
@@ -56,13 +56,13 @@ namespace BelfastBot.Services.Configuration
             {6, "Touhou Project"},
         };
         [DataMember]
-        public int SSRCardPrice { get; internal set; } = 200;
+        public uint SSRCardPrice { get; internal set; } = 200;
         [DataMember]
-        public int SRCardPrice { get; internal set; } = 50;
+        public uint SRCardPrice { get; internal set; } = 50;
         [DataMember]
-        public int RareCardPrice { get; internal set; } = 30;
+        public uint RareCardPrice { get; internal set; } = 30;
         [DataMember]
-        public int CommonCardPrice { get; internal set; } = 5;
+        public uint CommonCardPrice { get; internal set; } = 5;
         [DataMember]
         public string SourceCodeGit { get; internal set; } = "https://github.com/nobbele/BelfastBot.git";
 
