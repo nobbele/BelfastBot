@@ -86,11 +86,7 @@ namespace BelfastBot.Modules.Quaver
         [Summary("Get info about user")]
         public async Task GetUserAsync([Summary("Name to get info about")] [Remainder] string name = null)
         {
-            uint? id = null;
-            if(string.IsNullOrEmpty(name))
-                id = Db.GetUserEntry(0, Context.User.Id).QuaverId;
-            else
-                id = await Client.GetUserIdByNameAsync(name);
+            uint? id = await TryGetUserData(name, user => NormalAccessor(user, entry => entry.QuaverId), name => Client.GetUserIdByNameAsync(name).Result);
 
             if (id == null)
             {

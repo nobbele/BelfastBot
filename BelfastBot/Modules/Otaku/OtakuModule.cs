@@ -5,6 +5,7 @@ using BelfastBot.Services.Pagination;
 using System.Linq;
 using System.Threading.Tasks;
 using AnimeApi;
+using BelfastBot.Services.Database;
 
 namespace BelfastBot.Modules.Otaku
 {
@@ -12,6 +13,7 @@ namespace BelfastBot.Modules.Otaku
     public class OtakuModule : BelfastModuleBase
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
+        public JsonDatabaseService Db { get; set; }
 
         [Command("malanime"), Alias("mala")]
         [Summary("Search for anime on myanimelist")]
@@ -76,11 +78,19 @@ namespace BelfastBot.Modules.Otaku
 
         [Command("aluser"), Alias("alu")]
         [Summary("Search for a User on anilist")]
-        public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string name)
+        public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string target_name = null)
         {
-            Logger.LogInfo($"Searching for {name} on anilist");
+            string username = await TryGetUserData(target_name, user =>　NotNullOrEmptyStringDatabaseAccessor(user, entry => entry.AnilistName));
 
-            UserResult userResult = await AnilistClient.GetUserAsync(name);
+            if (username == null)
+            {
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using set?");
+                return;
+            }
+
+            Logger.LogInfo($"Searching for {username} on anilist");
+
+            UserResult userResult = await AnilistClient.GetUserAsync(username);
 
             await ReplyAsync(embed: GetUserResultEmbed(userResult, 0, new EmbedFooterBuilder()));
         }

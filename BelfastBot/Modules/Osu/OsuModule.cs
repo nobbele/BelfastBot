@@ -137,37 +137,16 @@ namespace BelfastBot.Modules.Osu
         #endregion
 
         #region Commands
-        private string GetOsuUsername(IUser user)
-        {
-            string name = Db.GetUserEntry(0, user.Id).OsuName;
-            if (string.IsNullOrEmpty(name))
-            {
-                return null;
-            }
-            return name;
-        }
 
         [Command("osu")]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")
         {
-            string username = null;
-
-            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
-
-            if (target != null && target.IsBot)
-                return;
-
-            if (target != null)
-                username = GetOsuUsername(target);
-            else if (!string.IsNullOrEmpty(target_name))
-                username = target_name;
-            else
-                username = GetOsuUsername(Context.User);
+            string username = await TryGetUserData(target_name, user =>　NotNullOrEmptyStringDatabaseAccessor(user, entry => entry.OsuName));
 
             if (username == null)
             {
-                await ReplyAsync("> Couldn't find a valid user, have you set your username using osuset?");
+                await ReplyAsync("> Couldn't find a valid user, have you set your username using set?");
                 return;
             }
 
@@ -189,15 +168,7 @@ namespace BelfastBot.Modules.Osu
         [Summary("Get recent play")]
         public async Task GetRecentPlay(string target_mode = "_", [Summary("Name to search")] [Remainder] string target_name = "")
         {
-            string username = null;
-
-            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
-            if (target != null)
-                username = GetOsuUsername(target);
-            else if (!string.IsNullOrEmpty(target_name))
-                username = target_name;
-            else
-                username = GetOsuUsername(Context.User);
+            string username = await TryGetUserData(target_name, user =>　NotNullOrEmptyStringDatabaseAccessor(user, entry => entry.OsuName));
 
             if (username == null)
             {
@@ -232,15 +203,7 @@ namespace BelfastBot.Modules.Osu
         [Summary("Get recent play")]
         public async Task GetBestPlays(string target_mode = "_", [Summary("Name to search")] string target_name = "")
         {
-            string username = null;
-
-            IUser target = await DiscordClient.GetUserAsync(Context.Message.MentionedUserIds.FirstOrDefault());
-            if (target != null)
-                username = GetOsuUsername(target);
-            else if (!string.IsNullOrEmpty(target_name))
-                username = target_name;
-            else
-                username = GetOsuUsername(Context.User);
+            string username = await TryGetUserData(target_name, user =>　NotNullOrEmptyStringDatabaseAccessor(user, entry => entry.OsuName));
 
             if (username == null)
             {
