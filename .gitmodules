@@ -2,3 +2,6 @@
 [submodule "Quaver.API"]
 	path = Quaver.API
 	url = https://github.com/nobbele/Quaver.API/
+[submodule "osu"]
+	path = osu
+	url = https://github.com/nobbele/osu

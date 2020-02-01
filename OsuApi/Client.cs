@@ -7,6 +7,18 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using osu.Game.Beatmaps;
+using osu.Game.Rulesets.Osu.Difficulty;
+using osu.Game.Rulesets.Osu;
+using osu.Game.Scoring;
+using Moq;
+using System.IO;
+using osu.Game.Rulesets.Scoring;
+using osu.Game.Rulesets.Taiko;
+using osu.Game.Rulesets.Catch;
+using osu.Game.Rulesets.Mania;
+using osu.Game.Rulesets;
+using osu.Game.Rulesets.Difficulty;
 
 namespace OsuApi
 {
@@ -30,6 +42,7 @@ namespace OsuApi
                 return profile;
             }
         }
+
         public static async Task<PlayResult[]> GetUserRecentAsync(string token, string user, uint mode)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
@@ -44,7 +57,53 @@ namespace OsuApi
             }
         }
 
-        public static async Task<UserBest[]> GetUserBestAsync(string token, string user, uint mode)
+        public static float GetPP(Stream beatmapStream, PlayResult result, bool ifFc)
+        {
+            Ruleset ruleset = result.Mode switch
+            {
+                0 => new OsuRuleset(),
+                1 => new TaikoRuleset(),
+                2 => new CatchRuleset(),
+                3 => new ManiaRuleset(),
+                _ => throw new Exception("Invalid mode"),
+            };
+            BeatmapInfo beatmapInfo = new BeatmapInfo()
+            {
+                BaseDifficulty = new BeatmapDifficulty()
+                {
+                    DrainRate = result.BeatmapData.DrainRate,
+                    ApproachRate = result.BeatmapData.ApproachRate,
+                    CircleSize = result.BeatmapData.CircleSize,
+                    OverallDifficulty = result.BeatmapData.OverallDifficulty,
+                },
+                Ruleset = ruleset.RulesetInfo,
+            };
+            FakeWorkingBeatmap beatmap = new FakeWorkingBeatmap(beatmapStream, beatmapInfo);
+            ScoreInfo score = new ScoreInfo()
+            {
+                MaxCombo = (int)result.Combo,
+                Mods = ruleset.GetAllMods().Where(mod => result.Mods.GetFromBitflag().Select(m => m.ToShortString()).Contains(mod.Acronym)).ToArray(),
+                Accuracy = (float)result.Accuracy.Accuracy,
+                Statistics = result.Accuracy.Statistics,
+            };
+            if(ifFc)
+            {
+                score.Statistics = new Dictionary<HitResult, int>()
+                {
+                    { HitResult.Miss, 0 },
+                    { HitResult.Ok, 0 },
+                    { HitResult.Meh, 0 },
+                    { HitResult.Good, 0 },
+                    { HitResult.Perfect, 0 },
+                    { HitResult.Great, result.Accuracy.Statistics.Sum(k => k.Value) }
+                };
+            }
+            PerformanceCalculator calc = ruleset.CreatePerformanceCalculator(beatmap, score);
+            
+            return (float)calc.Calculate();
+        }
+
+        public static async Task<PlayResult[]> GetUserBestAsync(string token, string user, uint mode)
         {
             Task<UserProfile> userDataTask = GetUserAsync(token, user, mode);
 
@@ -54,7 +113,7 @@ namespace OsuApi
 
                 PlayResult[] results = await GetPlayResultAsync(token, mode, json, userDataTask);
 
-                return results.Select(r => r == null ? null : new UserBest() { PlayResult = r }).ToArray();
+                return results;
             }
         }
 
@@ -70,12 +129,26 @@ namespace OsuApi
 
                 PlayResult result = jsonResult.ToObject<PlayResult>();
 
+                result.Mode = mode;
+
                 result.Accuracy = JsonConvert.DeserializeObject<OsuAccuracy>(jsonResult.ToString(), new OsuAccuracyConverter(mode));
 
                 await Task.WhenAll(userDataTask, beatmapDataTask);
 
                 result.PlayerData = userDataTask.Result;
                 result.BeatmapData = beatmapDataTask.Result;
+
+                if(result.BeatmapData == null || result.PlayerData == null)
+                    continue;
+
+                using(HttpClient httpClient = new HttpClient())
+                {
+                    Stream beatmap = await httpClient.GetStreamAsync($"https://osu.ppy.sh/osu/{result.BeatmapData.Id}");
+                    if(float.IsNaN(result.PP))
+                        result.PP = GetPP(beatmap, result, false);
+                    if(float.IsNaN(result.FCPP))
+                        result.FCPP = GetPP(beatmap, result, true);
+                }
 
                 results.Add(result);
             }

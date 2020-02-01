@@ -22,6 +22,7 @@ namespace OsuApi
             {
                 0 => new OsuStdAccuracy()
                 {
+                    CountMiss = token["countmiss"].ToObject<uint>(),
                     Count50 = token["count50"].ToObject<uint>(),
                     Count100 = token["count100"].ToObject<uint>(),
                     Count300 = token["count300"].ToObject<uint>(),
