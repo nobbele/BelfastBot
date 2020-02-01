@@ -119,7 +119,7 @@ namespace BelfastBot.Modules.Osu
             $"__**Main Details**__\n" +
             $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
             $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
-            $"► PP: **{result.PP:F2} ({result.FCPP:F2} if FC)**\n" +
+            $"► PP: **{result.PP:F2} ({result.SSPP:F2} if SS)**\n" +
             $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
             $"► Score: **{result.Score}**\n" +
             $"► Combo: **{result.Combo}**\n" +

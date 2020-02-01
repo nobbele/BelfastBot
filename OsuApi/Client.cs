@@ -57,7 +57,7 @@ namespace OsuApi
             }
         }
 
-        public static float GetPP(Stream beatmapStream, PlayResult result, bool ifFc)
+        public static float GetPP(Stream beatmapStream, PlayResult result, bool ifSs)
         {
             Ruleset ruleset = result.Mode switch
             {
@@ -86,7 +86,7 @@ namespace OsuApi
                 Accuracy = (float)result.Accuracy.Accuracy,
                 Statistics = result.Accuracy.Statistics,
             };
-            if(ifFc)
+            if(ifSs)
             {
                 score.Statistics = new Dictionary<HitResult, int>()
                 {
@@ -146,8 +146,8 @@ namespace OsuApi
                     Stream beatmap = await httpClient.GetStreamAsync($"https://osu.ppy.sh/osu/{result.BeatmapData.Id}");
                     if(float.IsNaN(result.PP))
                         result.PP = GetPP(beatmap, result, false);
-                    if(float.IsNaN(result.FCPP))
-                        result.FCPP = GetPP(beatmap, result, true);
+                    if(float.IsNaN(result.SSPP))
+                        result.SSPP = GetPP(beatmap, result, true);
                 }
 
                 results.Add(result);
