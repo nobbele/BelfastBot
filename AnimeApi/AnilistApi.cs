@@ -213,7 +213,7 @@ namespace AnimeApi
             };
         }
 
-        public static async Task<UserResult> GetUserAsync(string name)
+        public static async Task<UserResult?> GetUserAsync(string name)
         {
             GraphQLResponse response = await Client.PostAsync(new GraphQLRequest()
             {
@@ -226,6 +226,9 @@ namespace AnimeApi
             });
 
             dynamic data = response.Data.User;
+
+            if (data == null)
+                return null;
 
             return new UserResult()
             {

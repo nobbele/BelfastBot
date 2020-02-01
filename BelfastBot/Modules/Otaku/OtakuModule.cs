@@ -90,9 +90,12 @@ namespace BelfastBot.Modules.Otaku
 
             Logger.LogInfo($"Searching for {username} on anilist");
 
-            UserResult userResult = await AnilistClient.GetUserAsync(username);
+            UserResult? userResult = await AnilistClient.GetUserAsync(username);
 
-            await ReplyAsync(embed: GetUserResultEmbed(userResult, 0, new EmbedFooterBuilder()));
+            if(userResult == null)
+                await ReplyAsync($"> No user **{username}** found");
+            else
+                await ReplyAsync(embed: GetUserResultEmbed(userResult.Value, 0, new EmbedFooterBuilder()));
         }
 
         private Embed GetUserResultEmbed(UserResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
@@ -113,9 +116,9 @@ namespace BelfastBot.Modules.Otaku
             $"► Chapters Read: **{result.MangaStats.Amount}**\n" +
             $"► Mean Score: **{result.MangaStats.MeanScore}**\n")
             .AddField("Favorites ▼",
-            $"► Anime: **[{result.AnimeFavorite.Name.ShortenText(limit: 25)}]({result.AnimeFavorite.SiteUrl})**\n" +
-            $"► Manga: **[{result.MangaFavorite.Name.ShortenText(limit: 25)}]({result.MangaFavorite.SiteUrl})**\n" +
-            $"► Character: **[{result.CharacterFavorite.Name.ShortenText(limit: 25)}]({result.CharacterFavorite.SiteUrl})**\n")
+            $"► Anime: **[{result.AnimeFavorite?.Name?.ShortenText(limit: 25) ?? "None"}]({result.AnimeFavorite?.SiteUrl})**\n" +
+            $"► Manga: **[{result.MangaFavorite?.Name?.ShortenText(limit: 25) ?? "None"}]({result.MangaFavorite?.SiteUrl})**\n" +
+            $"► Character: **[{result.CharacterFavorite?.Name?.ShortenText(limit: 25) ?? "None"}]({result.CharacterFavorite?.SiteUrl})**\n")
             .WithFooter(footer)
             .WithThumbnailUrl(result.AvatarImage)
             .WithImageUrl(result.BannerImage)
