@@ -10,6 +10,7 @@ namespace BelfastBot.Modules.Fun
         public IDiscordClient Client { get; set; }
 
         [Command("nekoimg"), Alias("nimg")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("Sends a random image from nekoslife with the given tag")]
         public async Task GetImage([Summary("Category to search")] string category = "neko")
         {
@@ -32,6 +33,7 @@ namespace BelfastBot.Modules.Fun
         }
 
         [Command("nekogif"), Alias("ngif")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("Sends a random gif from nekoslife with the given tag")]
         public async Task GetGif([Summary("Category to search")] string category, [Summary("The user to do [verb] with")] IUser target = null, [Summary("The verb to display")] [Remainder] string verb = "interacted with")
         {
@@ -57,18 +59,23 @@ namespace BelfastBot.Modules.Fun
         }
 
         [Command("hug")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("Hugs Belfast or user specified")]
         public async Task GetHug([Summary("User to hug")] IUser target = null) => await GetGif("hug", target, "hugged");
         [Command("kiss")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("kisses Belfast or user specified")]
         public async Task GetKiss([Summary("User to kiss")] IUser target = null) => await GetGif("kiss", target, "kissed");
         [Command("poke")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("pokes Belfast or user specified")]
         public async Task GetPoke([Summary("User to poke")] IUser target = null) => await GetGif("poke", target, "poked");
         [Command("slap")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("slaps Belfast or user specified")]
         public async Task GetSlap([Summary("User to slap")] IUser target = null) => await GetGif("slap", target, "slapped");        
         [Command("pat")]
+        [RateLimit(typeof(NekosLifeModule), perMinute: 45)]
         [Summary("Pats Belfast or user specified")] 
         public async Task GetPat([Summary("User to pat")] IUser target = null) => await GetGif("pat", target, "patted");
     }

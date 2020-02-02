@@ -137,6 +137,7 @@ namespace BelfastBot.Modules.Osu
         #region Commands
 
         [Command("osu")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")
         {
@@ -163,6 +164,7 @@ namespace BelfastBot.Modules.Osu
         }
 
         [Command("orecent"), Alias("ors")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get recent play")]
         public async Task GetRecentPlay(string target_mode = "_", [Summary("Name to search")] [Remainder] string target_name = "")
         {
@@ -204,6 +206,7 @@ namespace BelfastBot.Modules.Osu
         }
 
         [Command("obest"), Alias("obs")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get recent play")]
         public async Task GetBestPlays(string target_mode = "_", [Summary("Name to search")] string target_name = "")
         {

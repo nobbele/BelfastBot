@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace BelfastBot.Modules.Misc
 {
@@ -25,6 +26,12 @@ namespace BelfastBot.Modules.Misc
 
             Belfast.Stop();
         }
+
+        [Command("servers"), RequireOwner]
+	    public async Task ServersAsync()
+	    {
+            await ReplyAsync(string.Join("\n", (await DiscordClient.GetGuildsAsync()).Select(guild => guild.Name)));
+	    }
 
         [Command("addcoin")]
         [Summary("Adds coin with given amount")]

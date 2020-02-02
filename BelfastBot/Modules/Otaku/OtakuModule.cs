@@ -16,6 +16,7 @@ namespace BelfastBot.Modules.Otaku
         public JsonDatabaseService Db { get; set; }
 
         [Command("malanime"), Alias("mala")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Search for anime on myanimelist")]
         public async Task SearchMalAnimeAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
@@ -36,6 +37,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("malmanga"), Alias("malm")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
         public async Task SearchMalMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
             Logger.LogInfo($"Searching for {name} on myanimelist");
@@ -55,6 +57,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("alanime"), Alias("ala")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Search for anime on anilist")]
         public async Task SearchAlAnimeAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
@@ -66,6 +69,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("alamanga"), Alias("alm")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Search for manga on anilist")]
         public async Task SearchAlMangaAsync([Summary("Title to search")] [Remainder]string name = "Azur Lane")
         {
@@ -77,6 +81,7 @@ namespace BelfastBot.Modules.Otaku
         }
 
         [Command("aluser"), Alias("alu")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Search for a User on anilist")]
         public async Task SearchAlUserAsync([Summary("Title to search")] [Remainder]string target_name = null)
         {

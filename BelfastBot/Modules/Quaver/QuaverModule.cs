@@ -83,6 +83,7 @@ namespace BelfastBot.Modules.Quaver
 
         #region Commands
         [Command("quaver")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
         [Summary("Get info about user")]
         public async Task GetUserAsync([Summary("Name to get info about")] [Remainder] string name = null)
         {
@@ -103,6 +104,7 @@ namespace BelfastBot.Modules.Quaver
         }
 
         [Command("qrecent4k"), Alias("qr4k")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
         [Summary("Get recent 4k play info by user")]
         public async Task GetRecent4KAsync([Summary("User to get recent play from")] string name = null)
         {
@@ -128,6 +130,7 @@ namespace BelfastBot.Modules.Quaver
         }
 
         [Command("qrecent7k"), Alias("qr7k")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
         [Summary("Get recent 7k play info by user")]
         public async Task GetRecent7KAsync([Summary("User to get recent play from")] string name = null)
         {

@@ -11,6 +11,7 @@ namespace BelfastBot.Modules.Fun
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
         [Command("wp")]
+        [RateLimit(typeof(WallpapersModule), perMinute: 45)]
         [Summary("Gets wallpaper from alphacoders")]
         public async Task SearchWallpaperAsync([Summary("Image to search")] [Remainder] string name = "Azur Lane")
         {

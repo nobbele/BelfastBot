@@ -16,6 +16,7 @@ namespace BelfastBot.Modules.Gacha
         private Random m_random;
 
         [Command("gao")]
+        [RateLimit(typeof(GachaModule), perMinute: 45)]
         [Summary("Opens random character from a card pack")]
         public async Task GetGacha([Summary("Card pack index")][Remainder]int cardPack = 1)
         {
