@@ -32,7 +32,7 @@ namespace BelfastBot.Modules.Misc
         {
             ModuleInfo[] moduleInfos = Command.Modules.GroupBy(x => x.Name).Select(y => y.First()).ToArray();
 
-            EmbedBuilder[] builders = new EmbedBuilder[(moduleInfos.Length / modulesPerPage)];
+            EmbedBuilder[] builders = new EmbedBuilder[(moduleInfos.Length / modulesPerPage) + 1];
 
             for(int j = 0; j < builders.Length; j++)
             {
