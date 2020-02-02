@@ -16,7 +16,7 @@ namespace BelfastBot.Modules.Fun
         [Command("cdaily")]
         public async Task DailyAsync()
         {
-            DatabaseUserEntry entry = Database.GetUserEntry(0, Context.Guild.Id);
+            DatabaseUserEntry entry = Database.GetUserEntry(0, Context.Message.Author.Id);
             async Task giveCoins()
             {
                 entry.LastDaily = DateTime.Now;
