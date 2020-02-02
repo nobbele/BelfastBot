@@ -91,7 +91,11 @@ namespace BelfastBot.Modules.Profiles
         }
 
         [Command("set")]
-        public async Task SetName(string Type, [Remainder]string name)
+        [Summary("Set Names For Certain Apis")]
+        public async Task SetName([Summary("" +
+            "► Anilist\n" +
+            "► Osu\n" +
+            "► Quaver\n")] string Type, [Summary("Name to set")] [Remainder] string name)
         {
             switch (Type.ToLower())
             {

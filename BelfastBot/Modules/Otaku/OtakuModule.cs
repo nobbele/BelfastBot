@@ -84,7 +84,7 @@ namespace BelfastBot.Modules.Otaku
 
             if (username == null)
             {
-                await ReplyAsync("> Couldn't find a valid user, have you set your username using set?");
+                await ReplyAsync("> No user **{username}** found");
                 return;
             }
 
