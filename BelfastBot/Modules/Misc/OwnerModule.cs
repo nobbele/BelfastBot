@@ -2,12 +2,9 @@
 using Discord.Commands;
 using BelfastBot.Services.Database;
 using System.Threading.Tasks;
-<<<<<<< HEAD
 using System;
 using System.Diagnostics;
 using System.IO;
-=======
->>>>>>> 0f905f48afefec60693d39a90a77956100172173
 using System.Linq;
 
 namespace BelfastBot.Modules.Misc
