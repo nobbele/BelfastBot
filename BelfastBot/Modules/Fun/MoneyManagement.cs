@@ -20,7 +20,7 @@ namespace BelfastBot.Modules.Fun
                 entry.LastDaily = DateTime.Now;
                 entry.Coins += DailyCoinAmount;
                 Database.WriteData();
-                await ReplyAsync($"You have been given {DailyCoinAmount}, your total is now {entry.Coins}");
+                await ReplyAsync($"> You have been given **{DailyCoinAmount}**, your total is now **{entry.Coins}**.");
             }
             if(entry.LastDaily == null)
                 await giveCoins();
@@ -30,7 +30,7 @@ namespace BelfastBot.Modules.Fun
                 if(entry.LastDaily.Value.DayOfYear != DateTime.Now.DayOfYear)
                     await giveCoins();
                 else
-                    await ReplyAsync($"You have already collected your daily today, please try again tomorrow");
+                    await ReplyAsync($"> You have already collected your daily today, please try again tomorrow.");
             }
         }
     }

@@ -19,6 +19,7 @@ namespace BelfastBot.Modules.Profiles
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient Client { get; set; }
 
+        #region Embed
         private Embed GetUserGachaEmbed(IUser target, string gachaString, EmbedFooterBuilder footer) => new EmbedBuilder()
                  .WithColor(0x53DF1D)
                  .WithAuthor(author => {
@@ -41,7 +42,9 @@ namespace BelfastBot.Modules.Profiles
                  .WithFooter(footer)
                  .WithThumbnailUrl($"{guild.IconUrl}")
                  .Build();
+        #endregion
 
+        #region Commands
         [Command("profile"), Alias("prf")]
         [Summary("Shows details of an users profile")]
         public async Task CheckProfileAsync([Summary("(optional) The user profile to get")] IUser target = null)
@@ -121,7 +124,8 @@ namespace BelfastBot.Modules.Profiles
                 users = users.Where(user => Context.Guild.GetUserAsync(user.Id).Result != null);
             IEnumerable<DatabaseUserEntry> sortedUser = users.OrderByDescending(user => user.Xp);
 
-            string lbString = (await Task.WhenAll(sortedUser.Select(async (user) => $"`{await Context.Guild.GetUserAsync(user.Id)}` - lvl {user.Level}({user.Xp} xp)"))).NewLineSeperatedString();
+            int i = 1;
+            string lbString = (await Task.WhenAll(sortedUser.Select(async (user) => $"► **[{i++}] {await Context.Guild.GetUserAsync(user.Id)}** - lvl {user.Level} ({user.Xp} xp)"))).NewLineSeperatedString();
 
             if(string.IsNullOrEmpty(lbString))
             {
@@ -209,6 +213,8 @@ namespace BelfastBot.Modules.Profiles
             }
             await ReplyAsync("> Couldn't find the specified card with given name");
         }
+        #endregion
+
         private uint GetPriceForCard(CardRarity rarity)
         {
             switch (rarity)
