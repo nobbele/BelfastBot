@@ -17,7 +17,7 @@ namespace BelfastBot.Services.Configuration
         [Sensitive, DataMember]
         public string AlphaCodersApiToken { get; internal set; } = "YOUR TOKEN";
         [DataMember]
-        public string Prefix { get; internal set; } = ".";
+        public string Prefix { get; internal set; } = "bel!";
         [DataMember]
         public string[] WelcomeMessages { get; internal set; } = new string[] 
         {
