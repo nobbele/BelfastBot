@@ -125,11 +125,11 @@ namespace BelfastBot.Modules.Profiles
             IEnumerable<DatabaseUserEntry> sortedUser = users.OrderByDescending(user => user.Xp);
 
             int i = 1;
-            string lbString = (await Task.WhenAll(sortedUser.Select(async (user) => $"► **[{i++}] {await Context.Guild.GetUserAsync(user.Id)}** - lvl {user.Level} ({user.Xp} xp)"))).NewLineSeperatedString();
+            string lbString = (await Task.WhenAll(sortedUser.Select(async (user) => $"► **[{i++}] {await Client.GetUserAsync(user.Id)}** - lvl {user.Level} ({user.Xp} xp)"))).NewLineSeperatedString();
 
             if(string.IsNullOrEmpty(lbString))
             {
-                await ReplyAsync("Empty leaderboard");
+                await ReplyAsync("> Empty leaderboard");
                 return;
             }
 
