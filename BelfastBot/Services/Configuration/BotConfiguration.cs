@@ -50,10 +50,11 @@ namespace BelfastBot.Services.Configuration
         {
             {1, "Azur Lane"},
             {2, "Fate (Series)"},
-            {3, "Honkai Impact 3rd"},
-            {4, "Pokemon (Series)"},
-            {5, "One Piece (Series)"},
-            {6, "Touhou Project"},
+            {3, "Arknights"},
+            {4, "Honkai Impact 3rd"},
+            {5, "Pokemon (Series)"},
+            {6, "One Piece (Series)"},
+            {7, "Touhou Project"},
         };
         [DataMember]
         public uint SSRCardPrice { get; internal set; } = 200;
