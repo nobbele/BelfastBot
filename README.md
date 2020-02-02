@@ -18,3 +18,5 @@ Prepare Giveaways, Set Reminders, Open Gacha Packs and Do Much More!
 BelfastDiscordClient is used to run the bot for discord
 
 BelfastWebClient is used to run the bot for the web via discord emulator
+
+<b>More Information About The Bot Will Be Added As Soon As Possible!</b>
