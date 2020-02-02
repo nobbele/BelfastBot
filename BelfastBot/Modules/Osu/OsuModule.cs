@@ -58,31 +58,19 @@ namespace BelfastBot.Modules.Osu
             return "Unknown";
         }
 
-        private IEmote GetEmoteForRank(string rank)
+        private IEmote GetEmoteForRank(string rank) => rank switch
         {
-            switch(rank)
-            {
-                case "SS":
-                    return Emotes.SS;
-                case "XH":
-                    return Emotes.XH;
-                case "S":
-                    return Emotes.S;
-                case "SH":
-                    return Emotes.SH;
-                case "A":
-                    return Emotes.A;
-                case "B":
-                    return Emotes.B;
-                case "C":
-                    return Emotes.C;
-                case "D":
-                    return Emotes.D;
-                case "F":
-                    return Emotes.F;
-            }
-            return Emotes.BelfastShock;
-        }
+            "X" => Emotes.SS,
+            "XH" => Emotes.XH,
+            "S" => Emotes.S,
+            "SH" => Emotes.SH,
+            "A" => Emotes.A,
+            "B" => Emotes.B,
+            "C" => Emotes.C,
+            "D" => Emotes.D,
+            "F" => Emotes.F,
+            _ => Emotes.BelfastShock,
+        };
         #endregion
 
         #region Embed
