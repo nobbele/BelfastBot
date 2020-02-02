@@ -109,10 +109,10 @@ namespace BelfastBot.Modules.Misc
             "► 2 = bing\n" +
             "► 3 = ask\n" +
             "► 4 = aol.\n" +
-            "► 5 = duckduckgo")]int type = 0, [Remainder] string search = "")
+            "► 5 = duckduckgo")]int type = 0, [Remainder] string search = "Belfast")
         {
             string engine = type switch
-            { 
+            {
                 0 => "p=1&s=g&t=w",
                 1 => "p=1&s=y&t=w",
                 2 => "p=1&s=b&t=w",
@@ -122,8 +122,7 @@ namespace BelfastBot.Modules.Misc
                 _ => "p=1&s=g&t=w",
             };
 
-            search = search.Replace(' ', '+');
-            string url = $"{BaseUrlLmgtfy}/?q={search}&{engine}";
+            string url = $"{BaseUrlLmgtfy}/?q={HttpUtility.UrlEncode(search)}&{engine}";
 
             await ReplyAsync(embed: GetLmgUrlEmbed(url, search, new EmbedFooterBuilder()));
         }    

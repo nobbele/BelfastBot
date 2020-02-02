@@ -1,11 +1,13 @@
 ﻿using Discord;
 using Discord.Commands;
-using BelfastBot.Services.Commands;
 using BelfastBot.Services.Database;
 using System.Threading.Tasks;
+<<<<<<< HEAD
 using System;
 using System.Diagnostics;
 using System.IO;
+=======
+>>>>>>> 0f905f48afefec60693d39a90a77956100172173
 using System.Linq;
 
 namespace BelfastBot.Modules.Misc
@@ -16,9 +18,8 @@ namespace BelfastBot.Modules.Misc
         public IClient Belfast { get; set; }
         public JsonDatabaseService Db { get; set; }
 
-        [Command("stop")]
+        [Command("stop"), RequireOwner]
         [Summary("Stops Belfast")]
-        [RequireOwner]
         public async Task StopAsync()
         {
             Logger.LogInfo($"{Context.User} stopped Belfast");
@@ -33,9 +34,8 @@ namespace BelfastBot.Modules.Misc
             await ReplyAsync(string.Join("\n", (await DiscordClient.GetGuildsAsync()).Select(guild => guild.Name)));
 	    }
 
-        [Command("addcoin")]
+        [Command("addcoin"), RequireOwner]
         [Summary("Adds coin with given amount")]
-        [RequireUserPermission(GuildPermission.Administrator)]
         public async Task AddCoinAsync([Summary("Amount to give")]uint amount = 100, [Summary("Optional mention")]IUser target = null)
         {
             target = target ?? Context.Message.Author;

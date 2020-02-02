@@ -25,7 +25,7 @@ namespace BelfastBot.Modules.Misc
                 await CommandHelp(command);
         }
 
-        private int modulesPerPage = 4;
+        private int modulesPerPage = 5;
 
         private async Task ModulesHelp()
         {
