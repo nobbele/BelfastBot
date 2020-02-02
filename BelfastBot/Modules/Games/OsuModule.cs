@@ -7,7 +7,7 @@ using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
 using Common;
 
-namespace BelfastBot.Modules.Osu
+namespace BelfastBot.Modules.Games
 {
     [Summary("Commands for osu")]
     public class OsuModule : BelfastModuleBase

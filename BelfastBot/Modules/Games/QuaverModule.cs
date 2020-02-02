@@ -5,7 +5,7 @@ using Discord;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
 
-namespace BelfastBot.Modules.Quaver
+namespace BelfastBot.Modules.Games
 {
     [Summary("Commands for quaver")]
     public class QuaverModule : BelfastModuleBase
