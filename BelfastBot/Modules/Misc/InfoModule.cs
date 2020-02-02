@@ -15,12 +15,6 @@ namespace BelfastBot.Modules.Misc
         public IClient Belfast { get; set; }
 
         #region Commands
-        [Command("servers"), RequireOwner]
-	    public async Task ServersAsync()
-	    {
-                await ReplyAsync(string.Join("\n", (await Client.GetGuildsAsync()).Select(guild => guild.Name)));
-	    }
-
         [Command("help")]
         public async Task HelpAsync([Remainder] string command = null)
         {
