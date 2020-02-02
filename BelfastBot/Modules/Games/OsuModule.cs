@@ -16,13 +16,13 @@ namespace BelfastBot.Modules.Games
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
 
-        public int GetIndexFromModeName(string name) => name.ToLower() switch
+        public int GetIndexFromModeName(string name, int defaultValue = -1) => name.ToLower() switch
         {
             "std" => 0,
             "taiko" => 1,
             "ctb" => 2,
             "mania" => 3,
-            _ => -1,
+            _ => defaultValue,
         };
 
         private string GetNameForModeIndex(uint mode)
@@ -114,6 +114,12 @@ namespace BelfastBot.Modules.Games
             $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
             $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
+            .WithFooter(footer)
+            .Build();
+
+        private Embed GetBeatmapEmbed(Beatmap beatmap, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithTitle($"{beatmap.Name}")
+            .AddField("Created by ", $"{beatmap.CreatorName}")
             .WithFooter(footer)
             .Build();
 
@@ -226,6 +232,26 @@ namespace BelfastBot.Modules.Games
                 else
                     await ReplyAsync($"> No best plays found for {username}");
             }          
+        }
+
+        [Command("omap")]
+        [Summary("Gives information about a map")]
+        public async Task MapAsync(string map, string mode = "std")
+        {
+            if(ulong.TryParse(map, out ulong id))
+            {
+                Beatmap beatmap = await Client.GetBeatmapAsync(Config.Configuration.OsuApiToken, id, (uint)GetIndexFromModeName(mode, 0));
+                if(beatmap == null)
+                {
+                    await ReplyAsync("No such map");
+                    return;
+                }
+                await ReplyAsync(embed: GetBeatmapEmbed(beatmap, 0, new EmbedFooterBuilder()));
+            }
+            else
+            {
+                await ReplyAsync("Invalid map id provided");
+            }
         }
     }
 }
