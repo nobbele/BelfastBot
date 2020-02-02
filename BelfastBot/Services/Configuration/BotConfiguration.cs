@@ -27,7 +27,7 @@ namespace BelfastBot.Services.Configuration
         [DataMember]
         public int MaxWarnAmount { get; internal set; } = 3;
         [DataMember]
-        public string StatusMessage { get; internal set; } = "Over :serverCount: servers";
+        public string StatusMessage { get; internal set; } = "Over :serverCount: servers | :prefix:help";
         [DataMember]
         public ActivityType Activity { get; internal set; } = ActivityType.Watching;
         [DataMember]

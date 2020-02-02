@@ -2,6 +2,9 @@
 using Discord.Commands;
 using BelfastBot.Services.Database;
 using System.Threading.Tasks;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace BelfastBot.Modules.Misc
@@ -22,6 +25,12 @@ namespace BelfastBot.Modules.Misc
             Belfast.Stop();
         }
 
+        [Command("servers"), RequireOwner]
+	    public async Task ServersAsync()
+	    {
+            await ReplyAsync(string.Join("\n", (await DiscordClient.GetGuildsAsync()).Select(guild => guild.Name)));
+	    }
+
         [Command("addcoin"), RequireOwner]
         [Summary("Adds coin with given amount")]
         public async Task AddCoinAsync([Summary("Amount to give")]uint amount = 100, [Summary("Optional mention")]IUser target = null)
@@ -36,12 +45,6 @@ namespace BelfastBot.Modules.Misc
             Db.GetUserEntry(0, target.Id).Coins += amount;
             Db.WriteData();
             await ReplyAsync($"> Given {target.Mention} {amount} Coins {Emotes.DiscordCoin}");
-        }
-
-        [Command("servers"), RequireOwner]
-        public async Task ServersAsync()
-        {
-            await ReplyAsync(string.Join("\n", (await this.DiscordClient.GetGuildsAsync()).Select(guild => guild.Name)));
         }
     }
 }

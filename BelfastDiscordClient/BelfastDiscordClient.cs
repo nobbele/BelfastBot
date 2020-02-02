@@ -23,7 +23,7 @@ namespace BelfastDiscordClient
 {
     public class BelfastDiscordClient : IClient
     {
-        public string Version => "1.2-Discord";
+        public string Version => "1.3-Discord";
 
         public LoggingService Logger { get; private set; }
         public static BelfastDiscordClient Instance;
@@ -81,7 +81,7 @@ namespace BelfastDiscordClient
                 };
                 client.Ready += async () =>
                 {
-                    await client.SetGameAsync(config.Configuration.StatusMessage.Replace(":serverCount:", client.Guilds.Count.ToString()), type: config.Configuration.Activity);
+                    await client.SetGameAsync(config.Configuration.StatusMessage.Replace(":serverCount:", client.Guilds.Count.ToString()).Replace(":prefix:", config.Configuration.Prefix), type: config.Configuration.Activity);
                     await client.SetStatusAsync(config.Configuration.OnlineStatus);
                 };
 

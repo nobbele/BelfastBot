@@ -4,7 +4,7 @@ namespace BelfastWebClient
 {
     public class WebBelfastClient : IClient
     {
-        public string Version => "1.2-Web";
+        public string Version => "1.3-Web";
 
         public bool Stopped => throw new System.NotImplementedException();
 

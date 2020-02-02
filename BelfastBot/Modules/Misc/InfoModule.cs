@@ -14,7 +14,6 @@ namespace BelfastBot.Modules.Misc
         public IDiscordClient Client { get; set; } 
         public IClient Belfast { get; set; }
 
-        #region Commands
         [Command("help")]
         public async Task HelpAsync([Remainder] string command = null)
         {
@@ -110,6 +109,5 @@ namespace BelfastBot.Modules.Misc
 
             await ReplyAsync(embed: embed);
         }
-        #endregion
     }
 }

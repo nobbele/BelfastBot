@@ -7,7 +7,7 @@ using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
 using Common;
 
-namespace BelfastBot.Modules.Osu
+namespace BelfastBot.Modules.Games
 {
     [Summary("Commands for osu")]
     public class OsuModule : BelfastModuleBase
@@ -16,14 +16,13 @@ namespace BelfastBot.Modules.Osu
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
 
-        #region Other
-        public int GetIndexFromModeName(string name) => name.ToLower() switch
+        public int GetIndexFromModeName(string name, int defaultValue = -1) => name.ToLower() switch
         {
             "std" => 0,
             "taiko" => 1,
             "ctb" => 2,
             "mania" => 3,
-            _ => -1,
+            _ => defaultValue,
         };
 
         private string GetNameForModeIndex(uint mode)
@@ -71,9 +70,7 @@ namespace BelfastBot.Modules.Osu
             "F" => Emotes.F,
             _ => Emotes.BelfastShock,
         };
-        #endregion
 
-        #region Embed
         private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
             .WithAuthor(author => {
@@ -120,11 +117,14 @@ namespace BelfastBot.Modules.Osu
             .WithFooter(footer)
             .Build();
 
-        #endregion
-
-        #region Commands
+        private Embed GetBeatmapEmbed(Beatmap beatmap, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithTitle($"{beatmap.Name}")
+            .AddField("Created by ", $"{beatmap.CreatorName}")
+            .WithFooter(footer)
+            .Build();
 
         [Command("osu")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get std profile details from an user")]
         public async Task OsuGetUserAsync([Summary("Name to search")] [Remainder] string target_name = "")
         {
@@ -151,6 +151,7 @@ namespace BelfastBot.Modules.Osu
         }
 
         [Command("orecent"), Alias("ors")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get recent play")]
         public async Task GetRecentPlay(string target_mode = "_", [Summary("Name to search")] [Remainder] string target_name = "")
         {
@@ -192,6 +193,7 @@ namespace BelfastBot.Modules.Osu
         }
 
         [Command("obest"), Alias("obs")]
+        [RateLimit(typeof(OsuModule), perMinute: 45)]
         [Summary("Get recent play")]
         public async Task GetBestPlays(string target_mode = "_", [Summary("Name to search")] string target_name = "")
         {
@@ -231,6 +233,26 @@ namespace BelfastBot.Modules.Osu
                     await ReplyAsync($"> No best plays found for {username}");
             }          
         }
-        #endregion
+
+        [Command("omap")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
+        [Summary("Gives information about a map")]
+        public async Task MapAsync(string map, string mode = "std")
+        {
+            if(ulong.TryParse(map, out ulong id))
+            {
+                Beatmap beatmap = await Client.GetBeatmapAsync(Config.Configuration.OsuApiToken, id, (uint)GetIndexFromModeName(mode, 0));
+                if(beatmap == null)
+                {
+                    await ReplyAsync("No such map");
+                    return;
+                }
+                await ReplyAsync(embed: GetBeatmapEmbed(beatmap, 0, new EmbedFooterBuilder()));
+            }
+            else
+            {
+                await ReplyAsync("Invalid map id provided");
+            }
+        }
     }
 }

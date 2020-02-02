@@ -82,15 +82,18 @@ namespace BelfastBot.Services.Commands
 
             if(result == null)
             {
-                await context.Channel.SendMessageAsync($"" +
+                await context.Channel.SendMessageAsync(
                     $"{Emotes.BelfastPout} Sorry For My Misbehaviour Commander！\n" +
-                    $"Command timed out");
+                    $"Command timed out"
+                );
             }
             else if (!result.IsSuccess)
             {
-                await context.Channel.SendMessageAsync($"" +
+                await context.Channel.SendMessageAsync(
                     $"{Emotes.BelfastShock} Sorry For My Misbehaviour Commander！\n" +
-                    $"{result.ErrorReason} try **{m_config.Configuration.Prefix}help** for lists of commands");
+                    $"{result.ErrorReason}\n" +
+                    $"try **{m_config.Configuration.Prefix}help** for lists of commands"
+                );
             }
             else
             {
