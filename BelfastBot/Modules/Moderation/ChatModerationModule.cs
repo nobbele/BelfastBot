@@ -25,6 +25,22 @@ namespace BelfastBot.Modules.Moderation
         }
 
         #region Commands
+        [Command("lock")]
+        [Summary("Locks down a text channel from everyone")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        [RequireBotPermission(GuildPermission.Administrator)]
+        [RequireGuild]
+        public async Task LockModule()
+        {
+            IGuildChannel channel = (IGuildChannel)Context.Channel;
+
+            PermValue permission = channel.GetPermissionOverwrite(Context.Guild.EveryoneRole)?.SendMessages ?? PermValue.Allow;
+            PermValue flippedPermission = permission == PermValue.Allow ? PermValue.Deny : PermValue.Allow;
+
+            await ReplyAsync(flippedPermission == PermValue.Allow ? "> Channel Has Been Unlocked" : "> Channel Has Been Locked");
+            await channel.AddPermissionOverwriteAsync(Context.Guild.EveryoneRole, new OverwritePermissions(sendMessages: flippedPermission));
+        }
+
         [Command("purge")]
         [Summary("Deletes messages with a given amount")]
         [RequireUserPermission(GuildPermission.ManageMessages)]
