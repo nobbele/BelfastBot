@@ -235,6 +235,7 @@ namespace BelfastBot.Modules.Games
         }
 
         [Command("omap")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
         [Summary("Gives information about a map")]
         public async Task MapAsync(string map, string mode = "std")
         {

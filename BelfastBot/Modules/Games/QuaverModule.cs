@@ -159,6 +159,7 @@ namespace BelfastBot.Modules.Games
         }
 
         [Command("qmap")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
         [Summary("Gives information about a map")]
         public async Task MapAsync(string mapName)
         {
