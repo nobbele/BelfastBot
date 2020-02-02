@@ -16,7 +16,6 @@ namespace BelfastBot.Modules.Games
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
 
-        #region Other
         public int GetIndexFromModeName(string name) => name.ToLower() switch
         {
             "std" => 0,
@@ -71,9 +70,7 @@ namespace BelfastBot.Modules.Games
             "F" => Emotes.F,
             _ => Emotes.BelfastShock,
         };
-        #endregion
 
-        #region Embed
         private Embed GetUserProfileEmbed(UserProfile user, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0xE664A0)
             .WithAuthor(author => {
@@ -119,10 +116,6 @@ namespace BelfastBot.Modules.Games
             .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
             .WithFooter(footer)
             .Build();
-
-        #endregion
-
-        #region Commands
 
         [Command("osu")]
         [RateLimit(typeof(OsuModule), perMinute: 45)]
@@ -234,6 +227,5 @@ namespace BelfastBot.Modules.Games
                     await ReplyAsync($"> No best plays found for {username}");
             }          
         }
-        #endregion
     }
 }
