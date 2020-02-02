@@ -23,7 +23,7 @@ namespace BelfastDiscordClient
 {
     public class BelfastDiscordClient : IClient
     {
-        public string Version => "1.2-Discord";
+        public string Version => "1.3-Discord";
 
         public LoggingService Logger { get; private set; }
         public static BelfastDiscordClient Instance;
