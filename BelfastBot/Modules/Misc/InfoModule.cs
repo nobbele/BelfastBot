@@ -26,13 +26,13 @@ namespace BelfastBot.Modules.Misc
                 await CommandHelp(command);
         }
 
-        private int modulesPerPage = 4;
+        private int modulesPerPage = 5;
 
         private async Task ModulesHelp()
         {
             ModuleInfo[] moduleInfos = Command.Modules.GroupBy(x => x.Name).Select(y => y.First()).ToArray();
 
-            EmbedBuilder[] builders = new EmbedBuilder[(moduleInfos.Length / modulesPerPage) + 1];
+            EmbedBuilder[] builders = new EmbedBuilder[(moduleInfos.Length / modulesPerPage)];
 
             for(int j = 0; j < builders.Length; j++)
             {
