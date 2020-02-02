@@ -55,6 +55,12 @@ namespace BelfastBot.Modules.Games
             .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
             .Build();
 
+        private Embed GetMapEmbed(Map map, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
+            .WithTitle($"{map.Title}")
+            .AddField("Created by ", $"{map.Creator}")
+            .WithFooter(footer)
+            .Build();
+
         private IEmote GetEmoteForRank(string rank)
         {
             switch (rank)
@@ -150,6 +156,26 @@ namespace BelfastBot.Modules.Games
             User user = await Client.GetUserAsync(userId);
 
             await ReplyAsync(embed: GetRecentEmbed(user, map, recent));
+        }
+
+        [Command("qmap")]
+        [Summary("Gives information about a map")]
+        public async Task MapAsync(string mapName)
+        {
+            if(uint.TryParse(mapName, out uint id))
+            {
+                Map map = await Client.GetMapAsync(id);
+                if(map == null)
+                {
+                    await ReplyAsync("No such map");
+                    return;
+                }
+                await ReplyAsync(embed: GetMapEmbed(map, 0, new EmbedFooterBuilder()));
+            }
+            else
+            {
+                await ReplyAsync("Invalid map id provided");
+            }
         }
     }
 }
