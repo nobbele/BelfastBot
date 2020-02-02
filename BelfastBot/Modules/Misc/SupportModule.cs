@@ -148,6 +148,7 @@ namespace BelfastBot.Modules.Misc
         }
         #endregion
 
+        #region Embed
         private Embed GenerateEmbedFor(JishoApi.SearchResult result, string searchWord, EmbedFooterBuilder footer)
         {
             string japanese = result.Japanese.Select(j => $"• {j.Key} ({j.Value})").NewLineSeperatedString();
@@ -193,5 +194,6 @@ namespace BelfastBot.Modules.Misc
             $"► [**Click Here to Learn More About \"{search}\"**]({url})\n")
             .WithFooter(footer)
             .Build();
+        #endregion
     }
 }

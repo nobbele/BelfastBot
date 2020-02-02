@@ -113,8 +113,8 @@ namespace BelfastBot.Modules.Profiles
             }
         }
 
-        [Command("leaderboard"), Alias("lb")]
         [Summary("Shows server leaderboard")]
+        [Command("leaderboard"), Alias("lb")]
         [RequireGuild]
         public async Task LeaderboardAsync(bool global = false) 
         {

@@ -14,7 +14,8 @@ namespace BelfastBot.Modules.Misc
         public IDiscordClient Client { get; set; } 
         public IClient Belfast { get; set; }
 
-	    [Command("servers"), RequireOwner]
+        #region Commands
+        [Command("servers"), RequireOwner]
 	    public async Task ServersAsync()
 	    {
                 await ReplyAsync(string.Join("\n", (await Client.GetGuildsAsync()).Select(guild => guild.Name)));
@@ -115,5 +116,6 @@ namespace BelfastBot.Modules.Misc
 
             await ReplyAsync(embed: embed);
         }
+        #endregion
     }
 }
