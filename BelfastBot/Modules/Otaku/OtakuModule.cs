@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using AnimeApi;
 using BelfastBot.Services.Database;
 using TraceMoeApi;
+using System.Net;
+using System;
 
 namespace BelfastBot.Modules.Otaku
 {
@@ -22,14 +24,27 @@ namespace BelfastBot.Modules.Otaku
         [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Trace an image to find source of it\n" +
             "Please Refain From Using Discord Image Links")]
-        public async Task TraceImageAsync([Summary("Image to search")] [Remainder]string url)
+        public async Task TraceImageAsync([Summary("Image to search")] [Remainder]string url = "")
         {
             Logger.LogInfo($"Tracing image {url}");
 
+            AnimeResult animeResult = new AnimeResult();
 
-            TraceResult traceResult = (await Client.GetTraceResultsAsync(url, 1))[0];
-
-            AnimeResult animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+            if (Context.Message.Attachments.Count == 1)
+            {
+                IAttachment attachment = Context.Message.Attachments.ElementAt(0);
+                using (WebClient wc = new WebClient())
+                {
+                    byte[] data = wc.DownloadData(attachment.Url);
+                    string base64Data = Convert.ToBase64String(data);
+                    TraceResult traceResult = (await Client.GetTraceResultsFromBase64Async(base64Data, 1))[0];
+                }
+            }
+            else if(Context.Message.Attachments.Count <= 0)
+            {
+                TraceResult traceResult = (await Client.GetTraceResultsAsync(url, 1))[0];
+                animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+            }
 
             await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
         }
