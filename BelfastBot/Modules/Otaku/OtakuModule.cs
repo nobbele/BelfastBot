@@ -38,6 +38,7 @@ namespace BelfastBot.Modules.Otaku
                     byte[] data = wc.DownloadData(attachment.Url);
                     string base64Data = Convert.ToBase64String(data);
                     TraceResult traceResult = (await Client.GetTraceResultsFromBase64Async(base64Data, 1))[0];
+                    animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
                 }
             }
             else if(Context.Message.Attachments.Count <= 0)
