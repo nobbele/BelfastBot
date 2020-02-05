@@ -18,6 +18,7 @@
     <ProjectReference Include="..\OsuApi\OsuApi.csproj" />
     <ProjectReference Include="..\SafeBooruApi\SafeBooruApi.csproj" />
     <ProjectReference Include="..\QuaverApi\QuaverApi.csproj" />
+    <ProjectReference Include="..\TraceMoeApi\TraceMoeApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Game.Rulesets.Osu", "os
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Game.Rulesets.Taiko", "osu\osu.Game.Rulesets.Taiko\osu.Game.Rulesets.Taiko.csproj", "{EC4FF524-EB4F-4511-8358-B257D05C9825}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraceMoeApi", "TraceMoeApi\TraceMoeApi.csproj", "{F8425336-619D-40D7-9FED-CF9F6FDC043E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{EC4FF524-EB4F-4511-8358-B257D05C9825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC4FF524-EB4F-4511-8358-B257D05C9825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC4FF524-EB4F-4511-8358-B257D05C9825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8425336-619D-40D7-9FED-CF9F6FDC043E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8425336-619D-40D7-9FED-CF9F6FDC043E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8425336-619D-40D7-9FED-CF9F6FDC043E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8425336-619D-40D7-9FED-CF9F6FDC043E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +137,7 @@ Global
 		{AEC9FB47-22C3-4F09-85C9-589DD4805B31} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 		{2F535BD5-10BD-4BF5-88BD-D48865D72768} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 		{DE5188D2-9497-4D1A-A6DB-F5DE0B56BC41} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
+		{F8425336-619D-40D7-9FED-CF9F6FDC043E} = {A9D7E55A-84C6-4B2D-90DC-51556EB98C4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4DADD416-3B64-4BBE-9FE6-943BE0DE3B92}

@@ -14,8 +14,8 @@ namespace AnimeApi
         public static readonly GraphQLClient Client = new GraphQLClient(BaseUrl);
 
         public static readonly string Query = @"
-            query GetAnimeByName($name: String) {
-                Media(search: $name, type: ANIME) {
+            query GetAnime($name: String, $id: Int) {
+                Media(search: $name, id: $id, type: ANIME) {
                     id
                     idMal
                     title {
@@ -143,12 +143,33 @@ namespace AnimeApi
             GraphQLResponse response = await Client.PostAsync(new GraphQLRequest()
             {
                 Query = Query,
-                OperationName = "GetAnimeByName",
-                Variables = new {
+                OperationName = "GetAnime",
+                Variables = new
+                {
                     name = name,
                 }
             });
 
+            return GetAnimeResultFromResponse(response);
+        }
+
+        public static async Task<AnimeResult> GetAnimeAsync(long id)
+        {
+            GraphQLResponse response = await Client.PostAsync(new GraphQLRequest()
+            {
+                Query = Query,
+                OperationName = "GetAnime",
+                Variables = new
+                {
+                    id = id,
+                }
+            });
+
+            return GetAnimeResultFromResponse(response);
+        }
+
+        public static AnimeResult GetAnimeResultFromResponse(GraphQLResponse response)
+        {
             dynamic data = response.Data.Media;
 
             return new AnimeResult()
@@ -166,7 +187,7 @@ namespace AnimeApi
                 Source = data.source,
                 Duration = data.duration,
                 Broadcast = data.airingSchedule.nodes.Count > 0
-                    ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToString("dddd, dd MMMM HH:mm (UTC)") 
+                    ? DateTimeOffset.FromUnixTimeSeconds((long)(data.airingSchedule.nodes[0].airingAt)).UtcDateTime.ToString("dddd, dd MMMM HH:mm (UTC)")
                     : null,
                 TrailerUrl = data.trailer != null ? (data.trailer.site == "youtube" ? $"https://www.youtube.com/watch?v={data.trailer.id}" : $"https://www.dailymotion.com/video/{data.trailer.id}") : null,
                 Studio = data.studios.nodes.Count > 0 ? data.studios.nodes[0].name : null,

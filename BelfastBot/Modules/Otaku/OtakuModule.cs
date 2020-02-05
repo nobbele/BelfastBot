@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnimeApi;
 using BelfastBot.Services.Database;
+using TraceMoeApi;
 
 namespace BelfastBot.Modules.Otaku
 {
@@ -14,6 +15,25 @@ namespace BelfastBot.Modules.Otaku
     {
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public JsonDatabaseService Db { get; set; }
+
+        #region Commands
+
+        [Command("trace")]
+        [RateLimit(typeof(OtakuModule), perMinute: 45)]
+        [Summary("Trace an image to find source of it\n" +
+            "Please Refain From Using Discord Image Links")]
+        public async Task TraceImageAsync([Summary("Image to search")] [Remainder]string url)
+        {
+            Logger.LogInfo($"Tracing image {url}");
+
+
+            TraceResult traceResult = (await Client.GetTraceResultsAsync(url, 1))[0];
+
+            AnimeResult animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+
+            await ReplyAsync(embed: GetAnimeResultEmbed(animeResult, 0, new EmbedFooterBuilder()));
+        }
+
 
         [Command("malanime"), Alias("mala")]
         [RateLimit(typeof(OtakuModule), perMinute: 45)]
@@ -102,7 +122,9 @@ namespace BelfastBot.Modules.Otaku
             else
                 await ReplyAsync(embed: GetUserResultEmbed(userResult.Value, 0, new EmbedFooterBuilder()));
         }
+        #endregion
 
+        #region Embed
         private Embed GetUserResultEmbed(UserResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
             .WithColor(0x2E51A2)
             .WithAuthor(author => {
@@ -173,5 +195,6 @@ namespace BelfastBot.Modules.Otaku
             .WithFooter(footer)
             .WithImageUrl(result.ImageUrl)
             .Build();
+        #endregion
     }
 }
