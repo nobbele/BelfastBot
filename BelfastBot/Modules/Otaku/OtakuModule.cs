@@ -28,6 +28,12 @@ namespace BelfastBot.Modules.Otaku
         {
             Logger.LogInfo($"Tracing image {url}");
 
+            if(url.Contains("cdn.discordapp.com"))
+            {
+                await ReplyAsync("Discord image links are not supported, please send the image directly as an attachement");
+                return;
+            }
+
             AnimeResult animeResult = new AnimeResult();
 
             if (Context.Message.Attachments.Count == 1)
