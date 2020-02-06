@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnimeApi;
 using BelfastBot.Services.Database;
-using TraceMoeApi;
 using System.Net;
 using System;
+using TraceMoeApi;
 
 namespace BelfastBot.Modules.Otaku
 {
