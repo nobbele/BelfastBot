@@ -6,9 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AnimeApi;
 using BelfastBot.Services.Database;
-using TraceMoeApi;
 using System.Net;
 using System;
+using TraceMoeApi;
+using System.Collections.Generic;
 
 namespace BelfastBot.Modules.Otaku
 {
@@ -24,31 +25,59 @@ namespace BelfastBot.Modules.Otaku
         [RateLimit(typeof(OtakuModule), perMinute: 45)]
         [Summary("Trace an image to find source of it\n" +
             "Please Refain From Using Discord Image Links")]
-        public async Task TraceImageAsync([Summary("Image to search")] [Remainder]string url = "")
+        public async Task TraceImageAsync([Summary("Image to search")] [Remainder]string url = null)
         {
             Logger.LogInfo($"Tracing image {url}");
 
-            if(url.Contains("cdn.discordapp.com"))
-            {
-                await ReplyAsync("Discord image links are not supported, please send the image directly as an attachement");
-                return;
-            }
-
             AnimeResult animeResult = new AnimeResult();
 
-            if (Context.Message.Attachments.Count == 1)
+            if (url == null)
             {
-                IAttachment attachment = Context.Message.Attachments.ElementAt(0);
-                using (WebClient wc = new WebClient())
+                if (Context.Message.Attachments.Count == 1)
                 {
-                    byte[] data = wc.DownloadData(attachment.Url);
-                    string base64Data = Convert.ToBase64String(data);
-                    TraceResult traceResult = (await Client.GetTraceResultsFromBase64Async(base64Data, 1))[0];
-                    animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+                    IAttachment attachment = Context.Message.Attachments.ElementAt(0);
+                    using (WebClient wc = new WebClient())
+                    {
+                        byte[] data = wc.DownloadData(attachment.Url);
+                        string base64Data = Convert.ToBase64String(data);
+                        TraceResult traceResult = (await Client.GetTraceResultsFromBase64Async(base64Data, 1))[0];
+                        animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+                    }
+                }
+                else
+                {
+                    var messagesEnumerable = Context.Channel.GetMessagesAsync(2);
+                    IEnumerable<IMessage> messages  = await messagesEnumerable.FlattenAsync();
+                    if(messages.Count() < 2)
+                    {
+                        await ReplyAsync($"Too Few Messages");
+                        return;
+                    }
+                    IMessage message = messages.ElementAt(1);
+
+                    if(message.Attachments.Count < 1)
+                    {
+                        await ReplyAsync("No Images Were Found On Previous Message");
+                        return;
+                    }
+                    IAttachment attachment = message.Attachments.ElementAt(0);
+                    using (WebClient wc = new WebClient())
+                    {
+                        byte[] data = wc.DownloadData(attachment.Url);
+                        string base64Data = Convert.ToBase64String(data);
+                        TraceResult traceResult = (await Client.GetTraceResultsFromBase64Async(base64Data, 1))[0];
+                        animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
+                    }
                 }
             }
-            else if(Context.Message.Attachments.Count <= 0)
+            else
             {
+                if (url.Contains("cdn.discordapp.com"))
+                {
+                    await ReplyAsync("Discord image links are not supported, please send the image directly as an attachement");
+                    return;
+                }
+
                 TraceResult traceResult = (await Client.GetTraceResultsAsync(url, 1))[0];
                 animeResult = await AnilistClient.GetAnimeAsync(traceResult.AlId);
             }

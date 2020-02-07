@@ -39,9 +39,12 @@ namespace TraceMoeApi
                 JObject obj = JObject.Parse(json);
 
                 JArray jsonResults = obj["docs"] as JArray;
+
+                count = Math.Min(jsonResults.Count, count);
+
                 TraceResult[] results = new TraceResult[jsonResults.Count];
 
-                for (int i = 0; i < results.Length; i++)
+                for (int i = 0; i < count; i++)
                     results[i] = jsonResults[i].ToObject<TraceResult>();
 
                 return results;

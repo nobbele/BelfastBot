@@ -32,11 +32,11 @@ namespace BelfastBot.Modules.Profiles
                  .WithThumbnailUrl($"{target.GetAvatarUrl()}")
                  .Build();
 
-        private Embed GetLeaderBoardPageEmbed(IGuild guild, string lbString, EmbedFooterBuilder footer) => new EmbedBuilder()
+        private Embed GetLeaderBoardPageEmbed(IGuild guild, string lbString, bool isGlobal, EmbedFooterBuilder footer) => new EmbedBuilder()
                  .WithColor(0x53DF1D)
                  .WithAuthor(author => {
                      author
-                         .WithName($"Leaderboard of {guild.Name}");
+                         .WithName(isGlobal ? $"Global Leaderboard" : $"Leaderboard of { guild.Name }");
                  })
                  .AddField("Leaderboard:", $"{lbString}")
                  .WithFooter(footer)
@@ -120,11 +120,11 @@ namespace BelfastBot.Modules.Profiles
         [Summary("Shows server leaderboard")]
         [Command("leaderboard"), Alias("lb")]
         [RequireGuild]
-        public async Task LeaderboardAsync(bool global = false) 
+        public async Task LeaderboardAsync(bool isGlobal = false) 
         {
             ServerEntry server = Db.GetServerEntry(0);
             IEnumerable<DatabaseUserEntry> users = server.Users;
-            if(!global)
+            if(!isGlobal)
                 users = users.Where(user => Context.Guild.GetUserAsync(user.Id).Result != null);
             IEnumerable<DatabaseUserEntry> sortedUser = users.OrderByDescending(user => user.Xp);
 
@@ -142,7 +142,7 @@ namespace BelfastBot.Modules.Profiles
             await PaginatedMessageService.SendPaginatedDataMessageAsync(
                 Context.Channel,
                 strings,
-                (result, index, footer) => GetLeaderBoardPageEmbed(Context.Guild, result, footer)
+                (result, index, footer) => GetLeaderBoardPageEmbed(Context.Guild, result, isGlobal, footer)
             );
         }
 

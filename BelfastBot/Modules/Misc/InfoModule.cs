@@ -102,7 +102,7 @@ namespace BelfastBot.Modules.Misc
                 $"► Version: **{Belfast.Version}**\n" +
                 $"► Developers: **[Nobbele](https://github.com/nobbele)** & **[TheJayDuck](https://github.com/thejayduck)**\n" +
                 $"► Status: **Still In Development**\n" +
-                $"[**Invite Belfast to Your Server!**](https://discordapp.com/oauth2/authorize?client_id=662986656885768212&scope=bot&permissions=8)\n" +
+                $"**[Invite Belfast to Your Server!](https://discordapp.com/oauth2/authorize?client_id=662986656885768212&scope=bot&permissions=8)**\n" +
                 $"[View Source Code](https://github.com/nobbele/BelfastBot)")
                 .WithFooter("Created: 09/07-2019")
                 .WithThumbnailUrl("https://cdn.discordapp.com/attachments/303528930634235904/629383238917292042/29692031.png")
