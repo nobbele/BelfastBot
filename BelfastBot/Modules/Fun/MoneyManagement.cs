@@ -10,7 +10,7 @@ namespace BelfastBot.Modules.Fun
     [Summary("Commands for managing and interacting with commands that have to do with money")]
     public class MoneyManagement : BelfastModuleBase
     {
-        public static readonly uint DailyCoinAmount = 10;
+        public static readonly uint DailyCoinAmount = 30;
 
         [Summary("Get daily coins")]
         [Command("cdaily")]
