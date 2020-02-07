@@ -45,6 +45,33 @@ namespace BelfastBot.Modules.Profiles
         #endregion
 
         #region Commands
+        [Command("set")]
+        [Summary("Set Names For Certain Apis")]
+        public async Task SetName([Summary("" +
+            "► Anilist\n" +
+            "► Osu\n" +
+            "► Quaver\n")] string Type, [Summary("Name to set")] [Remainder] string name)
+        {
+            switch (Type.ToLower())
+            {
+                case "anilist":
+                    Db.GetUserEntry(0, Context.User.Id).AnilistName = name;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Anilist** name is now set to __**{name}**__");
+                    break;
+                case "osu":
+                    Db.GetUserEntry(0, Context.User.Id).OsuName = name;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Osu** name is now set to __**{name}**__");
+                    break;
+                case "quaver":
+                    uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await QuaverApi.Client.GetUserIdByNameAsync(name)).Value;
+                    Db.WriteData();
+                    await ReplyAsync($"> Your **Quaver** name is now set to __**{name}**__");
+                    break;
+            }
+        }
+
         [Command("profile"), Alias("prf")]
         [Summary("Shows details of an users profile")]
         public async Task CheckProfileAsync([Summary("(optional) The user profile to get")] IUser target = null)
@@ -90,35 +117,8 @@ namespace BelfastBot.Modules.Profiles
             await ReplyAsync(embed: embed);
         }
 
-        [Command("set")]
-        [Summary("Set Names For Certain Apis")]
-        public async Task SetName([Summary("" +
-            "► Anilist\n" +
-            "► Osu\n" +
-            "► Quaver\n")] string Type, [Summary("Name to set")] [Remainder] string name)
-        {
-            switch (Type.ToLower())
-            {
-                case "anilist":
-                    Db.GetUserEntry(0, Context.User.Id).AnilistName = name;
-                    Db.WriteData();
-                    await ReplyAsync($"> Your **Anilist** name is now set to __**{name}**__");
-                    break;
-                case "osu":
-                    Db.GetUserEntry(0, Context.User.Id).OsuName = name;
-                    Db.WriteData();
-                    await ReplyAsync($"> Your **Osu** name is now set to __**{name}**__");
-                    break;
-                case "quaver":
-                    uint id = (Db.GetUserEntry(0, Context.User.Id).QuaverId = await QuaverApi.Client.GetUserIdByNameAsync(name)).Value;
-                    Db.WriteData();
-                    await ReplyAsync($"> Your **Quaver** name is now set to __**{name}**__");
-                    break;
-            }
-        }
-
-        [Summary("Shows server leaderboard")]
         [Command("leaderboard"), Alias("lb")]
+        [Summary("Shows server leaderboard")]
         [RequireGuild]
         public async Task LeaderboardAsync(bool isGlobal = false) 
         {

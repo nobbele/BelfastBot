@@ -2,9 +2,6 @@
 using Discord.Commands;
 using BelfastBot.Services.Database;
 using System.Threading.Tasks;
-using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace BelfastBot.Modules.Misc
