@@ -4,12 +4,16 @@ using QuaverApi;
 using Discord;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
+using System.Collections.Generic;
+using System;
 
 namespace BelfastBot.Modules.Games
 {
     [Summary("Commands for quaver")]
     public class QuaverModule : BelfastModuleBase
     {
+        public static Dictionary<IMessageChannel, (DateTime, Map)> LastMapInChannel = new Dictionary<IMessageChannel, (DateTime, Map)>();
+
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
 
@@ -33,33 +37,45 @@ namespace BelfastBot.Modules.Games
             .WithFooter(footer)
             .Build();
 
-        private Embed GetRecentEmbed(User user, Map map, Recent recent) => new EmbedBuilder()
-            .WithColor(0x43EBFB)
-            .WithAuthor(author => {
-                author
-                    .WithName($"{user.Username}'s Recent 4K Play")
-                    .WithUrl($"https://quavergame.com/profile/{user.Id}")
-                    .WithIconUrl(user.AvatarUrl);
-            })
-            .AddField("Details ▼", $"" +
-            $"__**Main Details**__\n" +
-            $"► Performance: **{recent.PerformanceRating:F2}**\n" +
-            $"► Grade: **{GetEmoteForRank(recent.Grade)}**\n" +
-            $"► Accuracy: **{recent.Accuracy:F2}**\n" +
-            $"► Mods: **{recent.ModsString}**\n" +
-            $"► Combo: **{recent.Combo}**\n" +
-            $"__**Map**__ {Emotes.Note}\n" +
-            $"**[{map.Title}](https://quavergame.com/mapsets/map/{map.Id})**\n" +
-            $"► **{map.DifficultyName} [{map.DifficultyRating:F2}☆]**\n" +
-            $"► Made By: **[{map.Creator}]**")
-            .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
-            .Build();
+        private Embed GetRecentEmbed(User user, Map map, Recent recent)
+        {
+            (DateTime time, Map map) pair = LastMapInChannel.GetValueOrDefault(Context.Channel);
+            if(DateTime.Now > pair.time)
+                LastMapInChannel[Context.Channel] = (DateTime.Now, map);
+            return new EmbedBuilder()
+                .WithColor(0x43EBFB)
+                .WithAuthor(author => {
+                    author
+                        .WithName($"{user.Username}'s Recent 4K Play")
+                        .WithUrl($"https://quavergame.com/profile/{user.Id}")
+                        .WithIconUrl(user.AvatarUrl);
+                })
+                .AddField("Details ▼", $"" +
+                $"__**Main Details**__\n" +
+                $"► Performance: **{recent.PerformanceRating:F2}**\n" +
+                $"► Grade: **{GetEmoteForRank(recent.Grade)}**\n" +
+                $"► Accuracy: **{recent.Accuracy:F2}**\n" +
+                $"► Mods: **{recent.ModsString}**\n" +
+                $"► Combo: **{recent.Combo}**\n" +
+                $"__**Map**__ {Emotes.Note}\n" +
+                $"**[{map.Title}](https://quavergame.com/mapsets/map/{map.Id})**\n" +
+                $"► **{map.DifficultyName} [{map.DifficultyRating:F2}☆]**\n" +
+                $"► Made By: **[{map.Creator}]**")
+                .WithImageUrl($"https://quaver.blob.core.windows.net/banners/{map.MapSetId}_banner.jpg")
+                .Build();
+        }
 
-        private Embed GetMapEmbed(Map map, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-            .WithTitle($"{map.Title}")
-            .AddField("Created by ", $"{map.Creator}")
-            .WithFooter(footer)
-            .Build();
+        private Embed GetMapEmbed(Map map, int index, EmbedFooterBuilder footer)
+        {
+            (DateTime time, Map map) pair = LastMapInChannel.GetValueOrDefault(Context.Channel);
+            if(DateTime.Now > pair.time)
+                LastMapInChannel[Context.Channel] = (DateTime.Now, map);
+            return new EmbedBuilder()
+                .WithTitle($"{map.Title}")
+                .AddField("Created by ", $"{map.Creator}")
+                .WithFooter(footer)
+                .Build();
+        }
 
         private IEmote GetEmoteForRank(string rank)
         {
@@ -176,6 +192,26 @@ namespace BelfastBot.Modules.Games
             else
             {
                 await ReplyAsync("Invalid map id provided");
+            }
+        }
+
+        [Command("qmap")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
+        [Summary("Gives information about a map that was just sent")]
+        public async Task MapAsync()
+        {
+            if(LastMapInChannel.TryGetValue(Context.Channel, out (DateTime time, Map map) pair))
+            {
+                if(pair.map == null)
+                {
+                    await ReplyAsync("Map is null");
+                    return;
+                }
+                await ReplyAsync(embed: GetMapEmbed(pair.map, 0, new EmbedFooterBuilder()));
+            }
+            else
+            {
+                await ReplyAsync("No map found in this channel");
             }
         }
     }

@@ -6,12 +6,16 @@ using System.Linq;
 using BelfastBot.Services.Database;
 using BelfastBot.Services.Pagination;
 using Common;
+using System.Collections.Generic;
+using System;
 
 namespace BelfastBot.Modules.Games
 {
     [Summary("Commands for osu")]
     public class OsuModule : BelfastModuleBase
     {
+        public static Dictionary<IMessageChannel, (DateTime, Beatmap)> LastBeatmapInChannel = new Dictionary<IMessageChannel, (DateTime, Beatmap)>();
+
         public JsonDatabaseService Db { get; set; }
         public PaginatedMessageService PaginatedMessageService { get; set; }
         public IDiscordClient IClient { get; set; }
@@ -92,36 +96,48 @@ namespace BelfastBot.Modules.Games
             .WithFooter(footer)
             .Build();
 
-        private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-            .WithColor(0xE664A0)
-            .WithAuthor(author => {
-                author
-                    .WithName($"{result.PlayerData.UserName}'s Recent osu!{GetNameForModeIndex(result.PlayerData.Mode)} Play")
-                    .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
-                    .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
-            })
-            .AddField($"Details ▼", $"" +
-            $"__**Main Details**__\n" +
-            $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
-            $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
-            $"► PP: **{result.PP:F2} ({result.SSPP:F2} if SS)**\n" +
-            $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
-            $"► Score: **{result.Score}**\n" +
-            $"► Combo: **{result.Combo}**\n" +
-            $"__**Beatmap**__ {Emotes.Note}\n" +
-            $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
-            $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
-            $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
-            $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
-            .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
-            .WithFooter(footer)
-            .Build();
+        private Embed GetBeatmapResultEmbed(PlayResult result, int index, EmbedFooterBuilder footer)
+        { 
+            (DateTime time, Beatmap beatmap) pair = LastBeatmapInChannel.GetValueOrDefault(Context.Channel);
+            if(DateTime.Now > pair.time)
+                LastBeatmapInChannel[Context.Channel] = (DateTime.Now, result.BeatmapData);
+            return new EmbedBuilder()
+                .WithColor(0xE664A0)
+                .WithAuthor(author => {
+                    author
+                        .WithName($"{result.PlayerData.UserName}'s Recent osu!{GetNameForModeIndex(result.PlayerData.Mode)} Play")
+                        .WithUrl($"https://osu.ppy.sh/users/{result.PlayerData.UserId}/{GetLinkSuffixForModeIndex(result.PlayerData.Mode)}")
+                        .WithIconUrl($"https://a.ppy.sh/{result.PlayerData.UserId}");
+                })
+                .AddField($"Details ▼", $"" +
+                $"__**Main Details**__\n" +
+                $"► Rank: **{GetEmoteForRank(result.Rank)}**\n" +
+                $"► Accuracy: **{(result.Accuracy?.Accuracy ?? 0) * 100:F2}%**\n" +
+                $"► PP: **{result.PP:F2} ({result.SSPP:F2} if SS)**\n" +
+                $"► Mods: **{"None".IfTargetIsNullOrEmpty(result.Mods.ToShortString())}**\n" +
+                $"► Score: **{result.Score}**\n" +
+                $"► Combo: **{result.Combo}**\n" +
+                $"__**Beatmap**__ {Emotes.Note}\n" +
+                $"**[{result.BeatmapData.Name}](https://osu.ppy.sh/b/{result.BeatmapData.Id})**\n" +
+                $"► **[{result.BeatmapData.StarRating:F2}☆] {result.BeatmapData.Bpm}** Bpm\n" +
+                $"► Lenght **{result.BeatmapData.Length.ToShortForm()}**\n" +
+                $"► Made By: **[{result.BeatmapData.CreatorName}](https://osu.ppy.sh/users/{result.BeatmapData.CreatorId})**")
+                .WithImageUrl($"https://assets.ppy.sh/beatmaps/{result.BeatmapData.SetId}/covers/cover.jpg")
+                .WithFooter(footer)
+                .Build();
+        }
 
-        private Embed GetBeatmapEmbed(Beatmap beatmap, int index, EmbedFooterBuilder footer) => new EmbedBuilder()
-            .WithTitle($"{beatmap.Name}")
-            .AddField("Created by ", $"{beatmap.CreatorName}")
-            .WithFooter(footer)
-            .Build();
+        private Embed GetBeatmapEmbed(Beatmap beatmap, int index, EmbedFooterBuilder footer)
+        {
+            (DateTime time, Beatmap beatmap) pair = LastBeatmapInChannel.GetValueOrDefault(Context.Channel);
+            if(DateTime.Now > pair.time)
+                LastBeatmapInChannel[Context.Channel] = (DateTime.Now, beatmap);
+            return new EmbedBuilder()
+                .WithTitle($"{beatmap.Name}")
+                .AddField("Created by ", $"{beatmap.CreatorName}")
+                .WithFooter(footer)
+                .Build();
+        }
 
         [Command("osu")]
         [RateLimit(typeof(OsuModule), perMinute: 45)]
@@ -220,7 +236,7 @@ namespace BelfastBot.Modules.Games
                 PlayResult[][] validResults = results.Select(a => a.Where(result => (result?.BeatmapData?.Id ?? 0) != 0).ToArray()).ToArray();
 
                 if (validResults.Length > 0)
-                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null).ToArray(), GetBeatmapResultEmbed);
+                    await PaginatedMessageService.SendPaginatedDataMessageAsync(Context.Channel, validResults.Select(a => a.Length > 0 ? a[0] : null)?.ToArray(), GetBeatmapResultEmbed);
                 else
                     await ReplyAsync($"> No best plays found for {username}");
             }
@@ -252,6 +268,26 @@ namespace BelfastBot.Modules.Games
             else
             {
                 await ReplyAsync("Invalid map id provided");
+            }
+        }
+
+        [Command("omap")]
+        [RateLimit(typeof(QuaverModule), perMinute: 45)]
+        [Summary("Gives information about a map that was just sent")]
+        public async Task MapAsync()
+        {
+            if(LastBeatmapInChannel.TryGetValue(Context.Channel, out (DateTime time, Beatmap beatmap) pair))
+            {
+                if(pair.beatmap == null)
+                {
+                    await ReplyAsync("Map is null");
+                    return;
+                }
+                await ReplyAsync(embed: GetBeatmapEmbed(pair.beatmap, 0, new EmbedFooterBuilder()));
+            }
+            else
+            {
+                await ReplyAsync("No map found in this channel");
             }
         }
     }

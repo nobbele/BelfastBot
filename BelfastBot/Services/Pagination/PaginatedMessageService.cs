@@ -135,6 +135,8 @@ namespace BelfastBot.Services.Pagination
             if(pageData.Length <= 0)
                 throw new ArgumentException("Passed zero length array");
 
+            pageData = pageData.Where(result => result != null).ToArray();
+
             IUserMessage message = await m_communication.SendMessageAsync(channel, embed: GetEmbed(0));
 
             await message.AddReactionsAsync(ReactionEmotes);
@@ -157,6 +159,8 @@ namespace BelfastBot.Services.Pagination
 
             if(pageData.Length <= 0)
                 throw new ArgumentException("Passed zero length array");
+
+            pageData = pageData.Where(result => result != null).ToArray();
 
             IUserMessage message = await m_communication.SendMessageAsync(channel, embed: await GetEmbedTask(0));
 
