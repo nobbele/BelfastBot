@@ -20,7 +20,7 @@ namespace BelfastBot.Modules.Fun
             async Task giveCoins()
             {
                 entry.LastDaily = DateTime.Now;
-                entry.Coins += DailyCoinAmount;
+                entry.Coins += DailyCoinAmount * ((uint)DateTime.Now.DayOfWeek + 1);
                 Database.WriteData();
                 await ReplyAsync($"> You have been given **{DailyCoinAmount}**, your total is now **{entry.Coins}**.");
             }
