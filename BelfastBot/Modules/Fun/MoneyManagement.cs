@@ -10,7 +10,7 @@ namespace BelfastBot.Modules.Fun
     [Summary("Commands for managing and interacting with commands that have to do with money")]
     public class MoneyManagement : BelfastModuleBase
     {
-        public static readonly uint DailyCoinAmount = 30;
+        public static readonly uint DailyCoinAmount = 30 * ((uint)DateTime.Now.DayOfWeek + 1);
 
         [Summary("Get daily coins")]
         [Command("cdaily")]
@@ -20,7 +20,7 @@ namespace BelfastBot.Modules.Fun
             async Task giveCoins()
             {
                 entry.LastDaily = DateTime.Now;
-                entry.Coins += DailyCoinAmount * ((uint)DateTime.Now.DayOfWeek + 1);
+                entry.Coins += DailyCoinAmount;
                 Database.WriteData();
                 await ReplyAsync($"> You have been given **{DailyCoinAmount}**, your total is now **{entry.Coins}**.");
             }
